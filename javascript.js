@@ -110,34 +110,6 @@ function scrollCarousel(direction) {
 //-----------------------------------------
 //--___java do html-pacotes___-------------
 
-//--___Função: Abrir a imagem no buttons___----
-
-// 1. Pega os elementos pelo ID
-const botao = document.getElementById('button-imgs');
-const imagem = document.getElementById('img-button01');
-
-// 2. Adiciona um "ouvinte de eventos" (event listener) ao botão
-botao.addEventListener('click', function() {
-  
-  // 3. Verifica se a imagem está oculta
-  if (imagem.classList.contains('imgbutton001')) {
-    
-    // Se estiver oculta, remove a classe 'escondida'
-    imagem.classList.remove('imgbutton001');
-    // E adiciona a classe 'visivel'
-    imagem.classList.add('imagem-visivel');
-    
-    // Opcional: Altera o texto do botão
-    botao.textContent = 'Imagem Exibida';
-    
-  } else {
-    // Se você quiser que o botão esconda a imagem novamente
-    imagem.classList.remove('imagem-visivel');
-    imagem.classList.add('imagem-escondida');
-    botao.textContent = 'Clique para Ver a Imagem';
-  }
-});
-
 
 
 //-----------------------------------------
@@ -146,7 +118,7 @@ botao.addEventListener('click', function() {
 //-----------------------------------------
 //---__Mensagens de Atenção__--------------
 
-// 1. Mensagem de Boas-Vindas/Primeira Mensagem (Será sempre a primeira vez)
+// 1. Mensagem de Boas-Vindas/Primeira Mensagem (Ser sempre a primeira vez)
 const primeiraMensagem = "O Drink **Negroni** foi o mais pedido hoje!";
 
 // 2. Array com as mensagens que irão ALTERNAR
