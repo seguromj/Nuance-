@@ -571,7 +571,7 @@ body {
 
 /* Estilo do Conteúdo da Mensagem */
 .atencao-body {
-    font-size: 0.9em;
+    font-size: 9px;
     color: #333;
     line-height: 1.4;
     /* Ajusta o alinhamento do conteúdo principal */
