@@ -61,31 +61,7 @@
         transform: scale(0.95); /* active:scale-95 */
       }
 
-    .botao-Voltar {
-    background-color: #453ae1;
-    color: white;
-    /* Aumentei o padding para dar mais ar em cima e embaixo, e mantive o horizontal */
-    padding: 0.5rem 1.5rem; /*tamanho cima e baixo*/
-    
-    border-radius: 50px;
-    
-    
-    width: 100px; /*Mantem os lados menores*/
-    
-    /* Se quiser um limite, defina um valor realista, por exemplo: */
-    /* max-width: 250px; */ 
-
-    box-shadow: 0 5px 10px rgba(0, 10, 0, 10);
-    font-size: 20px;
-    
-    /* Propriedades para centralizar o PRÓPRIO BOTÃO (bloco) */
-    display: block;
-    margin: 0 auto;
-    
-    /* Propriedade para centralizar o TEXTO DENTRO DO BOTÃO */
-    text-align: center;
-}
-
+  
 
           
     .botao-X {
@@ -190,8 +166,18 @@
           placeholder="Ex: 75000-000"
           maxlength="9"
           class="w-full p-3 border-2 border-indigo-300 rounded-xl focus:border-indigo-500 focus:ring-indigo-500 outline-none transition duration-150 text-center text-lg font-mono"
-          oninput="formatarCEP(this)"
-        />
+          oninput="formatarCEP(this)"/>
+
+              <div>
+        <span class="paragrafo-descobrir-cep">
+          <strong>Não sei meu CEP::</strong>
+        </span>
+       </a>
+      <a class="botao-buscarCEP" href="https://buscacepinter.correios.com.br/app/endereco/index.php?t" target="blank">
+        <strong>Buscar CEP</strong>
+      </a>
+    </div>
+
         <button
           id="botaoVerificar"
           onclick="verificarCEP()"
@@ -200,20 +186,7 @@
           Verificar Atendimento
         </button>
       </div>
-
-        
-    <div>
-        <span class="paragrafo-descobrir-cep">
-          <strong>Não sei meu CEP::</strong>
-        </span>
-       </a>
-      <a class="botao-buscarCEP" href="https://buscacepinter.correios.com.br/app/endereco/index.php?t" target="blank">
-        <strong>Buscar CEP</strong>
-      </a>
-    </div>  
-        
-
-        
+     
       <div
         id="mensagemResultado"
         class="mt-8 p-5 min-h-[120px] bg-indigo-50 border-l-4 border-indigo-500 rounded-lg text-gray-800 transition-all duration-500 flex items-center justify-center text-center text-base font-semibold">
@@ -250,10 +223,7 @@
         Confirmar
       </a>
 <br><br>
-      <a class="botao-Voltar" href="index.html">
-        Voltar
-      </a>
-
+    
 
     </div>
 
@@ -443,6 +413,7 @@
   </body>
 
 </html>
+
 
 
 
