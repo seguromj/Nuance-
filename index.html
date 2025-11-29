@@ -28,7 +28,7 @@
         text-align: center;
         
         /* Cores e Fundo (Gray 200) */
-        background-color: rgb(229 231 235); /* bg-gray-200 */
+        background-color: #34573F; /* cor do botão prosseguir*/
         color: rgb(55 65 81); /* text-gray-700 */
 
         /* Espaçamento e Borda */
@@ -230,7 +230,7 @@
       <br /><br />
       <!-- O link "Confirmar" é ocultado por padrão e só é exibido se o CEP for atendido -->
       <a id="linkConfirmar" class="botao-link-padrao hidden" href="loja.html">
-        Confirmar
+        <strong>Prosseguir</strong>
       </a>
 <br><br>
     
@@ -381,7 +381,9 @@
             } else if (cidadesBarman.includes(cidade) && estado === 'GO') {
               // REGRA 1: Cidades Barman (Goiânia, Pirenópolis, Abadiânia)
               mensagem = `🍹Atendemos a região de ${dadosApi.localidade} (GO) para serviços de Barman
-               em Festas, Aniversários, Confraternizações, etc.🍹 Confira nossos Pacotes.👇`;
+               em Festas, Aniversários, Confraternizações, etc.
+               <br><br>
+               🍹Prossiga e veja nossos Pacotes.🍹`;
               classesEstilo = 'border-indigo-500 bg-indigo-50 text-indigo-800';
               canProceed = true; // Permite prosseguir para ver pacotes/serviços
             } else if (cidade === 'anápolis' && estado === 'GO') {
@@ -389,7 +391,7 @@
               mensagem = `🥳 **Atendemos essa região**! Você pode ser elegível para **frete grátis**
                na sua primeira compra. 
                <br><br>
-               🍹Prossiga para ver nossos produtos!🍹`;
+               🍹Prossiga para ver nossos Serviços.🍹`;
               classesEstilo = 'border-green-500 bg-green-50 text-green-800';
               canProceed = true;
             } else {
@@ -423,6 +425,7 @@
   </body>
 
 </html>
+
 
 
 
