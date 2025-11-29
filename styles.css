@@ -293,6 +293,7 @@ body {
     text-decoration: none;
     border-radius: 50px;
     margin: 5px;
+    padding: 20px;
 }
 
 .bbtn-loja {
@@ -305,8 +306,11 @@ body {
     color: white;
     text-decoration: none;
     border-radius: 50px;
-    padding: 2px;
+    padding: 1px;
     margin: 5px;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
 
 
