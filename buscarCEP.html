@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscar CEP por Endereço</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+            max-width: 600px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #1e88e5;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+
+        p.info {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #555;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #c0c0c0;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1em;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #388e3c;
+        }
+
+        #resultado {
+            margin-top: 25px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #fafafa;
+        }
+
+        .cep-item {
+            margin-bottom: 10px;
+            padding: 10px;
+            border-bottom: 1px dashed #eee;
+        }
+
+        .cep-item strong {
+            color: #1e88e5;
+            font-size: 1.1em;
+        }
+
+        .alert {
+            padding: 10px;
+            border-radius: 4px;
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 15px;
+            display: none;
+        }
+
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>🏠 Descubra Seu CEP</h1>
+        <p class="info">Preencha o Estado (UF), a Cidade e o nome da Rua **completo**.</p>
+        
+        <div id="formBusca">
+            <div>
+                <label for="uf">Estado (UF):</label>
+                <input type="text" id="uf" maxlength="2" placeholder="Ex: SP" required>
+            </div>
+
+            <div>
+                <label for="localidade">Cidade:</label>
+                <input type="text" id="localidade" placeholder="Ex: São Paulo" required>
+            </div>
+
+            <div>
+                <label for="logradouro">Nome da Rua/Avenida:</label>
+                <input type="text" id="logradouro" placeholder="Ex: Avenida Paulista" required>
+            </div>
+
+            <div class="alert alert-error" id="message"></div>
+
+            <button onclick="buscarCepPorEndereco()">Buscar CEP(s)</button>
+        </div>
+
+        <div id="resultado">
+            <p style="text-align: center; color: #777;">O CEP (ou lista de CEPs) correspondente ao endereço aparecerá aqui.</p>
+        </div>
+    </div>
+
+    <script>
+        const ufInput = document.getElementById('uf');
+        const localidadeInput = document.getElementById('localidade');
+        const logradouroInput = document.getElementById('logradouro');
+        const resultadoDiv = document.getElementById('resultado');
+        const message = document.getElementById('message');
+
+        function limparResultado() {
+            message.style.display = 'none';
+            resultadoDiv.innerHTML = '<p style="text-align: center; color: #777;">O CEP (ou lista de CEPs) correspondente ao endereço aparecerá aqui.</p>';
+        }
+
+        function exibirMensagem(texto) {
+            message.textContent = texto;
+            message.style.display = 'block';
+        }
+
+        async function buscarCepPorEndereco() {
+            limparResultado();
+
+            // 1. Coletar e normalizar os dados
+            // O trim() remove espaços extras no início/fim. toUpperCase garante letras maiúsculas no UF.
+            const uf = ufInput.value.toUpperCase().trim();
+            const localidade = localidadeInput.value.trim();
+            const logradouro = logradouroInput.value.trim();
+
+            if (uf.length !== 2 || !localidade || !logradouro) {
+                exibirMensagem('Por favor, verifique se o Estado tem 2 letras e se todos os campos estão preenchidos.');
+                return;
+            }
+
+            // Codifica os espaços na URL para o formato exigido pelo ViaCEP
+            const localidadeEncoded = localidade.replace(/ /g, '%20');
+            const logradouroEncoded = logradouro.replace(/ /g, '%20');
+
+            // 2. Construir a URL de busca reversa (Endereço -> CEP)
+            const url = `https://viacep.com.br/ws/${uf}/${localidadeEncoded}/${logradouroEncoded}/json/`;
+
+            resultadoDiv.innerHTML = '<p style="text-align: center; color: #1e88e5;">Buscando CEPs, aguarde...</p>';
+
+            try {
+                // 3. Fazer a requisição
+                const response = await fetch(url);
+                const data = await response.json();
+
+                // 4. Tratar a resposta
+                if (response.status === 400) {
+                    exibirMensagem('O formato dos dados não está correto (Erro 400). Verifique o UF.');
+                    resultadoDiv.innerHTML = '';
+                    return;
+                }
+                
+                // O ViaCEP retorna um array vazio ou um objeto com 'erro: true' se não encontrar nada
+                if (data.length === 0 || (Array.isArray(data) && data.length > 0 && data[0].erro)) {
+                    resultadoDiv.innerHTML = `
+                        <p style="color: #721c24; text-align: center; font-weight: bold;">
+                            ❌ Nenhum CEP encontrado. 
+                            <br><br>
+                            Dicas:
+                            <ul>
+                                <li>Use o nome da rua **completo** (Ex: "Rua Afonso Pena" em vez de "Afonso Pena").</li>
+                                <li>Verifique se a Cidade e o Estado estão corretos.</li>
+                                <li>Tente digitar o nome da rua de forma **mais simples** (Ex: omitir "Doutor" ou "Professor").</li>
+                            </ul>
+                        </p>
+                    `;
+                    return;
+                }
+
+                // 5. Exibir os resultados (pode haver mais de um CEP)
+                let htmlResultado = `
+                    <p><strong>✅ ${data.length} CEP(s) encontrado(s). Escolha o que se aplica ao seu endereço:</strong></p>
+                    <hr>
+                `;
+                
+                data.forEach(item => {
+                    htmlResultado += `
+                        <div class="cep-item">
+                            <strong>CEP: ${item.cep}</strong>
+                            <p>${item.logradouro} - ${item.bairro}</p>
+                            <p>${item.localidade}/${item.uf}</p>
+                        </div>
+                    `;
+                });
+
+                resultadoDiv.innerHTML = htmlResultado;
+
+            } catch (error) {
+                exibirMensagem('Erro de conexão ou no servidor. Tente novamente mais tarde.');
+                console.error('Erro na requisição da API:', error);
+                resultadoDiv.innerHTML = '';
+            }
+        }
+    </script>
+</body>
+</html>
+
