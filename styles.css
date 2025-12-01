@@ -312,7 +312,7 @@ body {
     flex-shrink: 0;
     width: 220px; 
     align-items: center;
-    height: 350px; /* Aproximadamente 200px para imagem e 200px para conteúdo */
+    height: 340px; /* Aproximadamente 200px para imagem e 200px para conteúdo */
     border: none;
     border-radius: 19px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
