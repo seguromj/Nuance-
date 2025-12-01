@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu de Drinks - Busca Inteligente</title>
+    <style>
+        /* Estilos da Barra de Busca (FIXA) */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            padding-top: 80px; 
+        }
+
+        .secao-busca {
+            background-color: #558B2F; 
+            padding: 10px 20px;
+            text-align: center;
+            box-shadow: 0 0 10px rgba(0,0,0,0.3);
+            position: fixed; 
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+        
+        .form-busca {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .input-busca {
+            padding: 10px 15px;
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 20px; 
+            font-size: 1em;
+        }
+        
+        .btn-busca {
+            background-color: #FF5722; 
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 10px 15px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1em;
+            transition: background-color 0.3s;
+            flex-shrink: 0; 
+        }
+
+        .btn-busca:hover {
+            background-color: #E64A19;
+        }
+        
+        /* --- ESTILOS DO CONTAINER DE RESULTADOS UNIFICADOS --- */
+        #secao-resultados-busca {
+            padding: 40px 0;
+            background-color: white;
+            display: none; 
+        }
+
+        /* --- NOVO ESTILO PARA O TÍTULO DE RESULTADOS DE BUSCA --- */
+        .titulo-resultados {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px; 
+            font-size: 1.2em; 
+            font-weight: normal; 
+        }
+
+        /* Estilo para a frase de busca ("Nome digitado") */
+        .termo-busca-destaque {
+            display: block; 
+            font-size: 1.8em; 
+            font-weight: bold;
+            color: #FF5722; 
+            margin: 5px 0;
+        }
+
+        /* Estilo para a quantidade de produtos */
+        .quantidade-produtos {
+            display: block; 
+            font-size: 1em;
+            color: #666;
+            margin-top: 5px;
+        }
+        /* --- FIM DOS ESTILOS DO TÍTULO --- */
+
+
+        /* --- ESTILOS GERAIS DE SEÇÕES E CARDS --- */
+        .secao {
+            padding: 40px 0;
+            margin-bottom: 20px;
+            background-color: white;
+            border-bottom: 1px solid #ddd;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        .container-produtos {
+            display: flex;
+            flex-wrap: nowrap; 
+            overflow-x: auto; 
+            padding: 0 20px 20px 20px; 
+            -webkit-overflow-scrolling: touch;
+            gap: 20px;
+        }
+        
+        .container-produtos::-webkit-scrollbar {
+            height: 8px;
+        }
+        .container-produtos::-webkit-scrollbar-thumb {
+            background: #ccc;
+            border-radius: 10px;
+        }
+
+        .card-produto {
+            background-color: #0D8027; 
+            color: white; 
+            border: 1px solid #0288D1;
+            border-radius: 8px;
+            padding: 15px;
+            min-width: 200px; 
+            flex: 0 0 auto; 
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: opacity 0.3s ease; 
+        }
+
+        .imagem-produto {
+            width: 80px;
+            height: 80px;
+            border-radius: 10px;
+            object-fit: cover;
+            margin-bottom: 10px;
+            border: 2px solid white;
+        }
+
+        .nome-produto {
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: white;
+        }
+
+        .detalhes-preco {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .preco-antigo {
+            font-size: 0.9em;
+            color: #B3E5FC; 
+            text-decoration: line-through;
+            margin-bottom: 5px;
+        }
+
+        .linha-preco {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        .preco-real {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #FFEB3B; 
+        }
+
+        .volume {
+            font-size: 0.8em;
+            color: #E1F5FE;
+            margin-left: auto;
+        }
+
+        .divisor {
+            width: 100%;
+            height: 1px;
+            background-color: #81D4FA; 
+            margin: 10px 0;
+        }
+
+        .botao-comprar {
+            display: block;
+            width: 100%;
+            padding: 8px;
+            background-color: #FF5722; 
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .botao-comprar:hover {
+            background-color: #E64A19;
+        }
+
+        .secao-generica {
+            min-height: 150px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #666;
+            flex-direction: column;
+            padding: 40px 20px; 
+        }
+    </style>
+</head>
+<body>
+
+    <section class="secao-busca">
+        <form class="form-busca" onsubmit="event.preventDefault(); buscarProdutos();">
+            <input type="text" 
+                   id="search-input" 
+                   class="input-busca" 
+                   placeholder="Digite o nome do drink, copão ou combo..." 
+                   name="q"
+                   onkeyup="buscarProdutos()"> 
+            
+            <button type="submit" class="btn-busca">🔍 Buscar</button>
+        </form>
+    </section>
+    
+    <section id="secao-resultados-busca">
+        <h2 id="titulo-resultados" class="titulo-resultados"></h2>
+        <div id="container-resultados-produtos" class="container-resultados-produtos">
+            </div>
+    </section>
+
+    <hr id="divisor-busca-catalogo" style="display: none;">
+
+    <section id="sessao1" class="secao secao-catalogo">
+        <h2 class="titulo-secao-original">🍸 Drinks com Álcool</h2>
+        <div class="container-produtos">
+            
+            <div class="card-produto">
+                <img src="https://via.placeholder.com/80/FF5722/FFFFFF?text=D1" alt="Mojito Clássico" class="imagem-produto">
+                <span class="nome-produto">Mojito Clássico</span> 
+                <div class="detalhes-preco">
+                    <span class="preco-antigo">R$ 25,00</span>
+                    <div class="linha-preco">
+                        <span class="preco-real">R$ 22,90</span>
+                        <span class="volume">350ml</span>
+                    </div>
+                </div>
+                <div class="divisor"></div>
+                <a href="#" class="botao-comprar">Pedir</a>
+            </div>
+
+            <div class="card-produto">
+                <img src="https://via.placeholder.com/80/FFC107/333333?text=D2" alt="Caipirinha Morango" class="imagem-produto">
+                <span class="nome-produto">Caipirinha de Morango e Limão</span>
+                <div class="detalhes-preco">
+                    <span class="preco-antigo">R$ 28,00</span>
+                    <div class="linha-preco">
+                        <span class="preco-real">R$ 24,90</span>
+                        <span class="volume">350ml</span>
+                    </div>
+                </div>
+                <div class="divisor"></div>
+                <a href="#" class="botao-comprar">Pedir</a>
+            </div>
+
+            <div class="card-produto">
+                <img src="https://via.placeholder.com/80/673AB7/FFFFFF?text=D3" alt="Gin Tônica" class="imagem-produto">
+                <span class="nome-produto">Gin Tônica com Frutas Roxas</span>
+                <div class="detalhes-preco">
+                    <span class="preco-antigo">R$ 38,00</span>
+                    <div class="linha-preco">
+                        <span class="preco-real">R$ 34,99</span>
+                        <span class="volume">400ml</span>
+                    </div>
+                </div>
+                <div class="divisor"></div>
+                <a href="#" class="botao-comprar">Pedir</a>
+            </div>
+
+            <div class="card-produto">
+                <img src="https://via.placeholder.com/80/00BCD4/FFFFFF?text=D4" alt="Blue Lagoon" class="imagem-produto">
+                <span class="nome-produto">Blue Lagoon Refrescante</span> 
+                <div class="detalhes-preco">
+                    <span class="preco-antigo">R$ 30,00</span>
+                    <div class="linha-preco">
+                        <span class="preco-real">R$ 27,90</span>
+                        <span class="volume">350ml</span>
+                    </div>
+                </div>
+                <div class="divisor"></div>
+                <a href="#" class="botao-comprar">Pedir</a>
+            </div>
+        </div>
+    </section>
+
+    <hr class="divisor-catalogo">
+
+    <section id="sessao2" class="secao secao-catalogo">
+        <h2 class="titulo-secao-original">🍋 Drinks sem Álcool</h2>
+        <div class="container-produtos">
+
+            <div class="card-produto">
+                <img src="https://via.placeholder.com/80/4CAF50/FFFFFF?text=SA1" alt="Limonada Suíça" class="imagem-produto">
+                <span class="nome-produto">Limonada Suíça Cremosa</span>
+                <div class="detalhes-preco">
+                    <span class="preco-antigo">R$ 15,00</span>
+                    <div class="linha-preco">
+                        <span class="preco-real">R$ 12,90</span>
+                        <span class="volume">400ml</span>
+                    </div>
+                </div>
+                <div class="divisor"></div>
+                <a href="#" class="botao-comprar">Pedir</a>
+            </div>
+
+            <div class="card-produto">
+                <img src="https://via.placeholder.com/80/009688/FFFFFF?text=SA2" alt="Mojito Virgin" class="imagem-produto">
+                <span class="nome-produto">Mojito Virgin de Maçã Verde</span>
+                <div class="detalhes-preco">
+                    <span class="preco-antigo">R$ 18,00</span>
+                    <div class="linha-preco">
+                        <span class="preco-real">R$ 15,00</span>
+                        <span class="volume">350ml</span>
+                    </div>
+                </div>
+                <div class="divisor"></div>
+                <a href="#" class="botao-comprar">Pedir</a>
+            </div>
+
+            <div class="card-produto">
+                <img src="https://via.placeholder.com/80/FF9800/FFFFFF?text=SA3" alt="Soda Italiana" class="imagem-produto">
+                <span class="nome-produto">Soda Italiana de Laranja e Gengibre</span>
+                <div class="detalhes-preco">
+                    <span class="preco-antigo">R$ 20,00</span>
+                    <div class="linha-preco">
+                        <span class="preco-real">R$ 17,90</span>
+                        <span class="volume">300ml</span>
+                    </div>
+                </div>
+                <div class="divisor"></div>
+                <a href="#" class="botao-comprar">Pedir</a>
+            </div>
+        </div>
+    </section>
+
+    <hr class="divisor-catalogo">
+
+    <section id="sessao3" class="secao secao-catalogo">
+        <h2 class="titulo-secao-original">🍺 Copão</h2>
+        <div class="container-produtos">
+
+            <div class="card-produto">
+                <img src="https://via.placeholder.com/80/F44336/FFFFFF?text=C1" alt="Copão Whisky" class="imagem-produto">
+                <span class="nome-produto">Copão de Whisky com Redbull</span>
+                <div class="detalhes-preco">
+                    <span class="preco-antigo">R$ 45,00</span>
+                    <div class="linha-preco">
+                        <span class="preco-real">R$ 39,90</span>
+                        <span class="volume">700ml</span>
+                    </div>
+                </div>
+                <div class="divisor"></div>
+                <a href="#" class="botao-comprar">Pedir</a>
+            </div>
+
+            <div class="card-produto">
+                <img src="https://via.placeholder.com/80/9C27B0/FFFFFF?text=C2" alt="Copão Gin" class="imagem-produto">
+                <span class="nome-produto">Copão de Gin Tropical</span>
+                <div class="detalhes-preco">
+                    <span class="preco-antigo">R$ 40,00</span>
+                    <div class="linha-preco">
+                        <span class="preco-real">R$ 35,00</span>
+                        <span class="volume">700ml</span>
+                    </div>
+                </div>
+                <div class="divisor"></div>
+                <a href="#" class="botao-comprar">Pedir</a>
+            </div>
+
+            <div class="card-produto">
+                <img src="https://via.placeholder.com/80/000000/FFFFFF?text=C3" alt="Copão Vodka" class="imagem-produto">
+                <span class="nome-produto">Copão de Vodka com Energético</span>
+                <div class="detalhes-preco">
+                    <span class="preco-antigo">R$ 35,00</span>
+                    <div class="linha-preco">
+                        <span class="preco-real">R$ 32,90</span>
+                        <span class="volume">700ml</span>
+                    </div>
+                </div>
+                <div class="divisor"></div>
+                <a href="#" class="botao-comprar">Pedir</a>
+            </div>
+        </div>
+    </section>
+
+    <hr class="divisor-catalogo">
+
+    <section id="sessao4" class="secao secao-catalogo">
+        <h2 class="titulo-secao-original">📦 Combo</h2>
+        <div class="container-produtos">
+            
+            <div class="card-produto">
+                <img src="https://via.placeholder.com/80/795548/FFFFFF?text=CM1" alt="Combo Cerveja" class="imagem-produto">
+                <span class="nome-produto">Combo Cervejas Especiais (6 Unidades)</span> 
+                <div class="detalhes-preco">
+                    <span class="preco-antigo">R$ 80,00</span>
+                    <div class="linha-preco">
+                        <span class="preco-real">R$ 69,90</span>
+                        <span class="volume">6x 355ml</span>
+                    </div>
+                </div>
+                <div class="divisor"></div>
+                <a href="#" class="botao-comprar">Pedir</a>
+            </div>
+
+            <div class="card-produto">
+                <img src="https://via.placeholder.com/80/FF9800/FFFFFF?text=CM2" alt="Combo Aperitivo" class="imagem-produto">
+                <span class="nome-produto">Combo Aperitivo + Copão de Gin</span>
+                <div class="detalhes-preco">
+                    <span class="preco-antigo">R$ 75,00</span>
+                    <div class="linha-preco">
+                        <span class="preco-real">R$ 65,00</span>
+                        <span class="volume">1L + Petisco</span>
+                    </div>
+                </div>
+                <div class="divisor"></div>
+                <a href="#" class="botao-comprar">Pedir</a>
+            </div>
+
+            <div class="card-produto">
+                <img src="https://via.placeholder.com/80/FFEB3B/333333?text=CM3" alt="Combo Shots" class="imagem-produto">
+                <span class="nome-produto">Combo 5 Shots de Tequila</span>
+                <div class="detalhes-preco">
+                    <span class="preco-antigo">R$ 55,00</span>
+                    <div class="linha-preco">
+                        <span class="preco-real">R$ 49,90</span>
+                        <span class="volume">5 Shots</span>
+                    </div>
+                </div>
+                <div class="divisor"></div>
+                <a href="#" class="botao-comprar">Pedir</a>
+            </div>
+            
+        </div>
+    </section>
+    
+    <hr class="divisor-catalogo">
+
+    <script>
+        const MAX_TOLERANCIA = 1; 
+
+        function normalizarTextoParaPalavras(texto) {
+            if (!texto) return ''; 
+
+            let str = texto.toLowerCase();
+            str = str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+            return str;
+        }
+
+        function calcularDistancia(a, b) {
+            if (a.length === 0) return b.length;
+            if (b.length === 0) return a.length;
+
+            const matrix = [];
+            for (let i = 0; i <= b.length; i++) {
+                matrix[i] = [i];
+            }
+            for (let j = 1; j <= a.length; j++) {
+                matrix[0][j] = j;
+            }
+
+            for (let i = 1; i <= b.length; i++) {
+                for (let j = 1; j <= a.length; j++) {
+                    const cost = (b.charAt(i - 1) === a.charAt(j - 1)) ? 0 : 1;
+                    matrix[i][j] = Math.min(
+                        matrix[i - 1][j] + 1,      
+                        matrix[i][j - 1] + 1,       
+                        matrix[i - 1][j - 1] + cost 
+                    );
+                }
+            }
+            return matrix[b.length][a.length];
+        }
+
+        function buscarProdutos() {
+            // Valor original digitado pelo usuário (para exibição no título)
+            const inputBusca = document.getElementById('search-input').value.trim();
+            
+            // Palavras-chave normalizadas para a lógica de busca
+            const palavrasChave = normalizarTextoParaPalavras(inputBusca)
+                                    .split(/\s+/)
+                                    .filter(p => p.length > 0); 
+            
+            const secoesCatalogo = document.querySelectorAll('.secao-catalogo, .secao-generica, .divisor-catalogo');
+            const secaoResultados = document.getElementById('secao-resultados-busca');
+            const containerResultados = document.getElementById('container-resultados-produtos');
+            const tituloResultados = document.getElementById('titulo-resultados');
+            
+            containerResultados.innerHTML = '';
+            
+            if (palavrasChave.length === 0) {
+                secaoResultados.style.display = 'none';
+                secoesCatalogo.forEach(secao => secao.style.display = 'block');
+                return;
+            }
+
+            secoesCatalogo.forEach(secao => secao.style.display = 'none');
+
+            let produtosEncontrados = 0;
+            const todosOsCards = document.querySelectorAll('.card-produto');
+            
+            todosOsCards.forEach(card => {
+                const nomeProdutoElement = card.querySelector('.nome-produto');
+                
+                if (nomeProdutoElement) {
+                    const nomeProdutoNormalizado = normalizarTextoParaPalavras(nomeProdutoElement.textContent);
+                    
+                    let todasAsPalavrasPresentes = true;
+
+                    for (const palavraChave of palavrasChave) {
+                        
+                        // 1. Busca por Substring (mais rápida e priorizada)
+                        if (nomeProdutoNormalizado.includes(palavraChave)) {
+                            continue; 
+                        }
+
+                        // 2. Busca Tolerante (Fuzzy Search)
+                        
+                        // Quebra o nome do produto em palavras (usando qualquer caractere não alfanumérico como divisor)
+                        const palavrasDoProduto = nomeProdutoNormalizado.split(/[^a-z0-9]/).filter(p => p.length > 0);
+                        
+                        let encontrouTolerante = false;
+
+                        for (const palavraProduto of palavrasDoProduto) {
+                            if (palavraChave.length >= 3) {
+                                const distancia = calcularDistancia(palavraChave, palavraProduto);
+                                
+                                if (distancia <= MAX_TOLERANCIA) {
+                                    encontrouTolerante = true;
+                                    break; 
+                                }
+                            }
+                        }
+
+                        if (!encontrouTolerante) {
+                            todasAsPalavrasPresentes = false;
+                            break; 
+                        }
+                    }
+
+                    if (todasAsPalavrasPresentes) {
+                        const cardClonado = card.cloneNode(true);
+                        cardClonado.style.display = 'flex'; 
+                        containerResultados.appendChild(cardClonado);
+                        produtosEncontrados++;
+                    }
+                }
+            });
+
+
+            // --- LÓGICA DE FORMATAÇÃO DO TÍTULO (NOVA) ---
+            secaoResultados.style.display = 'block';
+
+            if (produtosEncontrados > 0) {
+                tituloResultados.innerHTML = `
+                    Resultado da busca
+                    <span class="termo-busca-destaque">"${inputBusca}"</span>
+                    <span class="quantidade-produtos">👇(${produtosEncontrados} produtos)👇</span>
+                `;
+            } else {
+                tituloResultados.innerHTML = `
+                    Resultado da busca
+                    <span class="termo-busca-destaque">"${inputBusca}"</span>
+                    <span class="quantidade-produtos">(Nenhum produto encontrado)</span>
+                `;
+            }
+            // --- FIM DA LÓGICA DE FORMATAÇÃO DO TÍTULO ---
+        }
+    </script>
+</body>
+</html>
