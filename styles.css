@@ -347,6 +347,7 @@ body {
   text-decoration-color: white;
   text-decoration-thickness: 1px;
 }
+
 .text-produto {
   font-size: 20px;
   color: white;
@@ -354,6 +355,11 @@ body {
   border-bottom: 1px solid black; 
   /* Adiciona um pequeno espaço entre o texto e a linha */
   padding-bottom: 9px;
+}
+
+.ml {
+  font-size: 12px;
+  color: white;
 }
 
 .button-passar {
