@@ -279,6 +279,9 @@ body {
   font-family: Georgia, "Times New Roman", serif;
   color: #0D3B14;
 }
+.h1-texto {
+  font-size: 12px;
+}
 
 
 .btn-comprar {
