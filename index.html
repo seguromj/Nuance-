@@ -133,9 +133,6 @@
     font-size: 0.7em;
     font-weight: bold;
 }
-      
-    
-      
     .img-mapa {
       display: flex;
       width: 50px;
@@ -147,9 +144,59 @@
     /* Shorthand: */
     margin: 0 auto;  
     }
+/*---__Botão X__--------------------*/
+    /* Estilização básica do botão */
+.botao-X {
+    /* Define o tamanho e margem */
+    padding: 15px 30px;
+    margin: 50px;
     
+    /* Remove a borda padrão do botão */
+    border: none;
     
+    /* Configura o texto */
+    color: white; /* Cor do texto inicial */
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer; /* Muda o cursor para indicar que é clicável */
     
+    /* Sombra opcional para um visual mais 'elevado' */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); 
+    
+    /* Aplica a animação principal */
+    /* Propriedades:
+    1. nome-da-animacao (piscar)
+    2. duração (1s)
+    3. função de tempo (ease-in-out para um piscar suave)
+    4. contagem de repetições (infinite para piscar sem parar)
+    5. direção (alternate - opcional, garante que o piscar seja suave)
+    */
+    animation: piscar 1s ease-in-out infinite alternate;
+}
+
+/* Define a animação "piscar" usando keyframes 
+0% e 100% são o início e o fim do ciclo de animação.
+*/
+@keyframes piscar {
+    /* Estado inicial (0% do ciclo de animação) */
+    0% {
+        background-color: #ff0000; /* Vermelho vibrante */
+        opacity: 1; /* Totalmente visível */
+    }
+
+    /* Ponto intermediário (50% do ciclo de animação) */
+    50% {
+        background-color: #000000; /* Preto */
+        opacity: 0.7; /* Ligeiramente transparente para dar efeito de "piscar" */
+    }
+
+    /* Estado final (100% do ciclo de animação) */
+    100% {
+        background-color: #ff0000; /* Volta para vermelho */
+        opacity: 1; /* Totalmente visível */
+    }
+}
+
 
 
       
@@ -178,8 +225,7 @@
           class="w-full p-3 border-2 border-indigo-300 rounded-xl focus:border-indigo-500 focus:ring-indigo-500 outline-none transition duration-150 text-center text-lg font-mono"
           oninput="formatarCEP(this)"/>
 
-        <a class="botao-X" href="loja.html">
-       X</a>
+        <a class="botao-X" href="loja.html">X</a>
 
 
 <div class="cep-ajuda">
@@ -426,6 +472,7 @@
   </body>
 
 </html>
+
 
 
 
