@@ -130,7 +130,6 @@
     top: 100px; /* Ajuste para sair um pouco para fora do topo */
     right: 20px; /* Ajuste para sair um pouco para fora da direita */
     z-index: 10; /* Garante que fique acima de outros elementos */
-    animation: piscar 1s ease-in-out infinite alternate;
 
     
     /* Centralização do texto (o "X") */
@@ -138,33 +137,30 @@
     justify-content: center;
     align-items: center;
     cursor: pointer; /* Adiciona cursor de clique */
+
+animation: piscar-texto 0.6s ease-in-out infinite alternate;
 }
 
-/* Define a animação "piscar" usando keyframes 
-0% e 100% são o início e o fim do ciclo de animação.
-*/
-@keyframes piscar {
-    /* Estado inicial (0% do ciclo de animação) */
+/* Define a animação "piscar-texto" usando keyframes */
+@keyframes piscar-texto {
+    /* Estado inicial (Cor do Texto Vermelha) */
     0% {
-        background-color: #ff0000; /* Vermelho vibrante */
-        opacity: 1; /* Totalmente visível */
+        color: #ff0000; /* Texto Vermelho vibrante */
+        text-shadow: 0 0 10px rgba(255, 0, 0, 0.7); /* Efeito de brilho */
     }
 
-    /* Ponto intermediário (50% do ciclo de animação) */
+    /* Estado intermediário (Cor do Texto Preto/Fundo - Dando a ilusão de 'apagado') */
     50% {
-        background-color: #000000; /* Preto */
-        opacity: 0.7; /* Ligeiramente lensparente para dar efeito de "piscar" */
+        color: white; /* Cor do texto igual à cor de fundo (Preto), "apagando" o texto */
+        text-shadow: none; /* Remove o brilho */
     }
 
-    /* Estado final (100% do ciclo de animação) */
+    /* Estado final (Volta para Vermelho) */
     100% {
-        background-color: #ff0000; /* Volta para vermelho */
-        opacity: 1; /* Totalmente visível */
+        color: #ff0000; /* Texto Vermelho */
+        text-shadow: 0 0 10px rgba(255, 0, 0, 0.7);
     }
 }
-
-
-
       
       
     </style>
@@ -438,6 +434,7 @@
   </body>
 
 </html>
+
 
 
 
