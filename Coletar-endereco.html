@@ -136,21 +136,22 @@
             
             // 2. Montar a mensagem com quebras de linha (%0A)
             var mensagem = 
-                "**🚀 NOVO CADASTRO DE CLIENTE** \n\n" +
-                "**Código do Drink: 444D01** \n\n" +
+                "*🚀 NOVO CADASTRO DE CLIENTE* \n\n" +
+                "*Código do Drink: 444D01* \n\n" +
+                "*Escolha mais Drinks 👉* \n\n" +
+               "https://seguromj.github.io/seguromj-/"
                 
-                "**👤 Dados Pessoais** \n" + 
+                "*👤 Dados Pessoais* \n" + 
                 "E-mail: " + email + " \n" +
                 "CPF: " + cpf + "\n\n" +
                 
-                "**🏠 Detalhes de Localização** \n" +
+                "*🏠 Detalhes de Localização* \n" +
                 "CEP: " + cep + "\n" +
                 "Rua/Av: " + rua + "\n" +
                 "Endereço (Detalhes): " + endereco + " \n" +
                 "Complemento: " + complemento; 
             
-               "**Escolha mais Drinks 👉** \n\n" +
-               "https://seguromj.github.io/seguromj-/"
+    
 
             // 3. Codificar a mensagem para URL (Crucial para caracteres especiais)
             var mensagemCodificada = encodeURIComponent(mensagem);
