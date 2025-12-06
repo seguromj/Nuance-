@@ -53,7 +53,7 @@
         #search-input {
             width: 70%;
             padding: 9px 10px 12px 50px;
-            border: 2px solid #ff6b6b;
+            border: 2px solid #2B758C;
             border-radius: 25px;
             font-size: 16px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
@@ -289,7 +289,7 @@
             top: 20px; 
             right: 20px;
             
-            background-color: #00bcd4;
+            background-color: #327D46;
             color: white;
             padding: 15px 25px;
             border: none;
@@ -784,7 +784,7 @@
                 <p><strong>Total: <span id="carrinho-total">R$ 0,00</span></strong></p>
                 
                 <button class="btn-modal-action" onclick="avancarEtapa()">
-                    Continuar para Dados de Contato e Local
+                   FINALIZAR
                 </button>
             </div>
 
@@ -1368,7 +1368,7 @@
                 mensagemPedido += `Local: *Entrega*\n`;
                 mensagemPedido += `Rua/Av: ${form.rua}, Nº ${form.numero}\n`;
                 if (form.complemento) {
-                     mensagemPedido += `Comp.: ${form.complemento}\n`;
+                     mensagemPedido += `Comple.: ${form.complemento}\n`;
                 }
                 mensagemPedido += `CEP: ${form.cep}\n`;
             }
@@ -1399,7 +1399,7 @@
             }
 
             mensagemPedido += `\n*💲 TOTAL A PAGAR: R$ ${totalFinalFormatado} 💲*\n\n`;
-            mensagemPedido += "_Aguardando confirmação e forma de pagamento._";
+            mensagemPedido += "_Seu link de pagamento está sendo gerado. ._";
 
             return mensagemPedido;
         }
