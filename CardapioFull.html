@@ -581,6 +581,11 @@
     <p id="no-results">Nenhum produto encontrado com o termo digitado.</p>
 
     <div class="container">
+
+
+<button id="prev-btn">👉</button>
+
+
         
         <h2 class="section-title" id="search-results-title"></h2>
         <div class="product-grid" id="search-results-carousel" style="display: none;">
@@ -685,6 +690,9 @@
                             <button class="btn-add" onclick="adicionarAoCarrinho('Pina Colada', 19.99, this)">Adicionar ao Carrinho</button>
                         </div>
                     </div>
+
+
+<button id="prev-btn">👉</button>
                 </div>
 
 <!-------------------------------------------------------------------------------------------------------->
@@ -1606,6 +1614,38 @@
              document.getElementById('coupon-input').value = '';
              atualizarCarrinhoFlutuante();
         });
+
+
+
+
+
+
+const wrapper = document.querySelector('.cards-wrapper');
+const nextBtn = document.getElementById('next-btn');
+const prevBtn = document.getElementById('prev-btn');
+
+// Calcule o quanto rolar. Isso pode ser ajustado.
+// Aqui, pegamos a largura do primeiro card para rolar um card por vez.
+const cardWidth = document.querySelector('.card').offsetWidth;
+const scrollAmount = cardWidth + 20; // + 20px de margem/gap, se houver
+
+nextBtn.addEventListener('click', () => {
+    // Adiciona o valor do deslocamento ao scroll horizontal atual
+    // Usamos 'smooth' para uma transição suave.
+    wrapper.scrollBy({
+        left: scrollAmount,
+        behavior: 'smooth'
+    });
+});
+
+prevBtn.addEventListener('click', () => {
+    // Subtrai o valor do deslocamento do scroll horizontal atual
+    wrapper.scrollBy({
+        left: -scrollAmount,
+        behavior: 'smooth'
+    });
+});
+        
     </script>
 </body>
 </html>
