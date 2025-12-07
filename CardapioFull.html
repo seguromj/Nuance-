@@ -565,6 +565,86 @@
             gap: 10px;
             margin-top: 15px;
         }
+
+
+
+
+
+
+
+
+
+
+        /* 1. Contêiner Principal */
+/* O contêiner pai deve ter 'position: relative' para que os botões possam ser posicionados 'absolute' em relação a ele. */
+.carousel-container {
+    position: relative; 
+    margin: 0 auto;
+    padding: 0 40px; /* Espaço nas laterais para os botões */
+}
+
+/* 2. O Conteúdo do Carrossel (A sua grid de produtos) */
+.carousel-content {
+    /* Habilita o scroll horizontal e esconde a barra de rolagem */
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap; /* Impede que os cards quebrem para a linha de baixo */
+    scroll-behavior: smooth; /* Adiciona animação suave ao deslizar */
+    -ms-overflow-style: none; /* Esconde a barra no IE e Edge */
+    scrollbar-width: none; /* Esconde a barra no Firefox */
+    padding-bottom: 10px; /* Garante que a sombra dos cards não seja cortada */
+}
+
+/* Esconde a barra de rolagem no Chrome, Safari e Opera */
+.carousel-content::-webkit-scrollbar {
+    display: none;
+}
+
+/* 3. Estilo dos Cards (Itens do Carrossel) */
+.carousel-content .card {
+    display: inline-block; /* Faz os cards ficarem lado a lado */
+    margin-right: 15px; /* Espaço entre os cards */
+    /* Mantenha o seu estilo original de card (largura, altura, etc.) */
+}
+
+/* 4. Estilo e Posicionamento dos Botões */
+.nav-button {
+    position: absolute; /* Posiciona o botão em relação ao .carousel-container */
+    
+    /* CHAVE PARA CENTRALIZAÇÃO VERTICAL: */
+    top: 50%; 
+    transform: translateY(-50%); /* Ajusta o botão para cima pela metade de sua altura, centralizando-o */
+    
+    /* Estilos Visuais */
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    z-index: 10; /* Garante que o botão fique em cima dos produtos */
+    font-size: 24px;
+    line-height: 1;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.3s;
+}
+
+/* Posicionamento Lateral */
+.nav-button.prev {
+    left: 0;
+}
+
+.nav-button.next {
+    right: 0;
+}
+
+.nav-button:hover {
+    background-color: rgba(0, 0, 0, 0.7);
+}
     </style>
 </head>
 <body>
