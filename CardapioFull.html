@@ -1324,678 +1324,775 @@
 
     <script>
   
-// =======================
-// === JAVASCRIPT (Lógica) ===
-// =======================
-
-let carrinho = [];
-let etapaAtual = 1; 
-let cupomAplicado = null; // Armazena o cupom ativo
-let descontoValor = 0;    // Armazena o valor do desconto calculado
-
-// Localiza todos os cards de produtos
-const cards = document.querySelectorAll('.card');
-const noResultsMessage = document.getElementById('no-results');
-
-// Dados do Cliente (Preenchidos pelo formulário)
-const form = {
-    nome: '',
-    telefone: '',
-    local: '',
-    mesa: '',
-    cep: '',
-    rua: '',
-    numero: '',
-    complemento: ''
-};
-
-// Catálogo de cupons válidos
-const cuponsValidos = {
-    // CUPOM DE R$5,00 (Exemplo que ABATE o valor)
-    "CINCO": { type: "flat", value: 5.00, minPurchase: 0.00, message: "R$5,00 de desconto aplicado!" },
-    // CUPOM FRETEGRATIS (NÃO ABATE o valor, apenas adiciona uma NOTA no WhatsApp)
-    "FRETEGRATIS": { type: "note", value: 0, minPurchase: 10.00, message: "Frete Grátis a ser aplicado na finalização da entrega/balcão." },
-    "NUANCE10": { type: "percent", value: 0.10, minPurchase: 50.00, message: "10% OFF em pedidos acima de R$50!" },
-    "MEGA20": { type: "flat", value: 20.00, minPurchase: 100.00, message: "R$20,00 de desconto!" }
-}; 
-
-// ------------------------------------------
-// --- LÓGICA DE PESQUISA (Busca Flexível) ---
-// ------------------------------------------
-
-/**
- * Função principal para filtrar os produtos na página de forma flexível.
- */
-function filtrarProdutos() {
-    // 1. Pega o texto digitado e o prepara para a busca
-    const termo = document.getElementById('search-input').value.trim().toUpperCase();
-    let resultadosEncontrados = 0;
-
-    // 2. Itera sobre cada card de produto
-    cards.forEach(card => {
-        // Pega o nome do produto no atributo data-name e o padroniza
-        const nomeProduto = card.getAttribute('data-name').toUpperCase();
+        // =======================
+        // === JAVASCRIPT (Lógica) ===
+        // =======================
         
-        // --- CHAVE DA SOLUÇÃO: Usando includes() para buscar em qualquer parte da string ---
-        const corresponde = nomeProduto.includes(termo); 
+        let carrinho = [];
+        let etapaAtual = 1; 
+        let cupomAplicado = null; // Armazena o cupom ativo
+        let descontoValor = 0;    // Armazena o valor do desconto calculado
         
-        // 3. Exibe ou esconde o card
-        if (corresponde) {
-            card.style.display = 'inline-block'; // Garante que o display correto seja aplicado
-            resultadosEncontrados++;
-        } else {
-            card.style.display = 'none'; // Esconde o card
+        // Dados do Cliente
+        const form = {
+            nome: '',
+            telefone: '',
+            local: '',
+            mesa: '',
+            cep: '',
+            rua: '',
+            numero: '',
+            complemento: ''
+        };
+        
+        // Catálogo de cupons válidos
+        const cuponsValidos = {
+            // CUPOM DE R$5,00 (Exemplo que ABATE o valor)
+            "CINCO": { type: "flat", value: 5.00, minPurchase: 0.00, message: "R$5,00 de desconto aplicado!" },                   // ---CINCO---
+
+            // CUPOM FRETEGRATIS (NÃO ABATE o valor, apenas adiciona uma NOTA no WhatsApp)
+            "FRETEGRATIS": {                                                                                                       // --- FRETEGRATIS ---
+                type: "note",  
+                value: 0, 
+                minPurchase: 10.00, 
+                message: "Frete Grátis a ser aplicado na finalização da entrega/balcão." 
+            },
+            
+            "NUANCE10": { type: "percent", value: 0.10, minPurchase: 50.00, message: "10% OFF em pedidos acima de R$50!" },          // --- NUANCE10 ---
+            "MEGA20": { type: "flat", value: 20.00, minPurchase: 100.00, message: "R$20,00 de desconto!" }                          // --- MEGA20 ---
+        }; 
+
+        // --- FUNÇÕES DE FORMATAÇÃO E VALIDAÇÃO ---
+        function formatarTelefone(input) {
+            let value = input.value.replace(/\D/g, ''); 
+            let formatted = '';
+
+            if (value.length > 0) {
+                formatted = '(' + value.substring(0, 2);
+            }
+            if (value.length > 2) {
+                formatted += ') ' + value.substring(2, 7);
+            }
+            if (value.length > 7) {
+                formatted += '-' + value.substring(7, 11);
+            }
+            input.value = formatted;
         }
-    });
 
-    // 4. Lógica para a mensagem "Nenhum produto encontrado"
-    if (termo === '' || resultadosEncontrados > 0) {
-        noResultsMessage.style.display = 'none';
-    } else {
-        noResultsMessage.style.display = 'block';
-    }
-    
-    // 5. Ocultar seções vazias para melhor organização durante a busca
-    atualizarVisibilidadeSecoes();
-}
+        function formatarCEP(input) {
+            let value = input.value.replace(/\D/g, ''); 
+            let formatted = '';
 
-/**
- * Função auxiliar para garantir que seções (h2 + carrossel) vazias sejam ocultadas.
- */
-function atualizarVisibilidadeSecoes() {
-    document.querySelectorAll('.carousel-container').forEach(container => {
-        const titleElement = container.previousElementSibling; // Pega o <h2>
-        const navPrev = container.querySelector('.nav-button.prev');
-        const navNext = container.querySelector('.nav-button.next');
-        
-        let visiveisNoFiltro = 0;
-        container.querySelectorAll('.card').forEach(card => {
-            // Conta cards que não foram escondidos pela busca
-            if (card.style.display !== 'none' && card.style.display !== '0') {
-                 visiveisNoFiltro++;
+            if (value.length > 0) {
+                formatted = value.substring(0, 5);
+            }
+            if (value.length > 5) {
+                formatted += '-' + value.substring(5, 8);
+            }
+            input.value = formatted;
+        }
+
+        // --- LÓGICA DE EXIBIÇÃO DE CAMPOS CONDICIONAIS ---
+        document.getElementById('local').addEventListener('change', function() {
+            const local = this.value;
+            const campoMesa = document.getElementById('campo-mesa');
+            const camposEndereco = document.getElementById('campos-endereco');
+            
+            // Lógica de reset e exibição
+            campoMesa.style.display = 'none';
+            camposEndereco.style.display = 'none';
+            
+            document.getElementById('mesa').removeAttribute('required');
+            document.getElementById('cep').removeAttribute('required');
+            document.getElementById('rua').removeAttribute('required');
+            document.getElementById('numero').removeAttribute('required');
+
+            // Limpa os valores ao mudar de opção (boa prática)
+            document.getElementById('mesa').value = '';
+            document.getElementById('cep').value = '';
+            document.getElementById('rua').value = '';
+            document.getElementById('numero').value = '';
+            document.getElementById('complemento').value = ''; 
+
+            if (local === 'Mesa') {
+                campoMesa.style.display = 'block';
+                document.getElementById('mesa').setAttribute('required', 'required');
+            } else if (local === 'Entrega') {
+                camposEndereco.style.display = 'block';
+                document.getElementById('cep').setAttribute('required', 'required');
+                document.getElementById('rua').setAttribute('required', 'required');
+                document.getElementById('numero').setAttribute('required', 'required');
             }
         });
-        
-        // Oculta/Exibe o título e o container se não houver cards visíveis
-        if (visiveisNoFiltro === 0 && document.getElementById('search-input').value.trim() !== '') {
-            if (titleElement) titleElement.style.display = 'none';
-            container.style.display = 'none';
-        } else {
-            if (titleElement) titleElement.style.display = 'block';
-            container.style.display = 'block';
-        }
 
-        // Esconde/Mostra os botões de navegação do carrossel se houver menos de 4 itens visíveis
-        if (navPrev && navNext) {
-            if (visiveisNoFiltro <= 3) { // Ajuste conforme quantos itens cabem na tela
-                navPrev.style.display = 'none';
-                navNext.style.display = 'none';
-            } else {
-                navPrev.style.display = 'flex'; // Use flex para garantir centralização
-                navNext.style.display = 'flex';
-            }
-        }
-    });
-}
 
-// ------------------------------------------
-// --- LÓGICA DO CARRINHO ---
-// ------------------------------------------
+        // ===================================
+        // === CONTROLE DE ETAPAS DO MODAL ===
+        // ===================================
 
-function atualizarCarrinhoFlutuante() {
-    const totalItens = carrinho.reduce((sum, item) => sum + item.quantidade, 0);
-    let totalValor = carrinho.reduce((sum, item) => sum + (item.preco * item.quantidade), 0);
-    
-    // Calcula o desconto para exibição no botão (totalValor é o subtotal)
-    let totalDescontoParaBotao = 0;
-    if (cupomAplicado && cupomAplicado.type !== 'note') {
-        if (cupomAplicado.type === 'percent') {
-            totalDescontoParaBotao = totalValor * cupomAplicado.value;
-        } else if (cupomAplicado.type === 'flat') {
-            totalDescontoParaBotao = cupomAplicado.value;
-        }
-        totalDescontoParaBotao = Math.min(totalDescontoParaBotao, totalValor);
-    }
-    
-    const totalFinalParaBotao = totalValor - totalDescontoParaBotao;
-    const totalFormatado = totalFinalParaBotao.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-    
-    const carrinhoFlutuante = document.getElementById('carrinho-flutuante');
-    carrinhoFlutuante.textContent = `🛒 Carrinho (${totalItens}) - ${totalFormatado}`;
-    
-    carrinhoFlutuante.style.display = totalItens > 0 ? 'block' : 'none';
-}
-
-function adicionarAoCarrinho(nome, preco, buttonElement) {
-    const itemExistente = carrinho.find(item => item.nome === nome);
-    if (itemExistente) {
-        itemExistente.quantidade++;
-    } else {
-        carrinho.push({ nome, preco, quantidade: 1 });
-    }
-    
-    // Feedback visual
-    if (buttonElement) {
-        const originalText = buttonElement.textContent;
-        buttonElement.textContent = '✅ Adicionado!';
-        buttonElement.style.backgroundColor = '#66BB6A';
-        buttonElement.disabled = true;
-
-        setTimeout(() => {
-            buttonElement.textContent = originalText;
-            buttonElement.style.backgroundColor = '#4CAF50';
-            buttonElement.disabled = false;
-        }, 800);
-    }
-    
-    atualizarCarrinhoFlutuante();
-    aplicarCupom(true); // Tenta reaplicar o cupom (silencioso)
-}
-
-function adicionarCaipifrutaSabor(sabor, preco, buttonElement) {
-    const cardElement = buttonElement.closest('.card');
-    const nomeBase = cardElement ? cardElement.getAttribute('data-name') : 'Produto com Sabor';
-    const nomeCompleto = `${nomeBase} - ${sabor}`;
-    
-    const itemExistente = carrinho.find(item => item.nome === nomeCompleto);
-
-    if (itemExistente) {
-        itemExistente.quantidade++;
-    } else {
-        carrinho.push({ nome: nomeCompleto, preco, quantidade: 1 });
-    }
-    
-    // Feedback visual e fechar dropdown
-    if (buttonElement) {
-        const menu = cardElement.querySelector('.sabores-menu');
-        if (menu) {
-             menu.style.display = 'none';
-        }
-    }
-    
-    atualizarCarrinhoFlutuante();
-    aplicarCupom(true); // Tenta reaplicar o cupom (silencioso)
-    alert(`✅ ${nomeCompleto} adicionado ao carrinho!`);
-}
-
-function removerItemCarrinho(index) {
-    carrinho.splice(index, 1); 
-    atualizarCarrinhoFlutuante();
-    aplicarCupom(true); 
-    atualizarListaCarrinhoModal(); 
-}
-
-// ------------------------------------------
-// --- LÓGICA DO CUPOM ---
-// ------------------------------------------
-
-function removerCupom() {
-    cupomAplicado = null;
-    descontoValor = 0;
-    document.getElementById('coupon-input').value = '';
-    document.getElementById('coupon-message').textContent = 'Cupom removido.';
-    document.getElementById('coupon-message').style.color = 'gray';
-    document.getElementById('remove-coupon-btn').style.display = 'none';
-
-    atualizarListaCarrinhoModal();
-    atualizarCarrinhoFlutuante();
-}
-
-function aplicarCupom(isSilent = false) {
-    const input = document.getElementById('coupon-input');
-    const messageDisplay = document.getElementById('coupon-message');
-    const removeBtn = document.getElementById('remove-coupon-btn');
-    const codigoCupom = input.value.trim().toUpperCase();
-    
-    const cupomParaTestar = codigoCupom.length > 0 ? codigoCupom : (cupomAplicado ? cupomAplicado.codigo : null);
-
-    // Salva o cupom ativo antes de zerar, para revalidação
-    const cupomAnterior = cupomAplicado ? { ...cupomAplicado } : null;
-    cupomAplicado = null;
-    descontoValor = 0;
-    
-    if (!isSilent || codigoCupom.length > 0) {
-         messageDisplay.textContent = '';
-         messageDisplay.style.color = 'red';
-    }
-    removeBtn.style.display = 'none';
-
-    const totalItens = carrinho.reduce((sum, item) => sum + (item.preco * item.quantidade), 0);
-    
-    // Se a chamada foi silenciosa e não há código no input, tenta revalidar o cupom anterior
-    const codigoFinal = codigoCupom.length > 0 ? codigoCupom : (isSilent && cupomAnterior ? cupomAnterior.codigo : null);
-
-    if (totalItens === 0 && !isSilent) {
-        messageDisplay.textContent = 'Adicione itens ao carrinho antes de aplicar um cupom.';
-        atualizarListaCarrinhoModal();
-        return;
-    }
-    
-    if (cuponsValidos[codigoFinal]) {
-        const cupom = cuponsValidos[codigoFinal];
-
-        if (totalItens >= cupom.minPurchase) {
-            cupomAplicado = { ...cupom, codigo: codigoFinal };
+        function showEtapa(etapa) {
+            document.querySelectorAll('.modal-card').forEach(card => card.style.display = 'none');
             
-            if (!isSilent) {
-                messageDisplay.textContent = `✅ ${cupom.message}`;
-                messageDisplay.style.color = '#4CAF50';
+            if (etapa === 1) {
+                document.getElementById('card-resumo-pedido').style.display = 'block';
+                atualizarListaCarrinhoModal(); 
+            } else if (etapa === 2) {
+                document.getElementById('card-dados-cliente').style.display = 'block';
             }
-            removeBtn.style.display = 'inline-block';
-            input.value = codigoFinal;
+            etapaAtual = etapa;
+        }
 
-        } else {
-            // Limpa o cupom se a condição mínima não for atendida
-            if (!isSilent || codigoCupom.length > 0) {
-                 input.value = '';
-                if (!isSilent) {
-                    messageDisplay.textContent = `🚫 Pedido mínimo de R$${cupom.minPurchase.toFixed(2).replace('.', ',')} necessário para o cupom ${codigoFinal}.`;
+        function abrirModal() {
+            if (carrinho.length === 0) {
+                alert('Seu carrinho está vazio! Adicione um item para continuar.');
+                return;
+            }
+            document.getElementById('myModal').style.display = 'block';
+            showEtapa(1); 
+        }
+
+        function fecharModal() {
+            document.getElementById('myModal').style.display = 'none';
+            etapaAtual = 1; 
+        }
+
+        function avancarEtapa() {
+            if (carrinho.length === 0) {
+                alert('Seu carrinho está vazio.');
+                fecharModal();
+                return;
+            }
+            if (etapaAtual === 1) {
+                showEtapa(2); 
+            }
+        }
+
+        function voltarEtapa() {
+             if (etapaAtual === 2) {
+                showEtapa(1);
+            }
+        }
+
+        // ===================================
+        // === LÓGICA DO CARRINHO ===
+        // ===================================
+
+        function atualizarCarrinhoFlutuante() {
+            const totalItens = carrinho.reduce((sum, item) => sum + item.quantidade, 0);
+            
+            let totalValor = carrinho.reduce((sum, item) => sum + (item.preco * item.quantidade), 0);
+            
+            // Recalcula o desconto para exibição no botão (sempre que o carrinho muda)
+            let totalDescontoParaBotao = 0;
+            if (cupomAplicado && cupomAplicado.type !== 'note') {
+                if (cupomAplicado.type === 'percent') {
+                    totalDescontoParaBotao = totalValor * cupomAplicado.value;
+                } else if (cupomAplicado.type === 'flat') {
+                    totalDescontoParaBotao = cupomAplicado.value;
+                }
+                totalDescontoParaBotao = Math.min(totalDescontoParaBotao, totalValor);
+            }
+            
+            const totalFinalParaBotao = totalValor - totalDescontoParaBotao;
+            
+            const totalFormatado = totalFinalParaBotao.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+            
+            const carrinhoFlutuante = document.getElementById('carrinho-flutuante');
+            carrinhoFlutuante.textContent = `🛒 Carrinho (${totalItens}) - ${totalFormatado}`;
+            
+            // Garante que o botão flutuante seja exibido
+            carrinhoFlutuante.style.display = totalItens > 0 ? 'block' : 'none';
+        }
+
+        function adicionarAoCarrinho(nome, preco, buttonElement) {
+            const itemExistente = carrinho.find(item => item.nome === nome);
+            if (itemExistente) {
+                itemExistente.quantidade++;
+            } else {
+                carrinho.push({ nome, preco, quantidade: 1 });
+            }
+            
+            // Feedback visual
+            if (buttonElement) {
+                const originalText = buttonElement.textContent;
+                buttonElement.textContent = '✅ Adicionado!';
+                buttonElement.style.backgroundColor = '#66BB6A';
+                buttonElement.disabled = true;
+
+                setTimeout(() => {
+                    buttonElement.textContent = originalText;
+                    buttonElement.style.backgroundColor = '#4CAF50';
+                    buttonElement.disabled = false;
+                }, 800);
+            }
+            
+            atualizarCarrinhoFlutuante();
+            aplicarCupom(true); // Tenta reaplicar o cupom (silencioso)
+        }
+
+        function adicionarCaipifrutaSabor(sabor, preco, buttonElement) {
+            const cardElement = buttonElement.closest('.card');
+            const nomeBase = cardElement ? cardElement.getAttribute('data-name') : 'Produto com Sabor';
+            const nomeCompleto = `${nomeBase} - ${sabor}`;
+            
+            const itemExistente = carrinho.find(item => item.nome === nomeCompleto);
+
+            if (itemExistente) {
+                itemExistente.quantidade++;
+            } else {
+                carrinho.push({ nome: nomeCompleto, preco, quantidade: 1 });
+            }
+            
+            // Feedback visual e fechar dropdown
+            if (buttonElement) {
+                const menu = cardElement.querySelector('.sabores-menu');
+                if (menu) {
+                     menu.style.display = 'none';
                 }
             }
+            
+            atualizarCarrinhoFlutuante();
+            aplicarCupom(true); // Tenta reaplicar o cupom (silencioso)
+
+            // Adicional: alertar que adicionou (para produtos com dropdown)
+            alert(`✅ ${nomeCompleto} adicionado ao carrinho!`);
         }
-    } else if (codigoCupom.length > 0 && !isSilent) {
-        messageDisplay.textContent = '🚫 Cupom inválido ou expirado.';
-    }
-
-    atualizarListaCarrinhoModal(); 
-    atualizarCarrinhoFlutuante();
-}
 
 
-function atualizarListaCarrinhoModal() {
-    const lista = document.getElementById('lista-carrinho');
-    const totalDisplay = document.getElementById('carrinho-total');
-    const discountDisplay = document.getElementById('discount-display');
-    const input = document.getElementById('coupon-input');
-    const messageDisplay = document.getElementById('coupon-message');
-    const removeBtn = document.getElementById('remove-coupon-btn');
-    
-    lista.innerHTML = '';
-    let totalGeral = 0;
-    let totalDesconto = 0;
-
-    if (carrinho.length === 0) {
-         lista.innerHTML = '<li>Seu carrinho está vazio.</li>';
-         discountDisplay.style.display = 'none';
-         cupomAplicado = null;
-         descontoValor = 0;
-         messageDisplay.textContent = ''; 
-         removeBtn.style.display = 'none';
-         input.value = ''; 
-    }
-
-    carrinho.forEach((item, index) => {
-        const li = document.createElement('li');
-        const subtotal = item.preco * item.quantidade;
-        totalGeral += subtotal;
+        function removerItemCarrinho(index) {
+            carrinho.splice(index, 1); 
+            atualizarCarrinhoFlutuante();
+            aplicarCupom(true); // Tenta reaplicar o cupom (silencioso)
+            atualizarListaCarrinhoModal(); 
+        }
         
-        const precoFormatado = item.preco.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-        const subtotalFormatado = subtotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        // ===================================
+        // === LÓGICA DO CUPOM ===
+        // ===================================
 
-        li.innerHTML = `
-            <div class="item-details">
-                <span style="max-width: 80%;">${item.nome.replace('|🛒', '')} <br> (${item.quantidade}x ${precoFormatado})</span>
-                <span style="text-align: right;">${subtotalFormatado}
-                    <button class="btn-remover" onclick="removerItemCarrinho(${index})">❌</button>
-                </span>
-            </div>
-        `;
-        lista.appendChild(li);
-    });
+        function removerCupom() {
+            cupomAplicado = null;
+            descontoValor = 0;
+            document.getElementById('coupon-input').value = '';
+            document.getElementById('coupon-message').textContent = 'Cupom removido.';
+            document.getElementById('coupon-message').style.color = 'gray';
+            document.getElementById('remove-coupon-btn').style.display = 'none';
 
-    // 2. Calcular o desconto
-    if (cupomAplicado) {
-        if (cupomAplicado.type === 'percent') {
-            totalDesconto = totalGeral * cupomAplicado.value;
-        } else if (cupomAplicado.type === 'flat') {
-            totalDesconto = cupomAplicado.value;
-        } 
-        totalDesconto = Math.min(totalDesconto, totalGeral); 
-    }
-    
-    descontoValor = totalDesconto; 
-
-    // 3. Exibir Desconto
-    if (descontoValor > 0) {
-        const descontoFormatado = descontoValor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-        discountDisplay.textContent = `Desconto (${cupomAplicado.codigo}): - ${descontoFormatado}`;
-        discountDisplay.style.display = 'block';
-        discountDisplay.style.color = '#4CAF50';
-        removeBtn.style.display = 'inline-block';
-
-    } else if (cupomAplicado && cupomAplicado.type === 'note') {
-        discountDisplay.textContent = `✅ Cupom ${cupomAplicado.codigo} aplicado (Sem abatimento em valor).`;
-        discountDisplay.style.display = 'block';
-        discountDisplay.style.color = '#00bcd4';
-        removeBtn.style.display = 'inline-block';
-    } else {
-        discountDisplay.style.display = 'none';
-    }
-    
-    // Atualiza o total
-    const totalFinal = totalGeral - descontoValor;
-    totalDisplay.textContent = totalFinal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-
-    if (carrinho.length === 0 && document.getElementById('myModal').style.display === 'block') {
-        fecharModal();
-    }
-}
-
-
-// ------------------------------------------
-// --- LÓGICA DO MODAL/ETAPAS ---
-// ------------------------------------------
-
-function showEtapa(etapa) {
-    document.querySelectorAll('.modal-card').forEach(card => card.style.display = 'none');
-    
-    if (etapa === 1) {
-        document.getElementById('card-resumo-pedido').style.display = 'block';
-        atualizarListaCarrinhoModal(); 
-    } else if (etapa === 2) {
-        document.getElementById('card-dados-cliente').style.display = 'block';
-    }
-    etapaAtual = etapa;
-}
-
-function abrirModal() {
-    if (carrinho.length === 0) {
-        alert('Seu carrinho está vazio! Adicione um item para continuar.');
-        return;
-    }
-    document.getElementById('myModal').style.display = 'block';
-    showEtapa(1); 
-}
-
-function fecharModal() {
-    document.getElementById('myModal').style.display = 'none';
-    etapaAtual = 1; 
-}
-
-function avancarEtapa() {
-    if (carrinho.length === 0) {
-        alert('Seu carrinho está vazio.');
-        fecharModal();
-        return;
-    }
-    if (etapaAtual === 1) {
-        showEtapa(2); 
-    }
-}
-
-function voltarEtapa() {
-     if (etapaAtual === 2) {
-        showEtapa(1);
-    }
-}
-
-// ------------------------------------------
-// --- FUNÇÕES DE AUXÍLIO E FORMATAÇÃO ---
-// ------------------------------------------
-
-function formatarTelefone(input) {
-    let value = input.value.replace(/\D/g, '').substring(0, 11); 
-    let formatted = '';
-
-    if (value.length > 0) {
-        formatted = '(' + value.substring(0, 2);
-    }
-    if (value.length > 2) {
-        formatted += ') ' + value.substring(2, 7);
-    }
-    if (value.length > 7) {
-        formatted += '-' + value.substring(7, 11);
-    }
-    input.value = formatted;
-}
-
-function formatarCEP(input) {
-    let value = input.value.replace(/\D/g, '').substring(0, 8); 
-    let formatted = '';
-
-    if (value.length > 0) {
-        formatted = value.substring(0, 5);
-    }
-    if (value.length > 5) {
-        formatted += '-' + value.substring(5, 8);
-    }
-    input.value = formatted;
-}
-
-function toggleDropdown(id) {
-    var menu = document.getElementById(id);
-    // Fecha todos os outros menus abertos
-    document.querySelectorAll('.sabores-menu').forEach(m => {
-        if (m.id !== id) {
-            m.style.display = 'none';
+            atualizarListaCarrinhoModal();
+            atualizarCarrinhoFlutuante();
         }
-    });
-    // Abre ou fecha o menu atual
-    menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
-}
 
-function iniciarDigitacaoBotao() {
-    const button = document.getElementById('myButton');
-    if (!button) return;
-    const text = "Monte seu Copão aqui 🍹";
-    let i = 0;
-    
-    function typing() {
-        if (i < text.length) {
-            button.textContent += text.charAt(i);
-            i++;
-            setTimeout(typing, 70);
-        } else {
-            button.classList.add('typing-complete');
+        function aplicarCupom(isSilent = false) {
+            const input = document.getElementById('coupon-input');
+            const messageDisplay = document.getElementById('coupon-message');
+            const removeBtn = document.getElementById('remove-coupon-btn');
+            const codigoCupom = input.value.trim().toUpperCase();
+            
+            // Se for silencioso e não houver cupom no input, usa o que já está aplicado
+            const cupomParaTestar = codigoCupom.length > 0 ? codigoCupom : (cupomAplicado ? cupomAplicado.codigo : null);
+
+            cupomAplicado = null;
+            descontoValor = 0;
+            
+            if (!isSilent || codigoCupom.length > 0) {
+                 messageDisplay.textContent = '';
+                 messageDisplay.style.color = 'red';
+            }
+            removeBtn.style.display = 'none';
+
+            const totalItens = carrinho.reduce((sum, item) => sum + (item.preco * item.quantidade), 0);
+
+            if (totalItens === 0 && !isSilent) {
+                messageDisplay.textContent = 'Adicione itens ao carrinho antes de aplicar um cupom.';
+                atualizarListaCarrinhoModal();
+                return;
+            }
+
+            if (cuponsValidos[cupomParaTestar]) {
+                const cupom = cuponsValidos[cupomParaTestar];
+
+                if (totalItens >= cupom.minPurchase) {
+                    cupomAplicado = { ...cupom, codigo: cupomParaTestar }; // Armazena o código também
+                    
+                    if (!isSilent) {
+                        messageDisplay.textContent = `✅ ${cupom.message}`;
+                        messageDisplay.style.color = '#4CAF50';
+                    }
+                    removeBtn.style.display = 'inline-block';
+                    input.value = cupomParaTestar;
+
+                } else {
+                    // Limpa o cupom se a condição mínima não for atendida
+                    if (codigoCupom.length > 0) { // Se o usuário digitou
+                        input.value = '';
+                        if (!isSilent) {
+                            messageDisplay.textContent = `🚫 Pedido mínimo de R$${cupom.minPurchase.toFixed(2).replace('.', ',')} necessário.`;
+                        }
+                    }
+                    // Se a chamada foi silenciosa, apenas deixa cupomAplicado como null
+                }
+            } else if (codigoCupom.length > 0 && !isSilent) {
+                messageDisplay.textContent = '🚫 Cupom inválido ou expirado.';
+            }
+
+            atualizarListaCarrinhoModal(); 
         }
-    }
-    
-    button.textContent = ''; 
-    typing();
-}
-
-/**
- * Lógica do Carrossel (Nav Buttons)
- */
-function scrollCarousel(gridId, direction) {
-    const grid = document.getElementById(gridId);
-    if (!grid) return;
-    
-    // Calcula o quanto rolar (ex: 70% da largura do carrossel)
-    const scrollAmount = grid.offsetWidth * 0.7; 
-    
-    if (direction === 'next') {
-        grid.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-    } else if (direction === 'prev') {
-        grid.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
-    }
-}
 
 
-// ------------------------------------------
-// --- VALIDAÇÃO E ENVIO PARA WHATSAPP ---
-// ------------------------------------------
+        function atualizarListaCarrinhoModal() {
+            const lista = document.getElementById('lista-carrinho');
+            const totalDisplay = document.getElementById('carrinho-total');
+            const discountDisplay = document.getElementById('discount-display');
+            const input = document.getElementById('coupon-input');
+            const messageDisplay = document.getElementById('coupon-message');
+            const removeBtn = document.getElementById('remove-coupon-btn');
+            
+            lista.innerHTML = '';
+            
+            let totalGeral = 0;
+            let totalDesconto = 0;
 
-function validarFormulario() {
-    let isValid = true;
-    
-    const nome = document.getElementById('nome');
-    const telefone = document.getElementById('telefone');
-    const local = document.getElementById('local');
-    const mesa = document.getElementById('mesa');
-    const cep = document.getElementById('cep');
-    const rua = document.getElementById('rua');
-    const numero = document.getElementById('numero');
+            if (carrinho.length === 0) {
+                 lista.innerHTML = '<li>Seu carrinho está vazio.</li>';
+                 discountDisplay.style.display = 'none';
+                 // Limpa o cupom se o carrinho esvaziar
+                 cupomAplicado = null;
+                 descontoValor = 0;
+                 messageDisplay.textContent = ''; 
+                 removeBtn.style.display = 'none';
+                 input.value = ''; 
+            }
 
-    // Limpa mensagens de erro
-    document.querySelectorAll('.error-message').forEach(el => el.style.display = 'none');
-    
-    if (nome.value.trim() === '') {
-        document.getElementById('error-nome').style.display = 'block';
-        isValid = false;
-    }
+            // 1. Calcular o subtotal dos itens
+            carrinho.forEach((item, index) => {
+                const li = document.createElement('li');
+                const subtotal = item.preco * item.quantidade;
+                totalGeral += subtotal;
+                
+                const precoFormatado = item.preco.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+                const subtotalFormatado = subtotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 
-    const telefoneRegex = /^\(\d{2}\) \d{4,5}-\d{4}$/; 
-    if (!telefoneRegex.test(telefone.value.trim())) {
-        document.getElementById('error-telefone').style.display = 'block';
-        isValid = false;
-    }
+                li.innerHTML = `
+                    <div class="item-details">
+                        <span style="max-width: 80%;">${item.nome} <br> (${item.quantidade}x ${precoFormatado})</span>
+                        <span style="text-align: right;">${subtotalFormatado}
+                            <button class="btn-remover" onclick="removerItemCarrinho(${index})">❌</button>
+                        </span>
+                    </div>
+                `;
+                lista.appendChild(li);
+            });
 
-    if (local.value === '') {
-        document.getElementById('error-local').style.display = 'block';
-        isValid = false;
-    }
-    
-    // Revalidação de campos obrigatórios condicionais
-    if (local.value === 'Mesa' && mesa.value.trim() === '') {
-        isValid = false;
-    }
-    
-    if (local.value === 'Entrega') {
-         const cepRegex = /^\d{5}-\d{3}$/;
-         // Se for Entrega, todos devem ser válidos e preenchidos
-         if (!cepRegex.test(cep.value.trim()) || rua.value.trim() === '' || numero.value.trim() === '') {
-            isValid = false;
-         }
-    }
+            // 2. Calcular o desconto
+            if (cupomAplicado) {
+                if (cupomAplicado.type === 'percent') {
+                    totalDesconto = totalGeral * cupomAplicado.value;
+                } else if (cupomAplicado.type === 'flat') {
+                    totalDesconto = cupomAplicado.value;
+                } else if (cupomAplicado.type === 'note') {
+                    // CUPOM 'NOTE' NÃO ABATE VALOR
+                    totalDesconto = 0; 
+                }
+                
+                // Garante que o desconto não exceda o total
+                totalDesconto = Math.min(totalDesconto, totalGeral); 
+            }
+            
+            descontoValor = totalDesconto; 
 
-    // Se a validação falhar, o WhatsApp não será enviado.
-    return isValid;
-}
+            // 3. Exibir Desconto (Tratamento para cupons de valor e cupons de nota)
+            if (descontoValor > 0) {
+                const descontoFormatado = descontoValor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+                discountDisplay.textContent = `Desconto (${cupomAplicado.codigo}): - ${descontoFormatado}`;
+                discountDisplay.style.display = 'block';
+                discountDisplay.style.color = '#4CAF50';
+                
+                // Garante que a mensagem de sucesso e o botão apareçam
+                if (messageDisplay.textContent === '') {
+                     messageDisplay.textContent = `✅ Cupom ${cupomAplicado.codigo} aplicado!`;
+                     messageDisplay.style.color = '#4CAF50';
+                }
+                removeBtn.style.display = 'inline-block';
 
+            } else if (cupomAplicado && cupomAplicado.type === 'note') {
+                 // Exibe a nota/observação 
+                discountDisplay.textContent = `✅ Cupom ${cupomAplicado.codigo} aplicado (Sem abatimento em valor).`;
+                discountDisplay.style.display = 'block';
+                discountDisplay.style.color = '#00bcd4'; // Cor diferente para nota
 
-function enviarPedidoWhatsapp() {
-    // 1. Validações
-    if (!validarFormulario()) {
-        alert('Por favor, preencha todos os campos obrigatórios corretamente para continuar.');
-        return;
-    }
+                 // Garante que a mensagem de sucesso e o botão apareçam
+                if (messageDisplay.textContent === '') {
+                     messageDisplay.textContent = `✅ ${cupomAplicado.message}`;
+                     messageDisplay.style.color = '#00bcd4';
+                }
+                removeBtn.style.display = 'inline-block';
+            } else {
+                discountDisplay.style.display = 'none';
+                removeBtn.style.display = 'none'; // Esconde se não houver cupom ativo
+                messageDisplay.textContent = ''; // Limpa se não houver cupom ativo
+            }
 
-    // 2. Coleta de dados
-    const nome = document.getElementById('nome').value.trim();
-    const telefone = document.getElementById('telefone').value.trim();
-    const local = document.getElementById('local').value;
-    const mesa = document.getElementById('mesa').value.trim();
-    const cep = document.getElementById('cep').value.trim();
-    const rua = document.getElementById('rua').value.trim();
-    const numero = document.getElementById('numero').value.trim();
-    const complemento = document.getElementById('complemento').value.trim();
+            // 4. Calcular e exibir o Total Final
+            const totalFinal = totalGeral - descontoValor;
+            totalDisplay.textContent = totalFinal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 
-    // 3. Cálculo do Total (já com desconto)
-    let subtotal = carrinho.reduce((sum, item) => sum + (item.preco * item.quantidade), 0);
-    const totalFinal = subtotal - descontoValor;
-    
-    // 4. Montagem da Mensagem do Pedido
-    let mensagem = `*Novo Pedido NUANCE* 🍸\n\n`;
-    mensagem += `*Cliente:* ${nome}\n`;
-    mensagem += `*Contato:* ${telefone}\n`;
-    mensagem += `*Entrega:* ${local}\n`;
-
-    if (local === 'Mesa') {
-        mensagem += `*Mesa N°:* ${mesa}\n`;
-    } else if (local === 'Entrega') {
-        mensagem += `*Rua/Av:* ${rua}, N° ${numero}\n`;
-        mensagem += `*CEP:* ${cep}\n`;
-        if (complemento) mensagem += `*Comp:* ${complemento}\n`;
-    } else if (local === 'Retirada') {
-        mensagem += `*(O cliente fará a retirada no balcão)*\n`;
-    }
-    
-    // Detalhes do carrinho
-    mensagem += `\n*--- ITENS DO PEDIDO ---*\n`;
-    carrinho.forEach(item => {
-        const itemTotal = (item.preco * item.quantidade).toFixed(2).replace('.', ',');
-        const precoUnit = item.preco.toFixed(2).replace('.', ',');
-        
-        // Remove a tag de compra do copão para o WhatsApp
-        const nomeLimpo = item.nome.replace('|🛒', ''); 
-        
-        mensagem += `${item.quantidade}x ${nomeLimpo} (R$ ${precoUnit}) - R$ ${itemTotal}\n`;
-    });
-
-    // Totais e Cupom
-    mensagem += `\n*--- TOTAIS ---*\n`;
-    mensagem += `*Subtotal:* R$ ${subtotal.toFixed(2).replace('.', ',')}\n`;
-    
-    if (cupomAplicado) {
-        if (cupomAplicado.type !== 'note') {
-            mensagem += `*Desconto (${cupomAplicado.codigo}):* - R$ ${descontoValor.toFixed(2).replace('.', ',')}\n`;
-        } else {
-            // Se for cupom de nota (Ex: Frete Grátis)
-            mensagem += `*Cupom ${cupomAplicado.codigo}:* ${cupomAplicado.message}\n`;
-        }
-    }
-    
-    mensagem += `*TOTAL A PAGAR:* R$ ${totalFinal.toFixed(2).replace('.', ',')}\n`;
-
-    // 5. Configuração do link (substitua o número abaixo pelo seu WhatsApp)
-    const numeroWhatsApp = "5599999999999"; // <-- COLOQUE SEU WHATSAPP AQUI
-    const url = `https://api.whatsapp.com/send?phone=${numeroWhatsApp}&text=${encodeURIComponent(mensagem)}`;
-    
-    window.open(url, '_blank');
-    
-    // Opcional: Limpar o carrinho e fechar o modal após o envio
-    // carrinho = [];
-    // atualizarCarrinhoFlutuante();
-    // fecharModal();
-}
-
-// ------------------------------------------
-// --- EVENT LISTENERS E INICIALIZAÇÃO ---
-// ------------------------------------------
-
-// Lógica de exibição de campos condicionais
-document.getElementById('local').addEventListener('change', function() {
-    const local = this.value;
-    const campoMesa = document.getElementById('campo-mesa');
-    const camposEndereco = document.getElementById('campos-endereco');
-    
-    campoMesa.style.display = 'none';
-    camposEndereco.style.display = 'none';
-    
-    // Remove required de todos para limpar o estado
-    document.getElementById('mesa').removeAttribute('required');
-    document.getElementById('cep').removeAttribute('required');
-    document.getElementById('rua').removeAttribute('required');
-    document.getElementById('numero').removeAttribute('required');
-
-    if (local === 'Mesa') {
-        campoMesa.style.display = 'block';
-        document.getElementById('mesa').setAttribute('required', 'required');
-    } else if (local === 'Entrega') {
-        camposEndereco.style.display = 'block';
-        document.getElementById('cep').setAttribute('required', 'required');
-        document.getElementById('rua').setAttribute('required', 'required');
-        document.getElementById('numero').setAttribute('required', 'required');
-    }
-});
-
-// Fechar modal ao clicar fora
-window.onclick = function(event) {
-    const modal = document.getElementById('myModal');
-    if (event.target == modal) {
-        fecharModal();
-    }
-    
-    // Fecha dropdowns
-    if (!event.target.matches('.btn-sabores') && !event.target.matches('.btn-sabor-item')) {
-        var dropdowns = document.getElementsByClassName("sabores-menu");
-        for (let i = 0; i < dropdowns.length; i++) {
-            var openDropdown = dropdowns[i];
-            if (openDropdown.style.display === 'block') {
-                openDropdown.style.display = 'none';
+            if (carrinho.length === 0 && document.getElementById('myModal').style.display === 'block') {
+                // Se o carrinho esvaziar dentro do modal, fecha o modal.
+                fecharModal();
             }
         }
+        
+        // ===================================
+        // === VALIDAÇÃO E ENVIO ===
+        // ===================================
+
+        function validarFormulario() {
+            let isValid = true;
+            
+            const nome = document.getElementById('nome');
+            const telefone = document.getElementById('telefone');
+            const local = document.getElementById('local');
+            const mesa = document.getElementById('mesa');
+            const cep = document.getElementById('cep');
+            const rua = document.getElementById('rua');
+            const numero = document.getElementById('numero');
+            const complemento = document.getElementById('complemento');
+
+            // Limpa mensagens de erro
+            document.querySelectorAll('.error-message').forEach(el => el.style.display = 'none');
+            
+            if (nome.value.trim() === '') {
+                document.getElementById('error-nome').style.display = 'block';
+                isValid = false;
+            }
+
+            const telefoneRegex = /^\(\d{2}\) \d{4,5}-\d{4}$/; 
+            if (!telefoneRegex.test(telefone.value.trim())) {
+                document.getElementById('error-telefone').style.display = 'block';
+                isValid = false;
+            }
+
+            if (local.value === '') {
+                document.getElementById('error-local').style.display = 'block';
+                isValid = false;
+            }
+
+            if (local.value === 'Mesa' && mesa.value.trim() === '') {
+                isValid = false;
+            }
+            
+            if (local.value === 'Entrega') {
+                 const cepRegex = /^\d{5}-\d{3}$/;
+                 if (!cepRegex.test(cep.value.trim())) {
+                    isValid = false; 
+                    // Se o CEP é inválido, marca como false
+                 }
+
+                 if (rua.value.trim() === '' || numero.value.trim() === '') {
+                     isValid = false;
+                 }
+            }
+
+            // Armazena os dados se for válido
+            if (isValid) {
+                form.nome = nome.value.trim();
+                form.telefone = telefone.value.trim();
+                form.local = local.value;
+                form.mesa = local.value === 'Mesa' ? mesa.value.trim() : '';
+                
+                if (local.value === 'Entrega') {
+                    form.cep = cep.value.trim();
+                    form.rua = rua.value.trim();
+                    form.numero = numero.value.trim();
+                    form.complemento = complemento.value.trim();
+                } else {
+                    form.cep = form.rua = form.numero = form.complemento = '';
+                }
+            }
+            
+            return isValid;
+        }
+
+        function gerarMensagemPedido() {
+            let mensagemPedido = '';
+            let totalItens = carrinho.reduce((sum, item) => sum + (item.preco * item.quantidade), 0);
+            let totalFinal = totalItens - descontoValor;
+            
+            const totalItensFormatado = totalItens.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+            const totalFinalFormatado = totalFinal.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+            const descontoFormatado = descontoValor.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+
+            // 1. Dados do Cliente
+            mensagemPedido += `*📋 NOVO PEDIDO - NUANCE 📋*\n`;
+            mensagemPedido += `Nome: ${form.nome}\n`;
+            mensagemPedido += `Telefone: ${form.telefone}\n`;
+            
+            if (form.local === 'Mesa' && form.mesa) {
+                mensagemPedido += `Local: Mesa ${form.mesa} (Consumo no Local)\n`;
+            } else if (form.local === 'Retirada') {
+                 mensagemPedido += `Local: Retirada (Balcão)\n`;
+            } else if (form.local === 'Entrega') {
+                mensagemPedido += `Local: *Entrega*\n`;
+                mensagemPedido += `Rua/Av: ${form.rua}, Nº ${form.numero}\n`;
+                if (form.complemento) {
+                     mensagemPedido += `Comple.: ${form.complemento}\n`;
+                }
+                mensagemPedido += `CEP: ${form.cep}\n`;
+            }
+
+            mensagemPedido += `\n*🛒 ITENS DO PEDIDO 🛒*\n`;
+
+            // 2. Itens do Carrinho
+            carrinho.forEach(item => {
+                const precoUnitarioFormatado = item.preco.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+                mensagemPedido += `• ${item.quantidade}x ${item.nome} (R$ ${precoUnitarioFormatado})\n`;
+            });
+
+            // 3. Total e Finalização (Com Desconto)
+            mensagemPedido += `\n*🧾 RESUMO DO PEDIDO 🧾*\n`;
+            mensagemPedido += `Subtotal dos Itens: R$ ${totalItensFormatado}\n`;
+
+            if (cupomAplicado) {
+                const codigoCupom = cupomAplicado.codigo;
+
+                if (cupomAplicado.type === 'note') {
+                    // FRETEGRATIS: Adiciona uma observação, não um desconto em valor
+                    mensagemPedido += `\n*🏷️ CUPOM DE OBSERVAÇÃO APLICADO: ${codigoCupom}*\n`;
+                    mensagemPedido += `*OBS:* ${cupomAplicado.message}\n`;
+                } else {
+                    // Flat/Percent: Abate o valor e explica
+                    mensagemPedido += `🏷️ Cupom ${codigoCupom} (Desconto de Valor): - R$ ${descontoFormatado}\n`;
+                }
+            }
+
+            mensagemPedido += `\n*💲 TOTAL A PAGAR: R$ ${totalFinalFormatado} 💲*\n\n`;
+            mensagemPedido += "_Seu link de pagamento está sendo gerado. ._";
+
+            return mensagemPedido;
+        }
+
+
+        function enviarPedidoWhatsapp() {
+            if (carrinho.length === 0) {
+                alert('Seu carrinho está vazio.');
+                return;
+            }
+
+            if (!validarFormulario()) {
+                alert('Por favor, preencha todos os campos obrigatórios de contato e local corretamente.');
+                return; 
+            }
+
+            const mensagem = gerarMensagemPedido();
+
+            // *** ATENÇÃO: SUBSTITUA ESTE NÚMERO PELO SEU WHATSAPP REAL ***
+            const numeroWhatsapp = '5562995679219'; 
+            
+            const url = `https://api.whatsapp.com/send?phone=${numeroWhatsapp}&text=${encodeURIComponent(mensagem)}`;
+            
+            window.open(url, '_blank');
+            fecharModal(); 
+            
+            // Opcional: Esvaziar o carrinho após o envio
+            carrinho = [];
+            cupomAplicado = null; // Limpa o cupom após o envio
+            document.getElementById('coupon-input').value = '';
+            document.getElementById('coupon-message').textContent = '';
+            atualizarCarrinhoFlutuante();
+        }
+
+        // ===================================
+        // === FILTRAGEM DE PRODUTOS ===
+        // ===================================
+
+        function removerAcentos(text) {
+            return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        }
+
+        function filtrarProdutos() {
+            const input = document.getElementById('search-input');
+            const rawFilter = input.value.trim().toLowerCase();
+            const filter = removerAcentos(rawFilter); 
+            
+            const allCards = document.querySelectorAll('.card');
+            const searchResultsCarousel = document.getElementById('search-results-carousel');
+            const searchResultsTitle = document.getElementById('search-results-title');
+            const originalSections = document.getElementById('original-sections');
+            const noResults = document.getElementById('no-results');
+            
+            searchResultsCarousel.innerHTML = '';
+            let resultsFound = 0;
+
+            if (filter.length === 0) {
+                // Exibe as seções originais
+                searchResultsCarousel.style.display = 'none';
+                searchResultsTitle.style.display = 'none';
+                noResults.style.display = 'none';
+                originalSections.style.display = 'block';
+                document.querySelectorAll('.section-original-title, .section-original-grid').forEach(el => el.style.display = 'block');
+                document.querySelectorAll('.sabores-menu').forEach(menu => menu.style.display = 'none');
+                return;
+            }
+            
+            // Oculta as seções originais e prepara a exibição dos resultados
+            originalSections.style.display = 'none'; 
+            searchResultsTitle.style.display = 'block';
+            searchResultsCarousel.style.display = 'flex';
+            searchResultsTitle.textContent = `Resultados da Busca por "${input.value}"`;
+
+            const allFlavorProducts = ['caipifrutas', 'mojito', 'caipishot'];
+            
+            allCards.forEach(card => {
+                const name = removerAcentos(card.getAttribute('data-name')).toLowerCase();
+                const section = removerAcentos(card.getAttribute('data-section')).toLowerCase();
+                
+                let matchesSearch = false;
+
+                if (name.includes(filter) || section.includes(filter)) {
+                    matchesSearch = true;
+                } else if (allFlavorProducts.some(p => name.includes(p))) {
+                    // Verifica se o filtro corresponde a algum sabor dentro dos dropdowns
+                    const dropdownContainer = card.querySelector('.dropdown-container');
+                    if (dropdownContainer) {
+                        const saborButtons = dropdownContainer.querySelectorAll('.btn-sabor-item');
+                        saborButtons.forEach(button => {
+                            const saborText = removerAcentos(button.textContent).toLowerCase();
+                            if (saborText.includes(filter)) {
+                                matchesSearch = true;
+                            }
+                        });
+                    }
+                }
+                
+                if (matchesSearch) {
+                    const clone = card.cloneNode(true);
+                    searchResultsCarousel.appendChild(clone);
+                    resultsFound++;
+                }
+            });
+
+            if (resultsFound === 0) {
+                noResults.style.display = 'block';
+                searchResultsCarousel.style.display = 'none';
+                searchResultsTitle.style.display = 'none';
+            } else {
+                noResults.style.display = 'none';
+            }
+        }
+        
+        // --- DROPDOWN E MODAL GERAL ---
+        function toggleDropdown(id) {
+            const menu = document.getElementById(id);
+            const isVisible = menu.style.display === 'block';
+
+            document.querySelectorAll('.sabores-menu').forEach(item => {
+                if (item.id !== id) {
+                    item.style.display = 'none';
+                }
+            });
+
+            menu.style.display = isVisible ? 'none' : 'block';
+        }
+        
+        window.onclick = function(event) {
+            const modal = document.getElementById('myModal');
+            if (event.target == modal) {
+                fecharModal();
+            }
+            
+            // Fechar dropdowns ao clicar fora
+            document.querySelectorAll('.sabores-menu').forEach(menu => {
+                const dropdownContainer = menu.closest('.dropdown-container');
+                const dropdownButton = dropdownContainer ? dropdownContainer.querySelector('.btn-sabores') : null;
+
+                if (menu.style.display === 'block' && 
+                    event.target !== menu && !menu.contains(event.target) && 
+                    dropdownButton && event.target !== dropdownButton && !dropdownButton.contains(event.target)) {
+                    
+                    menu.style.display = 'none';
+                }
+            });
+        }
+        
+        // Inicializa o carrinho ao carregar
+        document.addEventListener('DOMContentLoaded', () => {
+             // Garante que o input do cupom esteja vazio ao carregar
+             document.getElementById('coupon-input').value = '';
+             atualizarCarrinhoFlutuante();
+        });
+
+
+
+
+
+
+/**
+ * Rola o carrossel (product-grid) na direção especificada.
+ * @param {string} elementId - O ID da div que contém os produtos (ex: 'grid-1').
+ * @param {string} direction - A direção do scroll ('prev' para voltar, 'next' para avançar).
+ */
+function scrollCarousel(elementId, direction) {
+    const carousel = document.getElementById(elementId);
+    if (!carousel) return;
+
+    // Define a distância do scroll.
+    // Usamos a largura do próprio carrossel (clientWidth) para mover uma "página" de itens por vez.
+    const scrollDistance = carousel.clientWidth;
+
+    if (direction === 'next') {
+        // Rola para a direita
+        carousel.scrollBy({
+            left: scrollDistance,
+            behavior: 'smooth'
+        });
+    } else if (direction === 'prev') {
+        // Rola para a esquerda
+        carousel.scrollBy({
+            left: -scrollDistance,
+            behavior: 'smooth'
+        });
     }
 }
 
+//================================
+//================================
+//==Botão: Faça seu Copão=========
 
-// Chamadas iniciais
-document.addEventListener('DOMContentLoaded', () => {
-    filtrarProdutos(); 
-    iniciarDigitacaoBotao(); 
-    atualizarCarrinhoFlutuante();
-});
+         const button = document.getElementById('myButton');
+const textToType = "Cliqui aqui para Fazer seu Copão"; 
+const typingSpeed = 120; 
+const repeatInterval = 6000; // 6 segundos
+
+let charIndex = 0;
+let typingTimeout; 
+
+function typeWriter() {
+    if (charIndex < textToType.length) {
+        button.textContent += textToType.charAt(charIndex);
+        charIndex++;
+        typingTimeout = setTimeout(typeWriter, typingSpeed);
+    } else {
+        button.classList.add('typing-complete');
+    }
+}
+
+function startTypingEffect() {
+    button.textContent = ''; 
+    charIndex = 0;
+    button.classList.remove('typing-complete');
+    
+    // Limpa qualquer timeout pendente antes de iniciar um novo ciclo
+    clearTimeout(typingTimeout); 
+    
+    typeWriter();
+}
+
+// Inicia o efeito imediatamente
+startTypingEffect();
+
+// Repete o efeito a cada 6 segundos
+setInterval(startTypingEffect, repeatInterval);
+
         
     </script>
 </body>
