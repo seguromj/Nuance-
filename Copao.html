@@ -355,7 +355,7 @@
     let selecoesAtivas = {
         bebida: { id: '', nome: 'Nenhuma', valor: 0.00 },
         energetico: { id: '', nome: 'Nenhum', valor: 0.00 },
-        gelo: [] 
+        gelo: { id: '', nome: 'Nenhum' valor: 0.00 },
     };
     
     let quantidadeCopao = 1; 
@@ -365,7 +365,7 @@
     document.addEventListener('DOMContentLoaded', () => {
         renderizarLista('bebida', false);
         renderizarLista('energetico', false);
-        renderizarLista('gelo', true);
+        renderizarLista('gelo', false);
 
         document.querySelectorAll('.btn-modal-opener').forEach(button => {
             button.addEventListener('click', function() {
