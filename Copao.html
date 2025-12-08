@@ -425,7 +425,7 @@
         </button>
         
         <div id="valor-total-display">
-            VALOR TOTAL: R$ 0,00
+            VALOR TOTAL DOS PRODUTOS: R$ 0,00
             <span id="desconto-aplicado" class="desconto-info" style="display: none;"></span>
         </div>
         
@@ -530,10 +530,12 @@
     
     // --- CONSTANTES DE CUPOM ---
     const CUPONS = {
-        'FRETEGRATIS': { tipo: 'frete', valor: 10.00, descricao: 'Frete Grátis' }, // Valor que será abatido no total
+        // FRETEGRATIS: Apenas sinaliza Frete Grátis na mensagem, não altera o valor total dos produtos (tipo: 'frete').
+        'FRETEGRATIS': { tipo: 'frete', valor: 0.00, descricao: 'Frete Grátis' }, 
+        // DESCONTO5: Desconta R$ 5,00 do valor total dos produtos (tipo: 'valor').
         'DESCONTO5': { tipo: 'valor', valor: 5.00, descricao: 'R$ 5,00 de Desconto' }, 
     };
-    const VALOR_FRETE_SIMULADO = 5.00; // Valor simulado de frete, usado para o cupom 'frete'
+    const VALOR_FRETE_SIMULADO = 5.00; // Valor que será cobrado se não usar FRETEGRATIS
 
     const proximoTipo = {
         bebida: 'energetico',
@@ -678,8 +680,9 @@
     // --- FUNÇÕES: CÁLCULO, CUPOM E CONTADOR ---
     
     /**
-     * FUNÇÃO CORRIGIDA: Agora calcula o valor base unitário, multiplica pela quantidade 
-     * e, SÓ DEPOIS, aplica o desconto do cupom sobre o total.
+     * FUNÇÃO CORRIGIDA: Retorna o valor total dos produtos.
+     * Aplica SOMENTE o desconto de valor (DESCONTO5) sobre o total dos produtos.
+     * O cupom FRETEGRATIS é ignorado no cálculo do preço final dos produtos.
      */
     function calcularValorTotal() {
         let valorUnitario = 0;
@@ -689,27 +692,21 @@
         valorUnitario += selecoesAtivas.energetico.valor;
         valorUnitario += selecoesAtivas.gelo.valor; 
 
-        // 2. Cálculo do total do pedido (sem desconto)
-        let valorTotalPedido = valorUnitario * quantidadeCopao;
+        // 2. Cálculo do total dos produtos (sem desconto)
+        let valorTotalProdutos = valorUnitario * quantidadeCopao;
         
-        // 3. Aplica o desconto se houver cupom
+        // 3. Aplica o desconto se houver cupom (Apenas se for 'valor')
         if (cupomAplicado) {
             const cupomDetalhe = CUPONS[cupomAplicado];
 
-            if (cupomDetalhe.tipo === 'valor') {
+            if (cupomDetalhe && cupomDetalhe.tipo === 'valor') {
                 // Desconto Fixo (R$ 5,00)
-                valorTotalPedido -= cupomDetalhe.valor;
-            } else if (cupomDetalhe.tipo === 'porcentagem') {
-                // Desconto Porcentual (Ex: 10%)
-                valorTotalPedido *= (1 - cupomDetalhe.valor);
-            } else if (cupomDetalhe.tipo === 'frete') {
-                 // Desconto de Frete Grátis (Abate R$ 10,00 do total)
-                valorTotalPedido -= VALOR_FRETE_SIMULADO; 
-            }
+                valorTotalProdutos -= cupomDetalhe.valor;
+            } 
         }
         
         // Garante que o total não seja negativo
-        return Math.max(0, valorTotalPedido);
+        return Math.max(0, valorTotalProdutos);
     }
     
     function aplicarCupom() {
@@ -739,11 +736,11 @@
             let mensagem = '';
             
             if (cupomDetalhe.tipo === 'valor') {
-                mensagem = `🥳 Sucesso! Você ganhou R$ ${cupomDetalhe.valor.toFixed(2).replace('.', ',')} de desconto!`;
-            } else if (cupomDetalhe.tipo === 'porcentagem') {
-                mensagem = `🥳 Sucesso! Você ganhou ${cupomDetalhe.valor * 100}% de desconto!`;
+                mensagem = `🥳 Sucesso! Você ganhou R$ ${cupomDetalhe.valor.toFixed(2).replace('.', ',')} de desconto nos produtos!`;
             } else if (cupomDetalhe.tipo === 'frete') {
                 mensagem = `✅ Cupom ${cupom}: Frete Grátis aplicado!`;
+            } else {
+                 mensagem = `🥳 Sucesso! Cupom ${cupom} aplicado!`;
             }
 
             // Ações de sucesso
@@ -773,16 +770,25 @@
     }
 
     function atualizarValorTotalDisplay() {
-        const valorTotal = calcularValorTotal();
+        // Exibe o valor total dos produtos (com desconto de R$5 se aplicado)
+        const valorTotal = calcularValorTotal(); 
         const valorFormatado = valorTotal.toFixed(2).replace('.', ',');
-        document.getElementById('valor-total-display').textContent = `VALOR TOTAL: R$ ${valorFormatado}`;
+        document.getElementById('valor-total-display').textContent = `VALOR TOTAL DOS PRODUTOS: R$ ${valorFormatado}`;
         
-        // Mantém o status do cupom visualmente correto se ele já estava aplicado
-        if (!cupomAplicado) {
-             document.getElementById('cupom-status-display').style.display = 'none';
-             document.getElementById('btn-aplicar-cupom').textContent = 'Aplicar';
-             document.getElementById('btn-aplicar-cupom').classList.remove('applied');
-             document.getElementById('btn-aplicar-cupom').disabled = false;
+        // Recria o estado visual do cupom se ele estiver aplicado
+        const cupomStatusDisplay = document.getElementById('cupom-status-display');
+        const btnAplicar = document.getElementById('btn-aplicar-cupom');
+
+        if (cupomAplicado) {
+            btnAplicar.textContent = 'Aplicado';
+            btnAplicar.classList.add('applied');
+            btnAplicar.disabled = true;
+            cupomStatusDisplay.style.display = 'block'; // Garante que a mensagem permaneça visível
+        } else {
+             cupomStatusDisplay.style.display = 'none';
+             btnAplicar.textContent = 'Aplicar';
+             btnAplicar.classList.remove('applied');
+             btnAplicar.disabled = false;
         }
     }
 
@@ -860,23 +866,40 @@
         const gelo = selecoesAtivas.gelo.nome;
         
         const quantidade = quantidadeCopao;
-        const valorTotal = calcularValorTotal();
-        const valorFormatado = valorTotal.toFixed(2).replace('.', ',');
         
-        // --- Lógica de Cupom para o WhatsApp ---
+        // O valor total é o preço dos produtos com desconto (se houver DESCONTO5)
+        const valorTotalProdutos = calcularValorTotal(); 
+        const valorProdutosFormatado = valorTotalProdutos.toFixed(2).replace('.', ',');
+        
+        // --- Lógica de Frete e Cupom para o WhatsApp (CORRIGIDA) ---
         let cupomInfoWapp = '';
+        let valorFinalAPagar = valorTotalProdutos; // Começa com o valor dos produtos
+        let freteStatusWapp = `* Frete:* R$ ${VALOR_FRETE_SIMULADO.toFixed(2).replace('.', ',')}`; // Frete Padrão (R$ 5,00)
+        
+        // Adiciona o valor do frete ao total a pagar por padrão
+        valorFinalAPagar += VALOR_FRETE_SIMULADO; 
+        
         if (cupomAplicado) {
             const cupomDetalhe = CUPONS[cupomAplicado];
-            if (cupomDetalhe.tipo === 'valor') {
-                cupomInfoWapp = `* Cupom:* ${cupomAplicado} (R$ ${cupomDetalhe.valor.toFixed(2).replace('.', ',')} de desconto)\n`;
-            } else if (cupomDetalhe.tipo === 'porcentagem') {
-                cupomInfoWapp = `* Cupom:* ${cupomAplicado} (${cupomDetalhe.valor * 100}% de desconto)\n`;
-            } else if (cupomDetalhe.tipo === 'frete') {
-                cupomInfoWapp = `* Cupom:* ${cupomAplicado} (Frete Grátis - R$ ${VALOR_FRETE_SIMULADO.toFixed(2).replace('.', ',')} abatido)\n`;
+            
+            if (cupomAplicado === 'FRETEGRATIS') {
+                // Se for FRETEGRATIS, o frete é GRÁTIS e o valor final a pagar volta a ser apenas o dos produtos
+                cupomInfoWapp = `* Cupom Aplicado:* FRETEGRATIS\n`;
+                freteStatusWapp = `* Frete:* GRÁTIS`;
+                valorFinalAPagar = valorTotalProdutos; // Remove o frete do total a pagar
+                
+            } else if (cupomDetalhe.tipo === 'valor') {
+                // Se for DESCONTO5, o valor dos produtos já está com o desconto, e o frete continua R$ 5,00
+                cupomInfoWapp = `* Cupom Aplicado:* ${cupomAplicado} (R$ ${cupomDetalhe.valor.toFixed(2).replace('.', ',')} de desconto)\n`;
+            } else {
+                 cupomInfoWapp = `* Cupom Aplicado:* ${cupomAplicado}\n`;
             }
+
         } else {
-            cupomInfoWapp = `* Cupom:* Nenhum\n`;
+            cupomInfoWapp = `* Cupom Aplicado:* Nenhum\n`;
         }
+        
+        const valorFinalFormatado = valorFinalAPagar.toFixed(2).replace('.', ',');
 
 
         // 3. Formatação da Mensagem
@@ -891,12 +914,13 @@
             `*DETALHES DO PEDIDO:* \n` +
             `* QUANTIDADE TOTAL:* ${quantidade} Copão(ões)\n` +
             cupomInfoWapp + 
-            `* VALOR FINAL C/ DESCONTO:* R$ ${valorFormatado}\n\n` +
+            `* VALOR TOTAL DOS PRODUTOS:* R$ ${valorProdutosFormatado}\n` + // Valor dos produtos (com DESCONTO5, se houver)
+            freteStatusWapp + '\n\n' + // Status do frete (R$ 5,00 ou GRÁTIS)
+            `* TOTAL A COBRAR DO CLIENTE:* R$ ${valorFinalFormatado}\n\n` +
             `* ITENS (Por Copão):*\n` +
             `  - Base Alcoólica: ${bebida}\n` +
             `  - Energético: ${energetico}\n` +
-            `  - Gelo de Sabor: ${gelo}\n\n` +
-            `_O valor final da entrega (se houver) já está aplicado no total. Confirme a entrega com o atendente._`;
+            `  - Gelo de Sabor: ${gelo}\n`;
 
         const mensagemCodificada = encodeURIComponent(mensagemBase);
         
@@ -905,7 +929,7 @@
         // 4. Envio e Feedback
         window.open(urlWhatsApp, '_blank');
         
-        alert(`Pedido de R$ ${valorFormatado} enviado com sucesso!`);
+        alert(`Pedido de R$ ${valorFinalFormatado} enviado com sucesso!`);
         document.getElementById('checkoutModal').style.display = 'none';
     }
 </script>
