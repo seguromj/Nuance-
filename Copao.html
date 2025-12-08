@@ -77,6 +77,20 @@
             color: #5d4a8e;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
+        
+        /* Estilo para a mensagem de sucesso no campo de Cupom */
+        .cupom-status-message {
+            display: block;
+            font-size: 0.9em;
+            font-weight: bold;
+            color: #008000; /* Verde de sucesso */
+            margin-top: 5px;
+            margin-bottom: 10px;
+            padding: 8px 10px;
+            background-color: #e6ffe6;
+            border: 1px solid #008000;
+            border-radius: 4px;
+        }
         .desconto-info {
             display: block;
             font-size: 0.75em;
@@ -144,7 +158,7 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            margin-top: 20px;
+            margin-top: 10px; 
         }
         #cupom-input {
             flex-grow: 1;
@@ -177,6 +191,16 @@
         }
         #btn-aplicar-cupom:hover {
             background-color: #0056b3;
+        }
+        
+        /* Estilo quando o cupom está aplicado */
+        #btn-aplicar-cupom.applied {
+            background-color: #28a745; /* Verde de sucesso */
+            color: white;
+            cursor: default;
+        }
+        #btn-aplicar-cupom.applied:hover {
+            background-color: #218838;
         }
 
 
@@ -277,7 +301,7 @@
         }
 
         /* ------------------------------------- */
-        /* --- NOVO ESTILO: SIMULA O RADIO BUTTON --- */
+        /* --- ESTILO: SIMULA O RADIO BUTTON --- */
         /* ------------------------------------- */
         .radio-simulador {
             height: 20px;
@@ -313,7 +337,7 @@
         }
 
         /* ------------------------------------- */
-        /* --- ESTILO NOVO: BOTÃO DE CONFIRMAÇÃO --- */
+        /* --- ESTILO: BOTÃO DE CONFIRMAÇÃO --- */
         /* ------------------------------------- */
         .modal-content button.btn-confirmar-selecao {
             background-color: #5d4a8e; 
@@ -406,6 +430,8 @@
         </div>
         
         <label>🏷️ Cupom de Desconto:</label>
+        <span id="cupom-status-display" class="cupom-status-message" style="display: none;"></span>
+        
         <div class="cupom-container">
             <input type="text" id="cupom-input" placeholder="Insira seu código" oninput="this.value = this.value.toUpperCase()">
             <button type="button" id="btn-aplicar-cupom" onclick="aplicarCupom()">Aplicar</button>
@@ -501,10 +527,14 @@
     // --- CONFIGURAÇÃO ---
     const NUMERO_WHATSAPP = '5562995679219'; 
     const VALOR_GELO_PADRAO = 3.00; 
-    const CUPOM_VALIDO = 'MEUCOPAO10';
-    const TAXA_DESCONTO = 0.10;
+    
+    // --- CONSTANTES DE CUPOM ---
+    const CUPONS = {
+        'FRETEGRATIS': { tipo: 'frete', valor: 10.00, descricao: 'Frete Grátis' }, // Valor que será abatido no total
+        'DESCONTO5': { tipo: 'valor', valor: 5.00, descricao: 'R$ 5,00 de Desconto' }, 
+    };
+    const VALOR_FRETE_SIMULADO = 10.00; // Valor simulado de frete, usado para o cupom 'frete'
 
-    // Mapeamento de sequência dos modais: (Atual -> Próximo)
     const proximoTipo = {
         bebida: 'energetico',
         energetico: 'gelo',
@@ -515,7 +545,7 @@
         bebida: [
             { id: 'pitu', nome: 'Pitu (Dose: 100ml)', valor: 8.00, img: 'https://redemix.vteximg.com.br/arquivos/ids/213055-1000-1000/7896607100174.jpg?v=638350621696500000' },
             { id: '51', nome: '51 (Dose: 100ml)', valor: 12.00, img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRKKwXKFBrl9eRqUXkLpSirqtins6-1f-TePONBOhaXyx6ZhTIzkcLH0XZs&s=10' },
-            { id: 'rum_prata', nome: 'Rum Prata (Dose: 100ml)', valor: 10.00, img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4AZ7_JSZPtAhZeDKfg341qErorsBPG5KeMU1QgL7XCVEv5jUY4Du8MSxV&s=10' },
+            { id: 'rum_prata', nome: 'Rum Prata (Dose: 100ml)', valor: 10.00, img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4AZ7_JSZPtAhZeDKfg341qErorsBPG5KeMU1QgL7XCVEp5jUY4Du8MSxV&s=10' },
             { id: 'Vodka_Smirnoff_Red', nome: 'Vodka Red (Dose: 100ml)', valor: 12.00, img: 'https://io.convertiez.com.br/m/superpaguemenos/shop/products/images/15452/medium/vodka-smirnoff-red-998ml_122398.jpg' },
         ],
         energetico: [
@@ -532,7 +562,6 @@
         ]
     };
 
-    // Objeto para armazenar as seleções ativas
     let selecoesAtivas = {
         bebida: { id: 'pitu', nome: 'Pitu (Dose: 100ml)', valor: 8.00 },
         energetico: { id: 'Red_Bull', nome: 'Red Bull (350ml)', valor: 15.00 },
@@ -545,12 +574,10 @@
     // --- FUNÇÕES DE INICIALIZAÇÃO E MODAL ---
     
     document.addEventListener('DOMContentLoaded', () => {
-        // Renderiza as listas inicialmente
         renderizarLista('bebida'); 
         renderizarLista('energetico');
         renderizarLista('gelo'); 
 
-        // Configuração para abrir modais
         document.querySelectorAll('.btn-modal-opener').forEach(button => {
             button.addEventListener('click', function() {
                 const tipo = this.getAttribute('data-modal').replace('Modal', '');
@@ -559,23 +586,18 @@
             });
         });
         
-        // Configuração para fechar modais (via X)
         document.querySelectorAll('.close-btn').forEach(button => {
             button.addEventListener('click', function() {
                 document.getElementById(this.getAttribute('data-modal-id')).style.display = 'none';
             });
         });
 
-        // Atualização inicial do display
         atualizarResumoDisplay('bebida');
         atualizarResumoDisplay('energetico');
         atualizarResumoDisplay('gelo');
         atualizarValorTotalDisplay();
     });
 
-    /**
-     * Renderiza o HTML dos itens dentro de um modal.
-     */
     function renderizarLista(tipo) {
         const lista = itens[tipo];
         const idContainer = `lista-${tipo}s`;
@@ -584,7 +606,6 @@
             const selecionado = selecoesAtivas[tipo].id === item.id;
             const classe = selecionado ? 'selecionado' : '';
             
-            // ATENÇÃO: Esta função agora atualiza o valor total imediatamente.
             const onclickFunction = `selecionarUnico('${tipo}', '${item.id}', '${item.nome}', ${item.valor})`;
 
             const valorFormatado = item.valor > 0 ? `R$ ${item.valor.toFixed(2).replace('.', ',')}` : 'Grátis';
@@ -604,54 +625,38 @@
         document.getElementById(idContainer).innerHTML = listaHtml;
     }
 
-    /**
-     * FUNÇÃO ATUALIZADA: Lida com a seleção de itens ÚNICOS e ATUALIZA O VALOR IMEDIATAMENTE.
-     */
     function selecionarUnico(tipo, idSelecionado, nomeSelecionado, valorSelecionado) {
         
-        // 1. ATUALIZA O ESTADO ATIVO 
         selecoesAtivas[tipo] = { id: idSelecionado, nome: nomeSelecionado, valor: valorSelecionado };
 
-        // 2. RE-RENDERIZA A LISTA para mostrar o radio button selecionado
         renderizarLista(tipo);
         
-        // 3. ATUALIZA O VALOR TOTAL NO DISPLAY PRINCIPAL (NOVA FUNÇÃO)
         atualizarValorTotalDisplay();
     }
     
-    /**
-     * FUNÇÃO CORRIGIDA: Confirma a seleção, fecha o modal e abre o próximo na sequência.
-     */
     function confirmarSelecao(tipo, modalId) {
         
-        // 1. Verifica se algo foi selecionado.
         if (selecoesAtivas[tipo].id === '') {
             return alert(`🚨 Por favor, selecione um item de ${tipo.charAt(0).toUpperCase() + tipo.slice(1)}.`);
         }
         
-        // 2. ATUALIZA OS DISPLAYS DE RESUMO
         atualizarResumoDisplay(tipo);
         
-        // 3. FECHA O MODAL ATUAL
         const modalElement = document.getElementById(modalId);
         if (modalElement) {
             modalElement.style.display = 'none';
         }
 
-        // 4. ABRE O PRÓXIMO MODAL NA SEQUÊNCIA (Ex: Bebida -> Energético)
         const proximo = proximoTipo[tipo];
         if (proximo) {
             const proximoModalId = `${proximo}Modal`;
             const proximoModalElement = document.getElementById(proximoModalId);
 
             if (proximoModalElement) {
-                 // Renderiza a lista do próximo item
                 renderizarLista(proximo); 
-                // Abre o próximo modal
                 proximoModalElement.style.display = 'block';
             }
         } else if (tipo === 'gelo') {
-             // Se for o último item (Gelo), damos um feedback de conclusão.
              alert('✅ Todos os itens do copão selecionados! Confirme a quantidade e finalize o pedido.');
         }
     }
@@ -670,43 +675,98 @@
         document.getElementById(`${tipo}-resumo`).textContent = resumoTexto;
     }
 
-    // --- FUNÇÕES: CÁLCULO E CONTADOR ---
+    // --- FUNÇÕES: CÁLCULO, CUPOM E CONTADOR ---
     
+    /**
+     * FUNÇÃO CORRIGIDA: Agora calcula o valor base unitário, multiplica pela quantidade 
+     * e, SÓ DEPOIS, aplica o desconto do cupom sobre o total.
+     */
     function calcularValorTotal() {
         let valorUnitario = 0;
 
+        // 1. Soma do valor base unitário (por copão)
         valorUnitario += selecoesAtivas.bebida.valor;
         valorUnitario += selecoesAtivas.energetico.valor;
         valorUnitario += selecoesAtivas.gelo.valor; 
 
+        // 2. Cálculo do total do pedido (sem desconto)
         let valorTotalPedido = valorUnitario * quantidadeCopao;
         
-        // Aplica o desconto se houver cupom
+        // 3. Aplica o desconto se houver cupom
         if (cupomAplicado) {
-            valorTotalPedido *= (1 - TAXA_DESCONTO);
-        }
+            const cupomDetalhe = CUPONS[cupomAplicado];
 
-        return valorTotalPedido;
+            if (cupomDetalhe.tipo === 'valor') {
+                // Desconto Fixo (R$ 5,00)
+                valorTotalPedido -= cupomDetalhe.valor;
+            } else if (cupomDetalhe.tipo === 'porcentagem') {
+                // Desconto Porcentual (Ex: 10%)
+                valorTotalPedido *= (1 - cupomDetalhe.valor);
+            } else if (cupomDetalhe.tipo === 'frete') {
+                 // Desconto de Frete Grátis (Abate R$ 10,00 do total)
+                valorTotalPedido -= VALOR_FRETE_SIMULADO; 
+            }
+        }
+        
+        // Garante que o total não seja negativo
+        return Math.max(0, valorTotalPedido);
     }
     
     function aplicarCupom() {
         const input = document.getElementById('cupom-input');
+        const btnAplicar = document.getElementById('btn-aplicar-cupom');
+        const cupomStatusDisplay = document.getElementById('cupom-status-display');
         const cupom = input.value.toUpperCase().trim();
-        const descontoDisplay = document.getElementById('desconto-aplicado');
         
+        // 1. Reseta o estado
         cupomAplicado = null;
-        descontoDisplay.style.display = 'none';
+        cupomStatusDisplay.style.display = 'none';
+        btnAplicar.textContent = 'Aplicar';
+        btnAplicar.classList.remove('applied');
+        btnAplicar.disabled = false;
+        
+        // 2. Limpa estilos de erro
+        cupomStatusDisplay.style.color = '#008000';
+        cupomStatusDisplay.style.borderColor = '#008000';
+        cupomStatusDisplay.style.backgroundColor = '#e6ffe6';
 
-        if (cupom === CUPOM_VALIDO) {
+
+        const cupomDetalhe = CUPONS[cupom];
+
+        if (cupomDetalhe) {
+            // CUPOM VÁLIDO ENCONTRADO
             cupomAplicado = cupom;
-            descontoDisplay.textContent = `Cupom ${CUPOM_VALIDO} aplicado: 10% de desconto!`;
-            descontoDisplay.style.display = 'block';
-            alert('🥳 Cupom de 10% aplicado com sucesso!');
+            let mensagem = '';
+            
+            if (cupomDetalhe.tipo === 'valor') {
+                mensagem = `🥳 Sucesso! Você ganhou R$ ${cupomDetalhe.valor.toFixed(2).replace('.', ',')} de desconto!`;
+            } else if (cupomDetalhe.tipo === 'porcentagem') {
+                mensagem = `🥳 Sucesso! Você ganhou ${cupomDetalhe.valor * 100}% de desconto!`;
+            } else if (cupomDetalhe.tipo === 'frete') {
+                mensagem = `✅ Cupom ${cupom}: Frete Grátis aplicado!`;
+            }
+
+            // Ações de sucesso
+            cupomStatusDisplay.textContent = mensagem;
+            cupomStatusDisplay.style.display = 'block';
+            btnAplicar.textContent = 'Aplicado';
+            btnAplicar.classList.add('applied');
+            btnAplicar.disabled = true; 
+
         } else if (cupom.length > 0) {
-            input.value = '';
-            alert('🚫 Cupom inválido ou expirado. Tente novamente.');
+            // CUPOM INVÁLIDO
+            input.value = ''; 
+            cupomStatusDisplay.textContent = '🚫 Cupom inválido ou expirado. Tente novamente.';
+            cupomStatusDisplay.style.color = '#dc3545'; // Cor de erro
+            cupomStatusDisplay.style.borderColor = '#dc3545';
+            cupomStatusDisplay.style.backgroundColor = '#f8d7da';
+            cupomStatusDisplay.style.display = 'block';
+            btnAplicar.textContent = 'Aplicar';
+            btnAplicar.classList.remove('applied');
+            btnAplicar.disabled = false;
         } else {
-            alert('Desconto removido.');
+             // CAMPO VAZIO
+             cupomStatusDisplay.style.display = 'none';
         }
 
         atualizarValorTotalDisplay();
@@ -717,12 +777,12 @@
         const valorFormatado = valorTotal.toFixed(2).replace('.', ',');
         document.getElementById('valor-total-display').textContent = `VALOR TOTAL: R$ ${valorFormatado}`;
         
-        const descontoDisplay = document.getElementById('desconto-aplicado');
-        if (cupomAplicado && !descontoDisplay.textContent.includes(CUPOM_VALIDO)) {
-             descontoDisplay.textContent = `Cupom ${CUPOM_VALIDO} aplicado: 10% de desconto!`;
-             descontoDisplay.style.display = 'block';
-        } else if (!cupomAplicado) {
-             descontoDisplay.style.display = 'none';
+        // Mantém o status do cupom visualmente correto se ele já estava aplicado
+        if (!cupomAplicado) {
+             document.getElementById('cupom-status-display').style.display = 'none';
+             document.getElementById('btn-aplicar-cupom').textContent = 'Aplicar';
+             document.getElementById('btn-aplicar-cupom').classList.remove('applied');
+             document.getElementById('btn-aplicar-cupom').disabled = false;
         }
     }
 
@@ -741,9 +801,6 @@
 
     // --- FUNÇÕES: CHECKOUT E WHATSAPP ---
 
-    /**
-     * Verifica obrigatoriedade e abre o modal de checkout.
-     */
     function enviarPedidoWhatsApp() {
         if (selecoesAtivas.bebida.id === '') {
             return alert('🚨 Por favor, escolha a Bebida Base.');
@@ -758,9 +815,6 @@
         document.getElementById('checkoutModal').style.display = 'block';
     }
 
-    /**
-     * Busca o endereço usando a API ViaCEP.
-     */
     async function buscarEndereco() {
         const cep = document.getElementById('cep-cliente').value.replace(/\D/g, '');
 
@@ -784,9 +838,6 @@
     }
 
 
-    /**
-     * Valida os campos de checkout e envia a mensagem formatada para o WhatsApp.
-     */
     function validarEEnviarPedido() {
         const form = document.getElementById('formCheckout');
         
@@ -811,7 +862,21 @@
         const quantidade = quantidadeCopao;
         const valorTotal = calcularValorTotal();
         const valorFormatado = valorTotal.toFixed(2).replace('.', ',');
-        const cupomInfo = cupomAplicado ? `* Cupom:* ${cupomAplicado} (10% de desconto)\n` : `* Cupom:* Nenhum\n`;
+        
+        // --- Lógica de Cupom para o WhatsApp ---
+        let cupomInfoWapp = '';
+        if (cupomAplicado) {
+            const cupomDetalhe = CUPONS[cupomAplicado];
+            if (cupomDetalhe.tipo === 'valor') {
+                cupomInfoWapp = `* Cupom:* ${cupomAplicado} (R$ ${cupomDetalhe.valor.toFixed(2).replace('.', ',')} de desconto)\n`;
+            } else if (cupomDetalhe.tipo === 'porcentagem') {
+                cupomInfoWapp = `* Cupom:* ${cupomAplicado} (${cupomDetalhe.valor * 100}% de desconto)\n`;
+            } else if (cupomDetalhe.tipo === 'frete') {
+                cupomInfoWapp = `* Cupom:* ${cupomAplicado} (Frete Grátis - R$ ${VALOR_FRETE_SIMULADO.toFixed(2).replace('.', ',')} abatido)\n`;
+            }
+        } else {
+            cupomInfoWapp = `* Cupom:* Nenhum\n`;
+        }
 
 
         // 3. Formatação da Mensagem
@@ -825,13 +890,13 @@
             `  - *Compl:* ${complemento || 'Nenhum'}\n\n` +
             `*DETALHES DO PEDIDO:* \n` +
             `* QUANTIDADE TOTAL:* ${quantidade} Copão(ões)\n` +
-            cupomInfo + 
+            cupomInfoWapp + 
             `* VALOR FINAL C/ DESCONTO:* R$ ${valorFormatado}\n\n` +
             `* ITENS (Por Copão):*\n` +
             `  - Base Alcoólica: ${bebida}\n` +
             `  - Energético: ${energetico}\n` +
             `  - Gelo de Sabor: ${gelo}\n\n` +
-            `_O valor final da entrega será confirmado pelo atendente._`;
+            `_O valor final da entrega (se houver) já está aplicado no total. Confirme a entrega com o atendente._`;
 
         const mensagemCodificada = encodeURIComponent(mensagemBase);
         
