@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -531,26 +531,25 @@
     
     // --- CONSTANTES DE CUPOM ---
     const CUPONS = {
-        // FRETEGRATIS: Apenas sinaliza Frete Grátis na mensagem, não altera o valor total dos produtos (tipo: 'frete').
+        // FRETEGRATIS: Tipo 'frete' - Não altera valor, apenas status na mensagem do WhatsApp.
         'FRETEGRATIS': { tipo: 'frete', valor: 0.00, descricao: 'Frete Grátis' }, 
-        // DESCONTO5: Desconta R$ 5,00 do valor total dos produtos (tipo: 'valor').
+        // DESCONTO5: Tipo 'valor' - Desconta R$ 5,00 do valor total dos produtos.
         'DESCONTO5': { tipo: 'valor', valor: 5.00, descricao: 'R$ 5,00 de Desconto' }, 
     };
-    const VALOR_FRETE_SIMULADO = 5.00; // Valor que será cobrado se não usar FRETEGRATIS
 
     // =================================================================
-    // 🚨 NOVO: OBJETO DE LINKS FIXOS DO MERCADO PAGO 🚨
-    // A chave é o VALOR FINAL a COBRAR do cliente (Produtos + Frete - Desconto).
+    // 🚨 LINKS FIXOS DO MERCADO PAGO 🚨
+    // A chave é o VALOR FINAL a COBRAR do cliente (Que é o valor dos produtos com desconto, se houver).
     // USE SEMPRE FORMATO "XX.XX"
     // ⚠️ SUBSTITUA OS LINKS E VALORES PELOS SEUS REAIS!
     // =================================================================
     const linksDePagamentoFixos = {
-        // Exemplo: Pedido que deu R$ 13,00 FINAL (R$ 8,00 Pitu + R$ 5,00 Frete)
+        // Exemplo: Pedido de R$ 18,00 (Valor dos produtos)
+        "18.00": "https://mpago.la/19vEZUV", 
+        // Exemplo: Pedido de R$ 13,00 (R$ 18,00 - R$ 5,00 de cupom DESCONTO5)
         "13.00": "https://mpago.li/SEU_LINK_1300", 
-        // Exemplo: Pedido que deu R$ 38,00 FINAL (R$ 33,00 Produtos + R$ 5,00 Frete)
-        "23.00": "https://mpago.la/19vEZUV",
-        // Adicione seus links fixos aqui
-        "25.00": "https://mpago.la/LINK_FIXO_25",
+        // Adicione seus links fixos aqui. Ex: 2 copões sem desconto.
+        "36.00": "https://mpago.la/1wfhtfi",
         "40.00": "https://mpago.la/LINK_FIXO_40",
     };
     // =================================================================
@@ -596,6 +595,8 @@
     // --- FUNÇÕES DE INICIALIZAÇÃO E MODAL ---
     
     document.addEventListener('DOMContentLoaded', () => {
+        // Seleção inicial de 1 copão para dar R$ 18,00 (4 + 10 + 4)
+        
         renderizarLista('bebida'); 
         renderizarLista('energetico');
         renderizarLista('gelo'); 
@@ -700,9 +701,8 @@
     // --- FUNÇÕES: CÁLCULO, CUPOM E CONTADOR ---
     
     /**
-     * FUNÇÃO CORRIGIDA: Retorna o valor total dos produtos.
+     * Retorna o valor total dos produtos.
      * Aplica SOMENTE o desconto de valor (DESCONTO5) sobre o total dos produtos.
-     * O cupom FRETEGRATIS é ignorado no cálculo do preço final dos produtos.
      */
     function calcularValorTotal() {
         let valorUnitario = 0;
@@ -723,6 +723,7 @@
                 // Desconto Fixo (R$ 5,00)
                 valorTotalProdutos -= cupomDetalhe.valor;
             } 
+            // CUPOM 'FRETEGRATIS' NÃO TEM EFEITO NO CÁLCULO
         }
         
         // Garante que o total não seja negativo
@@ -758,7 +759,8 @@
             if (cupomDetalhe.tipo === 'valor') {
                 mensagem = `🥳 Sucesso! Você ganhou R$ ${cupomDetalhe.valor.toFixed(2).replace('.', ',')} de desconto nos produtos!`;
             } else if (cupomDetalhe.tipo === 'frete') {
-                mensagem = `✅ Cupom ${cupom}: Frete Grátis aplicado!`;
+                // Mensagem específica para FRETE GRÁTIS
+                mensagem = `✅ Cupom ${cupom}: Frete Grátis aplicado! (Apenas indicativo)`;
             } else {
                  mensagem = `🥳 Sucesso! Cupom ${cupom} aplicado!`;
             }
@@ -790,7 +792,7 @@
     }
 
     function atualizarValorTotalDisplay() {
-        // Exibe o valor total dos produtos (com desconto de R$5 se aplicado)
+        // O valor exibido na tela é SEMPRE o valor dos produtos, já com desconto de valor se houver.
         const valorTotal = calcularValorTotal(); 
         const valorFormatado = valorTotal.toFixed(2).replace('.', ',');
         document.getElementById('valor-total-display').textContent = `VALOR TOTAL DOS PRODUTOS: R$ ${valorFormatado}`;
@@ -884,60 +886,52 @@
         const bebida = selecoesAtivas.bebida.nome;
         const energetico = selecoesAtivas.energetico.nome;
         const gelo = selecoesAtivas.gelo.nome;
-        
         const quantidade = quantidadeCopao;
         
-        // O valor total é o preço dos produtos com desconto (se houver DESCONTO5)
+        // VALOR FINAL A COBRAR: É o valor dos produtos, já com desconto de valor, se houver.
         const valorTotalProdutos = calcularValorTotal(); 
+        const valorFinalAPagar = valorTotalProdutos;
+        
+        // Formatações
         const valorProdutosFormatado = valorTotalProdutos.toFixed(2).replace('.', ',');
+        const valorFinalFormatado = valorFinalAPagar.toFixed(2).replace('.', ',');
         
-        // --- Lógica de Frete e Cupom ---
-        let cupomInfoWapp = '';
-        let valorFinalAPagar = valorTotalProdutos; 
-        let freteStatusWapp = `* Frete:* R$ ${VALOR_FRETE_SIMULADO.toFixed(2).replace('.', ',')}`; 
         
-        // Adiciona o frete padrão (R$ 5,00) ao total a pagar
-        valorFinalAPagar += VALOR_FRETE_SIMULADO; 
+        // --- Lógica de Status de Cupom e Frete para o WhatsApp ---
+        let cupomInfoWapp = `* Cupom Aplicado:* Nenhum\n`;
+        let freteStatusWapp = `* Frete:* Entrega a combinar`; 
         
         if (cupomAplicado) {
             const cupomDetalhe = CUPONS[cupomAplicado];
             
             if (cupomAplicado === 'FRETEGRATIS') {
-                // Se for FRETEGRATIS: Frete é grátis e o valor final é só o dos produtos
+                // Efeito simbólico do FRETEGRATIS:
                 cupomInfoWapp = `* Cupom Aplicado:* FRETEGRATIS\n`;
-                freteStatusWapp = `* Frete:* GRÁTIS`;
-                valorFinalAPagar = valorTotalProdutos; 
+                freteStatusWapp = `* Frete:* GRÁTIS`; // Indica que ele usou o cupom de frete grátis
                 
             } else if (cupomDetalhe.tipo === 'valor') {
-                // Se for DESCONTO5: Desconto já foi aplicado ao valorTotalProdutos
+                // Desconto de valor:
                 cupomInfoWapp = `* Cupom Aplicado:* ${cupomAplicado} (R$ ${cupomDetalhe.valor.toFixed(2).replace('.', ',')} de desconto)\n`;
-            } else {
-                 cupomInfoWapp = `* Cupom Aplicado:* ${cupomAplicado}\n`;
-            }
-
-        } else {
-            cupomInfoWapp = `* Cupom Aplicado:* Nenhum\n`;
+            } 
         }
-        
-        // O valor final é o que será usado para procurar o link fixo
-        const valorFinalFormatado = valorFinalAPagar.toFixed(2).replace('.', ',');
 
         // =================================================================
-        // ✅ LÓGICA CORRIGIDA DE LINK DE PAGAMENTO FIXO 
+        // LÓGICA DE LINK DE PAGAMENTO FIXO (Busca exata do valor)
         // =================================================================
         let linkPagamentoFixo = '';
-        const valorChave = valorFinalAPagar.toFixed(2); // Ex: "38.00"
+        // Converte para string no formato "XX.XX" para buscar na lista fixa
+        const valorChave = valorFinalAPagar.toFixed(2); 
         
         if (linksDePagamentoFixos.hasOwnProperty(valorChave)) {
-            // 1. LINK FIXO ENCONTRADO
+            // 1. LINK FIXO ENCONTRADO (Busca exata)
             linkPagamentoFixo = 
-                `\n\n*✅ LINK DE PAGAMENTO RÁPIDO (MERCADO PAGO):*\n` +
-                `${linksDePagamentoFixos[valorChave]}`;
+                `\n\n*👇Faço seu Pagamento👇 - R$ ${valorChave.replace('.', ',')}:*\n` +
+                `🔗 ${linksDePagamentoFixos[valorChave]} `;
         } else {
-            // 2. LINK FIXO NÃO ENCONTRADO
+            // 2. LINK FIXO NÃO ENCONTRADO (Valor não mapeado)
             linkPagamentoFixo = 
                 `\n\n*⚠️ Opção de pagamento:*\n` +
-                `Estamos gerando o link de pagamento. Aguarde!`; // Mensagem solicitada
+                `Estamos gerando o link de pagamento. Por favor, aguarde!`; 
         }
         // =================================================================
 
@@ -956,12 +950,14 @@
             cupomInfoWapp + 
             `* VALOR TOTAL DOS PRODUTOS:* R$ ${valorProdutosFormatado}\n` + 
             freteStatusWapp + '\n\n' + 
-            `* TOTAL A COBRAR DO CLIENTE:* R$ ${valorFinalFormatado}\n` +
-            linkPagamentoFixo + // Agora, sempre terá o link ou a mensagem
+            `* TOTAL A COBRAR DO CLIENTE:* R$ ${valorFinalFormatado}\n` + 
             `\n\n* ITENS (Por Copão):*\n` +
             `  - Base Alcoólica: ${bebida}\n` +
             `  - Energético: ${energetico}\n` +
-            `  - Gelo de Sabor: ${gelo}\n`;
+            `  - Gelo de Sabor: ${gelo}\n\n` +
+            linkPagamentoFixo + 
+            `============\n` +
+            `🤗 Não esqueça de Nos enviar o comprovante📃` ;
 
         const mensagemCodificada = encodeURIComponent(mensagemBase);
         
@@ -978,4 +974,3 @@
 
 </body>
 </html>
-
