@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -22,7 +23,12 @@
         /* ----------------------------------------------------- */
         /* 🚨 NOVO: BARRA DE PESQUISA/CARRINHO (PARTE FIXA) 🚨 */
         /* ----------------------------------------------------- */
-        .fixed-top-container { position: fixed; top: 0; left: 0; right: 0; z-index: 999; 
+        .fixed-top-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 999; 
             background-color: #175727; 
             padding: 10px 20px; 
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
@@ -145,7 +151,7 @@
             /* CORREÇÃO DO ALINHAMENTO */
             display: none; 
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
-            border: 2px solid #FF0000; 
+            border: 2px solid #175727; 
             z-index: 1000;
             
             /* 🚨 CORREÇÃO APLICADA: Centraliza o número perfeitamente */
@@ -217,24 +223,13 @@
         
         /* === ESTILO: CARROSSEL HORIZONTAL (Product Grid) === */
         /* Container da busca que será ativado/desativado */
-        #search-results-carousel-container,
-        #suggestion-section-content { /* 🚨 NOVO: Container de Sugestões */
+        #search-results-carousel-container {
              display: none; /* Começa escondido */
              overflow-x: auto; 
              scroll-snap-type: x mandatory; 
              padding: 10px 20px 25px 20px; 
              margin-bottom: 30px; 
              white-space: nowrap; 
-        }
-
-        /* 🚨 NOVO: Estilo da Seção de Sugestões */
-        #suggestion-section {
-            padding-top: 20px;
-            padding-bottom: 10px;
-        }
-        #suggestion-section .section-title {
-            color: #00bcd4; /* Destaque para a cor da sugestão */
-            font-size: 1.5rem;
         }
         
         .product-grid {
@@ -247,15 +242,15 @@
         }
 
         /* Esconder barra de rolagem (Chrome, Safari) */
-        .product-grid::-webkit-scrollbar, #search-results-carousel-container::-webkit-scrollbar, #suggestion-section-content::-webkit-scrollbar {
+        .product-grid::-webkit-scrollbar, #search-results-carousel-container::-webkit-scrollbar {
             height: 8px;
             background-color: #f1f1f1;
         }
-        .product-grid::-webkit-scrollbar-thumb, #search-results-carousel-container::-webkit-scrollbar-thumb, #suggestion-section-content::-webkit-scrollbar-thumb {
+        .product-grid::-webkit-scrollbar-thumb, #search-results-carousel-container::-webkit-scrollbar-thumb {
             background-color: #ccc;
             border-radius: 10px;
         }
-        .product-grid, #search-results-carousel-container, #suggestion-section-content {
+        .product-grid, #search-results-carousel-container {
             -ms-overflow-style: none; 
             scrollbar-width: none; 
         }
@@ -276,8 +271,7 @@
         }
         
         /* Cards menores na Busca/Resultados */
-        #search-results-carousel-container .card,
-        #suggestion-section-content .card { /* 🚨 NOVO: Estilo para sugestões */
+        #search-results-carousel-container .card {
             min-width: 180px; 
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); 
             display: inline-block; 
@@ -470,82 +464,95 @@
             cursor: pointer; 
         }
         
-        /* ================================================================= */
-        /* === 🚨 NOVO: ESTILOS PARA O CARRINHO (LISTA COMPACTA) 🚨 === */
-        /* ================================================================= */
-
         /* Lista do Carrinho */
         #lista-carrinho { 
             list-style: none; 
             padding: 0; 
         }
-
-        /* Estilo do Item na Lista (li) */
+    
+        /* 🚨 NOVO: Estilo base para cada item do carrinho 🚨 */
         #lista-carrinho li { 
             padding: 10px 0; 
             border-bottom: 1px dashed #ccc; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: flex-start; 
         }
     
         #lista-carrinho li:last-child { 
             border-bottom: none; 
         }
         
-        /* Container principal de detalhes do item (imagem, nome, preço, botões) */
-        .item-carrinho-row {
+        /* 🚨 NOVO: Container do item principal (imagem, nome, preço) 🚨 */
+        .item-main-details {
             display: flex;
-            align-items: center; 
-            width: 100%;
-            gap: 10px; /* Espaço entre imagem e detalhes */
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 10px;
         }
-        
-        /* Imagem do Produto no Carrinho */
-        .item-carrinho-img {
-            width: 50px; 
-            height: 50px;
+
+        .item-thumbnail {
+            width: 60px;
+            height: 60px;
             background-size: cover;
             background-position: center;
-            border-radius: 5px; 
-            flex-shrink: 0; /* Não encolhe */
+            border-radius: 8px;
             border: 1px solid #eee;
-        }
-        
-        /* Detalhes do Produto (Nome e Preço) */
-        .item-details-content {
-            flex-grow: 1; /* Ocupa o espaço restante */
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            min-width: 0; 
-        }
-
-        /* Nome e quantidade/preço unitário */
-        .item-name-qty {
-            font-size: 0.9em;
-            font-weight: 500;
-            color: #333;
-            word-break: break-word; 
-        }
-
-        /* Botões (Observação e Remover) */
-        .item-action-buttons {
-            display: flex;
-            align-items: center;
             flex-shrink: 0; 
         }
-        
-        /* Estilo do Botão de Excluir */
+
+        .item-info {
+            flex-grow: 1;
+        }
+
+        .item-title {
+            font-weight: bold;
+            color: #333;
+            margin: 0;
+            font-size: 1.1em;
+        }
+
+        .item-sub-info {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 3px;
+        }
+
+        .item-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0; 
+        }
+
+        .item-price-total {
+            font-weight: bold;
+            color: #4CAF50;
+            font-size: 1.1em;
+            white-space: nowrap; 
+        }
+
+        /* 🚨 NOVO: Estilo do Botão de Observação/Lápis 🚨 */
+        .btn-obs {
+            background: none;
+            border: none;
+            color: #00bcd4;
+            cursor: pointer;
+            padding: 5px;
+            font-size: 1.1em;
+            transition: color 0.2s;
+        }
+        .btn-obs:hover {
+            color: #0096a7;
+            transform: scale(1.1);
+        }
+
+
+        /* Estilo do Botão de Excluir (Lixeira) */
         .btn-remover {
             background: none;
             border: none;
             color: #ff6b6b;
-            font-weight: bold;
-            font-size: 1.1em;
             cursor: pointer;
             padding: 5px;
-            margin-left: 5px; 
+            font-size: 1.1em;
             transition: color 0.2s;
         }
 
@@ -553,34 +560,21 @@
             color: #ee5253;
             transform: scale(1.1);
         }
-        
-        /* 🚨 NOVO: Botão de Observação do Item 🚨 */
-        .btn-obs-item {
-            background: none;
-            border: none;
-            color: #00bcd4;
-            font-size: 1.1em;
-            cursor: pointer;
-            padding: 5px;
-            margin-left: 5px;
-            transition: color 0.2s;
-        }
-        .btn-obs-item:hover {
-            color: #0096a7;
-        }
 
-        /* Observação do Item (mais discreta) */
-        .item-obs {
-            font-size: 0.8em;
-            color: #888;
+        /* 🚨 NOVO: Container de Observação (Campo de Texto) 🚨 */
+        .item-observation-container {
             margin-top: 5px;
-            padding-left: 8px; /* Alinha com o texto, após o espaço da imagem */
-            width: 100%;
-            box-sizing: border-box;
-            font-style: italic;
-            border-left: 3px solid #00bcd4; /* Linha de destaque */
+            padding-left: 75px; /* Alinha o campo de obs com o nome do produto */
         }
-        /* FIM DOS NOVOS ESTILOS DO CARRINHO */
+        .item-observation-container textarea {
+            width: calc(100% - 10px);
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+            resize: vertical;
+            min-height: 30px;
+        }
 
         /* === ESTILOS DO CUPOM === */
         .coupon-container {
@@ -948,57 +942,6 @@
             font-size: 7px;
             color: #6B6665;
         }
-
-        /* 🚨 NOVO: MODAL DE OBSERVAÇÃO 🚨 */
-        #obs-modal {
-            display: none;
-            position: fixed;
-            z-index: 1002; /* Maior que o modal principal */
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.6);
-        }
-
-        #obs-modal .modal-content {
-            margin: 20% auto;
-            max-width: 400px;
-            padding: 20px;
-        }
-
-        #obs-modal h3 {
-            margin-top: 0;
-            color: #175727;
-        }
-
-        #obs-text {
-            width: 100%;
-            height: 80px;
-            padding: 10px;
-            box-sizing: border-box;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            resize: none;
-        }
-
-        #save-obs-btn {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            width: 100%;
-            font-size: 16px;
-            cursor: pointer;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-        }
-
-        #save-obs-btn:hover {
-            background-color: #45a049;
-        }
     </style>
 </head>
 <body>
@@ -1025,11 +968,6 @@
         </div>
     </header>
     
-    <div id="suggestion-section">
-        <h2 class="section-title" id="suggestion-title" style="display:none;">Você também pode gostar...</h2>
-        <div id="suggestion-section-content" class="product-grid">
-            </div>
-    </div>
     <p id="no-results">Nenhum produto encontrado com o termo digitado.</p>
     
     <h2 id="search-results-title">Resultados da Busca</h2>
@@ -1046,7 +984,7 @@
         <div class="product-grid section-original-grid carousel-content" id="grid-1">
 
 
-             <div class="card" data-name="CaipiFrutas" data-price="10.00" data-section="Drinks com Álcool" data-id="caipifrutas-base">
+             <div class="card" data-name="CaipiFrutas" data-price="10.00" data-section="Drinks com Álcool" data-img="img-produtos/Drinks-c-alcool/caipifrutas.jpg">
                 <div class="product-image" style="background-image: url('img-produtos/Drinks-c-alcool/caipifrutas.jpg');"></div>
                 <div class="card-content">
                     <h3>CaipiFrutas</h3>
@@ -1062,16 +1000,16 @@
                             Selecione o Sabor
                         </button>
                         <div id="saboresCaipiFrutas" class="sabores-menu">
-                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Caipfruta de Limão 🍋‍🟩', 10.00, this, 'limao')" data-sabor="limao">Limão 🍋‍🟩</button>
-                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Caipfruta de Morango 🍓', 10.00, this, 'morango')" data-sabor="morango">Morango 🍓</button>
-                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Caipfruta de Maracujá 🥂', 10.00, this, 'maracuja')" data-sabor="maracuja">Maracujá 🥂</button>
-                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Caipfruta de Manga 🥭', 10.00, this, 'manga')" data-sabor="manga">🥭 Manga 🥭</button>
+                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Caipfruta de Limão 🍋‍🟩', 10.00, 'img-produtos/Drinks-c-alcool/caipifrutas.jpg')">Limão 🍋‍🟩</button>
+                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Caipfruta de Morango 🍓', 10.00, 'img-produtos/Drinks-c-alcool/caipifrutas.jpg')">Morango 🍓</button>
+                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Caipfruta de Maracujá 🥂', 10.00, 'img-produtos/Drinks-c-alcool/caipifrutas.jpg')">Maracujá 🥂</button>
+                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Caipfruta de Manga 🥭', 10.00, 'img-produtos/Drinks-c-alcool/caipifrutas.jpg')">🥭 Manga 🥭</button>
                         </div>
                     </div>
                 </div>
             </div>
 
- <div class="card" data-name="Gin's" data-price="20.00" data-section="Drinks com Álcool" data-id="gins-base">
+ <div class="card" data-name="Gin's" data-price="20.00" data-section="Drinks com Álcool" data-img="img-produtos/Drinks-c-alcool/Caipigins.jpg">
     <div class="product-image" style="background-image: url('img-produtos/Drinks-c-alcool/Caipigins.jpg');"></div>
     <div class="card-content">
         <h3>GIN's</h3>
@@ -1087,15 +1025,15 @@
                 Selecione o Sabor
             </button>
             <div id="saboresGin" class="sabores-menu"> 
-                <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Gin Tropical ', 20.00, this)">Gin Tropical</button>
-                <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Gin Tônica ', 20.00, this)">Gin Tônica</button>
-                <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Gin Red-Fruts ', 20.00, this)" data-id="gin-red-fruts">Gin Red-Fruts</button>
+                <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Gin Tropical ', 20.00, 'img-produtos/Drinks-c-alcool/Caipigins.jpg')">Gin Tropical</button>
+                <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Gin Tônica ', 20.00, 'img-produtos/Drinks-c-alcool/Caipigins.jpg')">Gin Tônica</button>
+                <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Gin Red-Fruts ', 20.00, 'img-produtos/Drinks-c-alcool/Caipigins.jpg')">Gin Red-Fruts</button>
             </div>
         </div>
     </div>
 </div>
             
-           <div class="card" data-name="Mojito" data-price="15.00" data-section="Drinks com Álcool" data-id="mojito-base">
+           <div class="card" data-name="Mojito" data-price="15.00" data-section="Drinks com Álcool" data-img="img-produtos/Drinks-c-alcool/Mojitos.jpg">
                 <div class="product-image" style="background-image: url('img-produtos/Drinks-c-alcool/Mojitos.jpg');"></div>
                 <div class="card-content">
                     <h3>Mojito</h3>
@@ -1111,17 +1049,17 @@
                             Selecione o Sabor
                         </button>
                         <div id="saboresMogito" class="sabores-menu">
-                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Mojito Limão 🍋‍🟩', 15.00, this)">🍋‍🟩 Limão 🍋‍🟩</button>
-                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Mojito Morango 🍓', 15.00, this)">🍓 Morango 🍓</button>
-                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Mojito Maracujá 🥂', 15.00, this)">🥂 Maracujá 🥂</button>
-                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Mojito Manga 🥭', 15.00, this)">🥭 Manga 🥭</button>
+                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Mojito Limão 🍋‍🟩', 15.00, 'img-produtos/Drinks-c-alcool/Mojitos.jpg')">🍋‍🟩 Limão 🍋‍🟩</button>
+                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Mojito Morango 🍓', 15.00, 'img-produtos/Drinks-c-alcool/Mojitos.jpg')">🍓 Morango 🍓</button>
+                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Mojito Maracujá 🥂', 15.00, 'img-produtos/Drinks-c-alcool/Mojitos.jpg')">🥂 Maracujá 🥂</button>
+                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Mojito Manga 🥭', 15.00, 'img-produtos/Drinks-c-alcool/Mojitos.jpg')">🥭 Manga 🥭</button>
                         </div>
                     </div>
                 </div>
             </div>
 
 
-    <div class="card" data-name="Moscow Mule" data-price="20.00" data-section="Drinks com Álcool" data-id="moscow-mule">
+    <div class="card" data-name="Moscow Mule" data-price="20.00" data-section="Drinks com Álcool" data-img="img-produtos/Drinks-c-alcool/Moscow-mule.jpg">
                 <div class="product-image" style="background-image: url('img-produtos/Drinks-c-alcool/Moscow-mule.jpg');"></div>
                 <div class="card-content">
                     <h3>Moscow Mule</h3>
@@ -1136,7 +1074,7 @@
                 </div>
             </div>
 
-            <div class="card" data-name="Jack limoned" data-price="25.00" data-section="Drinks com Álcool" data-id="jack-limoned">
+            <div class="card" data-name="Jack limoned" data-price="25.00" data-section="Drinks com Álcool" data-img="img-produtos/Drinks-c-alcool/Jack-limoned.jpg">
                 <div class="product-image" style="background-image: url('img-produtos/Drinks-c-alcool/Jack-limoned.jpg');"></div>
                 <div class="card-content">
                     <h3>Jack limoned</h3>
@@ -1151,7 +1089,7 @@
                 </div>
             </div>
             
-            <div class="card" data-name="Joge Amado" data-price="18.00" data-section="Drinks com Álcool" data-id="joge-amado">
+            <div class="card" data-name="Joge Amado" data-price="18.00" data-section="Drinks com Álcool" data-img="img-produtos/Drinks-c-alcool/Joge-amado.jpeg">
                 <div class="product-image" style="background-image: url('img-produtos/Drinks-c-alcool/Joge-amado.jpeg');"></div>
                 <div class="card-content">
                     <h3>Joge Amado</h3>
@@ -1166,7 +1104,7 @@
                 </div>
             </div>
 
-            <div class="card" data-name="Pina Colada" data-price="20.00" data-section="Drinks com Álcool" data-id="pina-colada">
+            <div class="card" data-name="Pina Colada" data-price="20.00" data-section="Drinks com Álcool" data-img="img-produtos/Drinks-c-alcool/Pina-colada.jpg">
                 <div class="product-image" style="background-image: url('img-produtos/Drinks-c-alcool/Pina-colada.jpg');"></div>
                 <div class="card-content">
                     <h3>Pina Colada</h3>
@@ -1195,7 +1133,7 @@
     <div class="product-grid section-original-grid carousel-content" id="grid-2">
 
         
-        <div class="card" data-name="Soda Italiana" data-price="8.00" data-section="Drinks Sem Álcool" data-id="soda-italiana-base">
+        <div class="card" data-name="Soda Italiana" data-price="8.00" data-section="Drinks Sem Álcool" data-img="img-produtos/Drinks-s-alcool/Soda-Italiana.jpeg">
             <div class="product-image" style="background-image: url('img-produtos/Drinks-s-alcool/Soda-Italiana.jpeg');"></div>
             <div class="card-content">
                 <h3>Soda Italiana</h3>
@@ -1211,17 +1149,17 @@
                         Selecione o Sabor
                     </button>
                     <div id="saboresSoda" class="sabores-menu">
-                        <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Soda Italiana sabir Limão Siciliano 🍋‍🟩', 8.00, this)">🍋‍🟩 Limão Siciliano 🍋‍🟩</button>
-                        <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Soda Italiana sabir Red Frits', 8.00, this)" data-id="soda-red-frits">🍎🍓 Red Frits 🍓🍎</button>
-                        <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Soda Italiana sabir Maracujá 🥂', 8.00, this)">🥂 Maracujá 🥂</button>
-                        <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Soda Italiana sabir Maçã Verde 🍏', 8.00, this)">🍏 Maçan Vrede 🍏</button>
-                        <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Soda Italiana sabir Abacaxi 🍍', 8.00, this)">🍍 Abacaxi 🍍</button>
+                        <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Soda Italiana sabir Limão Siciliano 🍋‍🟩', 8.00, 'img-produtos/Drinks-s-alcool/Soda-Italiana.jpeg')">🍋‍🟩 Limão Siciliano 🍋‍🟩</button>
+                        <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Soda Italiana sabir Red Frits', 8.00, 'img-produtos/Drinks-s-alcool/Soda-Italiana.jpeg')">🍎🍓 Red Frits 🍓🍎</button>
+                        <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Soda Italiana sabir Maracujá 🥂', 8.00, 'img-produtos/Drinks-s-alcool/Soda-Italiana.jpeg')">🥂 Maracujá 🥂</button>
+                        <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Soda Italiana sabir Maçã Verde 🍏', 8.00, 'img-produtos/Drinks-s-alcool/Soda-Italiana.jpeg')">🍏 Maçan Vrede 🍏</button>
+                        <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Soda Italiana sabir Abacaxi 🍍', 8.00, 'img-produtos/Drinks-s-alcool/Soda-Italiana.jpeg')">🍍 Abacaxi 🍍</button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="card" data-name="Abacaxi Hortelã" data-price="6.00" data-section="Drinks Sem Álcool" data-id="abacaxi-hortela">
+        <div class="card" data-name="Mojito Virgem" data-price="6.00" data-section="Drinks Sem Álcool" data-img="img-produtos/Drinks-s-alcool/Abacixi-Hortelã.jpeg">
             <div class="product-image" style="background-image: url('img-produtos/Drinks-s-alcool/Abacixi-Hortelã.jpeg');"></div>
             <div class="card-content">
                 <h3>Abacixi Hortelã</h3>
@@ -1236,7 +1174,7 @@
             </div>
         </div>
         
-        <div class="card" data-name="Chá Tropical" data-price="10.00" data-section="Drinks Sem Álcool" data-id="cha-tropical">
+        <div class="card" data-name="Chá Tropical" data-price="10.00" data-section="Drinks Sem Álcool" data-img="img-produtos/Drinks-s-alcool/Cha-tropical.jpeg">
             <div class="product-image" style="background-image: url('img-produtos/Drinks-s-alcool/Cha-tropical.jpeg');"></div>
             <div class="card-content">
                 <h3>Chá Tropical</h3>
@@ -1251,7 +1189,7 @@
             </div>
         </div>
         
-        <div class="card" data-name="Grape Fresh" data-price="6.00" data-section="Drinks Sem Álcool" data-id="grape-fresh">
+        <div class="card" data-name="Grape Fresh" data-price="6.00" data-section="Drinks Sem Álcool" data-img="img-produtos/Drinks-s-alcool/Grape-Fresh.jpeg">
             <div class="product-image" style="background-image: url('img-produtos/Drinks-s-alcool/Grape-Fresh.jpeg');"></div>
             <div class="card-content">
                 <h3>Grape Fresh</h3>
@@ -1266,7 +1204,7 @@
             </div>
         </div>
         
-        <div class="card" data-name="Hibisco Spritz" data-price="10.00" data-section="Drinks Sem Álcool" data-id="hibisco-spritz">
+        <div class="card" data-name="Hibisco Spritz" data-price="10.00" data-section="Drinks Sem Álcool" data-img="img-produtos/Drinks-s-alcool/Hibisco-Spritz.jpeg">
             <div class="product-image" style="background-image: url('img-produtos/Drinks-s-alcool/Hibisco-Spritz.jpeg');"></div>
             <div class="card-content">
                 <h3>Hibisco Spritz</h3>
@@ -1281,7 +1219,7 @@
             </div>
         </div>
         
-        <div class="card" data-name="Mocktail" data-price="18.00" data-section="Drinks Sem Álcool" data-id="mocktail">
+        <div class="card" data-name="Mocktail" data-price="18.00" data-section="Drinks Sem Álcool" data-img="img-produtos/Drinks-s-alcool/Mocktail.jpeg">
             <div class="product-image" style="background-image: url('img-produtos/Drinks-s-alcool/Mocktail.jpeg');"></div>
             <div class="card-content">
                 <h3>Mocktail</h3>
@@ -1296,7 +1234,7 @@
             </div>
         </div>
         
-        <div class="card" data-name="Mongorango" data-price="8.00" data-section="Drinks Sem Álcool" data-id="mongorango">
+        <div class="card" data-name="Mongorango" data-price="8.00" data-section="Drinks Sem Álcool" data-img="img-produtos/Drinks-s-alcool/Mongorango.jpeg">
             <div class="product-image" style="background-image: url('img-produtos/Drinks-s-alcool/Mongorango.jpeg');"></div>
             <div class="card-content">
                 <h3>Mongorango</h3>
@@ -1337,7 +1275,7 @@
     <div class="product-grid section-original-grid carousel-content" id="grid-3">
 
         
-         <div class="card" data-name="Copão Pitu" data-price="27.00" data-section="Copão" data-id="copao-pitu">
+         <div class="card" data-name="Copão Pitu" data-price="27.00" data-section="Copão" data-img="img-produtos/img-Copoes/Img-Copoes.jpeg">
                 <div class="product-image" style="background-image: url('img-produtos/img-Copoes/Img-Copoes.jpeg');"></div>
                 <div class="card-content">
                     <h3>Pitu<strong class="Copao-ml">(Dose 100ml)</strong><br>+<br>Red Bull<strong class="Copao-ml">(350ml)</strong><br>+<br>Gelo Com Sabor</h3> <div class="caipifrutas-details">
@@ -1350,16 +1288,16 @@
                             Selecione Sabor do Gelo 
                         </button>
                         <div id="saboresCopaoPitu" class="sabores-menu">
-                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Copão Pitu - Água de Coco 🥥', 27.00, this)">🥥 Água de Coco 🥥</button>
-                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Copão Pitu - Morango 🍓', 27.00, this)">🍓 Morango 🍓</button>
-                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Copão Pitu - Maracujá 🥂', 27.00, this)">🥂 Maracujá 🥂</button>
-                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Copão Pitu - Abacaxi 🍍', 27.00, this)">🍍 Abacaxi 🍍</button>
+                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Copão Pitu - Água de Coco 🥥', 27.00, 'img-produtos/img-Copoes/Img-Copoes.jpeg')">🥥 Água de Coco 🥥</button>
+                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Copão Pitu - Morango 🍓', 27.00, 'img-produtos/img-Copoes/Img-Copoes.jpeg')">🍓 Morango 🍓</button>
+                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Copão Pitu - Maracujá 🥂', 27.00, 'img-produtos/img-Copoes/Img-Copoes.jpeg')">🥂 Maracujá 🥂</button>
+                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Copão Pitu - Abacaxi 🍍', 27.00, 'img-produtos/img-Copoes/Img-Copoes.jpeg')">🍍 Abacaxi 🍍</button>
                         </div>
                     </div>
                 </div>
             </div>
 
-         <div class="card" data-name="Copão Rum Prata" data-price="27.00" data-section="Copão" data-id="copao-rum">
+         <div class="card" data-name="Copão Rum Prata" data-price="27.00" data-section="Copão" data-img="img-produtos/img-Copoes/Img-Copoes.jpeg">
                 <div class="product-image" style="background-image: url('img-produtos/img-Copoes/Img-Copoes.jpeg');"></div>
                 <div class="card-content">
                     <h3>Rum Prata<strong class="Copao-ml">(Dose 100ml)</strong><br>+<br>Red Bull<strong class="Copao-ml">(100ml)</strong><br>+<br>Gelo Com Sabor</h3> <div class="caipifrutas-details">
@@ -1372,16 +1310,16 @@
                             Selecione Sabor do Gelo 
                         </button>
                         <div id="saboresCopaoRum" class="sabores-menu">
-                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Copão Rum Prata - Água de Coco 🥥', 27.00, this)">🥥 Água de Coco 🥥</button>
-                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Copão Rum Prata - Morango 🍓', 27.00, this)">🍓 Morango 🍓</button>
-                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Copão Rum Prata - Maracujá 🥂', 27.00, this)">🥂 Maracujá 🥂</button>
-                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Copão Rum Prata - Abacaxi 🍍', 27.00, this)">🍍 Abacaxi 🍍</button>
+                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Copão Rum Prata - Água de Coco 🥥', 27.00, 'img-produtos/img-Copoes/Img-Copoes.jpeg')">🥥 Água de Coco 🥥</button>
+                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Copão Rum Prata - Morango 🍓', 27.00, 'img-produtos/img-Copoes/Img-Copoes.jpeg')">🍓 Morango 🍓</button>
+                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Copão Rum Prata - Maracujá 🥂', 27.00, 'img-produtos/img-Copoes/Img-Copoes.jpeg')">🥂 Maracujá 🥂</button>
+                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Copão Rum Prata - Abacaxi 🍍', 27.00, 'img-produtos/img-Copoes/Img-Copoes.jpeg')">🍍 Abacaxi 🍍</button>
                         </div>
                     </div>
                 </div>
             </div>
 
-        <div class="card" data-name="Copão 51" data-price="27.00" data-section="Copão" data-id="copao-51">
+        <div class="card" data-name="Copão 51" data-price="27.00" data-section="Copão" data-img="img-produtos/img-Copoes/Img-Copoes.jpeg">
                 <div class="product-image" style="background-image: url('img-produtos/img-Copoes/Img-Copoes.jpeg');"></div>
                 <div class="card-content">
                     <h3>51<strong class="Copao-ml">(Dose 100ml)</strong><br>+<br>Red Bull<strong class="Copao-ml">(100ml)</strong><br>+<br>Gelo Com Sabor</h3> <div class="caipifrutas-details">
@@ -1394,10 +1332,10 @@
                             Selecione Sabor do Gelo 
                         </button>
                         <div id="saboresCopao51" class="sabores-menu">
-                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Copão 51 - Água de Coco 🥥', 27.00, this)">🥥 Água de Coco 🥥</button>
-                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Copão 51 - Morango 🍓', 27.00, this)">🍓 Morango 🍓</button>
-                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Copão 51 - Maracujá 🥂', 27.00, this)">🥂 Maracujá 🥂</button>
-                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Copão 51 - Abacaxi 🍍', 27.00, this)">🍍 Abacaxi 🍍</button>
+                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Copão 51 - Água de Coco 🥥', 27.00, 'img-produtos/img-Copoes/Img-Copoes.jpeg')">🥥 Água de Coco 🥥</button>
+                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Copão 51 - Morango 🍓', 27.00, 'img-produtos/img-Copoes/Img-Copoes.jpeg')">🍓 Morango 🍓</button>
+                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Copão 51 - Maracujá 🥂', 27.00, 'img-produtos/img-Copoes/Img-Copoes.jpeg')">🥂 Maracujá 🥂</button>
+                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Copão 51 - Abacaxi 🍍', 27.00, 'img-produtos/img-Copoes/Img-Copoes.jpeg')">🍍 Abacaxi 🍍</button>
                         </div>
                     </div>
                 </div>
@@ -1424,7 +1362,7 @@
         
 
 
-          <div class="card" data-name="Combo Copão 51" data-price="27.00" data-section="Combos" data-id="combo-51">
+          <div class="card" data-name="Combo Copão 51" data-price="27.00" data-section="Combos" data-img="img-produtos/Drinks-c-alcool/Mojitos.jpg">
                 <div class="product-image" style="background-image: url('img-produtos/Drinks-c-alcool/Mojitos.jpg');"></div>
                 <div class="card-content">
                     <h3>Copão| Dose 51 + Red Bull </h3> <div class="caipifrutas-details">
@@ -1437,16 +1375,16 @@
                             Selecione Sabor Gelo 
                         </button>
                         <div id="saboresCombo51" class="sabores-menu">
-                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Combo 51 - Coco 🥥', 27.00, this)">🥥 coco 🥥</button>
-                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Combo 51 - Morango 🍓', 27.00, this)">🍓 Morango 🍓</button>
-                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Combo 51 - Maracujá 🥂', 27.00, this)">🥂 Maracujá 🥂</button>
-                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Combo 51 - Abacaxi 🍍', 27.00, this)">🍍 Abacaxi 🍍</button>
+                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Combo 51 - Coco 🥥', 27.00, 'img-produtos/Drinks-c-alcool/Mojitos.jpg')">🥥 coco 🥥</button>
+                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Combo 51 - Morango 🍓', 27.00, 'img-produtos/Drinks-c-alcool/Mojitos.jpg')">🍓 Morango 🍓</button>
+                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Combo 51 - Maracujá 🥂', 27.00, 'img-produtos/Drinks-c-alcool/Mojitos.jpg')">🥂 Maracujá 🥂</button>
+                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Combo 51 - Abacaxi 🍍', 27.00, 'img-produtos/Drinks-c-alcool/Mojitos.jpg')">🍍 Abacaxi 🍍</button>
                         </div>
                     </div>
                 </div>
             </div>
 
-         <div class="card" data-name="Combo Rum Prata" data-price="27.00" data-section="Combos" data-id="combo-rum">
+         <div class="card" data-name="Combo Rum Prata" data-price="27.00" data-section="Combos" data-img="img-produtos/Drinks-c-alcool/Mojitos.jpg">
                 <div class="product-image" style="background-image: url('img-produtos/Drinks-c-alcool/Mojitos.jpg');"></div>
                 <div class="card-content">
                     <h3>Copao| Dose Rum Prata+Red Bull+Gelo Com Sabor</h3> <div class="caipifrutas-details">
@@ -1459,10 +1397,10 @@
                             Selecione Sabor Gelo 
                         </button>
                         <div id="saboresComboRum" class="sabores-menu">
-                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Combo Rum - Coco 🥥', 27.00, this)">🥥 coco 🥥</button>
-                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Combo Rum - Morango 🍓', 27.00, this)">🍓 Morango 🍓</button>
-                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Combo Rum - Maracujá 🥂', 27.00, this)">🥂 Maracujá 🥂</button>
-                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Combo Rum - Abacaxi 🍍', 27.00, this)">🍍 Abacaxi 🍍</button>
+                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Combo Rum - Coco 🥥', 27.00, 'img-produtos/Drinks-c-alcool/Mojitos.jpg')">🥥 coco 🥥</button>
+                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Combo Rum - Morango 🍓', 27.00, 'img-produtos/Drinks-c-alcool/Mojitos.jpg')">🍓 Morango 🍓</button>
+                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Combo Rum - Maracujá 🥂', 27.00, 'img-produtos/Drinks-c-alcool/Mojitos.jpg')">🥂 Maracujá 🥂</button>
+                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Combo Rum - Abacaxi 🍍', 27.00, 'img-produtos/Drinks-c-alcool/Mojitos.jpg')">🍍 Abacaxi 🍍</button>
                         </div>
                     </div>
                 </div>
@@ -1581,15 +1519,15 @@
         </div>
     </div>
 
-    <div id="obs-modal" class="modal">
-        <div class="modal-content">
-            <span class="close-btn" onclick="fecharObsModal()">&times;</span>
-            <h3 id="obs-item-title">Observação para:</h3>
-            <textarea id="obs-text" placeholder="Ex: Pouco gelo, mais limão, retirar hortelã..."></textarea>
-            <button id="save-obs-btn" onclick="salvarObservacao()">Salvar Observação</button>
-        </div>
-    </div>
-    <div id="atencao-box">
+
+
+
+
+
+
+
+
+<div id="atencao-box">
     <div class="atencao-header">
         <div class="atencao-checkmark">
             <svg viewBox="0 0 52 52">
@@ -1609,12 +1547,10 @@
         // === JAVASCRIPT (Lógica) ===
         // =======================
         
-        // 🚨 NOVO: Item do carrinho agora pode ter uma 'observacao'
-        let carrinho = []; // Ex: [{ nome: 'Moscow Mule', preco: 20.00, quantidade: 1, observacao: '' }]
+        let carrinho = [];
         let etapaAtual = 1; 
-        let cupomAplicado = null; 
-        let descontoValor = 0;    
-        let obsItemIndex = -1; // Índice do item que está sendo editado no modal de observação
+        let cupomAplicado = null; // Armazena o cupom ativo
+        let descontoValor = 0;    // Armazena o valor do desconto calculado
         
         // Dados do Cliente
         const form = {
@@ -1630,6 +1566,7 @@
         
         // =================================================================
         // 🚨__Adicionar os links de pagamento aqui__🚨
+        //🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨
         // =================================================================
         const linksDePagamentoFixos = {
             // A chave é o valor total formatado como string "XX.XX"
@@ -1643,31 +1580,31 @@
 
         // =================================================================
         // 🚨 OBJETO DE CUPOM🚨
+       //🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨
         // =================================================================
    
         // Catálogo de cupons válidos
         const cuponsValidos = {
-            "CINCO": { type: "flat", value: 5.00, minPurchase: 0.00, message: "R$5,00 de desconto aplicado!" },                   
-            "FRETEGRATIS": {                                                                                                       
+            // CUPOM DE R$5,00 (Exemplo que ABATE o valor)
+            "CINCO": { type: "flat", value: 5.00, minPurchase: 0.00, message: "R$5,00 de desconto aplicado!" },                   // ---CINCO---
+
+            // CUPOM FRETEGRATIS (NÃO ABATE o valor, apenas adiciona uma NOTA no WhatsApp)
+            "FRETEGRATIS": {                                                                                                       // --- FRETEGRATIS ---
                 type: "note",  
                 value: 0, 
                 minPurchase: 10.00, 
                 message: "Frete Grátis a ser aplicado na finalização da entrega/balcão." 
             },
             
-            "NUANCE10": { type: "percent", value: 0.10, minPurchase: 50.00, message: "10% OFF em pedidos acima de R$50!" },          
-            "MEGA20": { type: "flat", value: 20.00, minPurchase: 100.00, message: "R$20,00 de desconto!" }                          
+            "NUANCE10": { type: "percent", value: 0.10, minPurchase: 50.00, message: "10% OFF em pedidos acima de R$50!" },          // --- NUANCE10 ---
+            "MEGA20": { type: "flat", value: 20.00, minPurchase: 100.00, message: "R$20,00 de desconto!" }                          // --- MEGA20 ---
         }; 
-        
-        // =================================================================
-        // 💾 FUNÇÕES DE LOCAL STORAGE - MANTIDO
-        // =================================================================
-
-        function salvarCarrinho() {
+               function salvarCarrinho() {
             try {
-                // Incluindo a observação no JSON salvo
+                // Converte o array de objetos para uma string JSON e armazena
                 localStorage.setItem('carrinhoNuance', JSON.stringify(carrinho));
                 
+                // Salva também o cupom (para que ele continue aplicado após o F5)
                 if (cupomAplicado) {
                     localStorage.setItem('cupomNuance', JSON.stringify(cupomAplicado));
                 } else {
@@ -1678,36 +1615,43 @@
             }
         }
 
+        /**
+         * Carrega o carrinho e o cupom do localStorage ao iniciar a página.
+         */
         function carregarCarrinho() {
             try {
                 const carrinhoSalvo = localStorage.getItem('carrinhoNuance');
                 const cupomSalvo = localStorage.getItem('cupomNuance');
 
                 if (carrinhoSalvo) {
+                    // Converte a string JSON de volta para um array de objetos
                     carrinho = JSON.parse(carrinhoSalvo);
-                    // Garante que todos os itens tenham a propriedade 'observacao' para evitar erros
-                    carrinho.forEach(item => {
-                        if (typeof item.observacao === 'undefined') {
-                            item.observacao = '';
-                        }
-                    });
                 } else {
                     carrinho = [];
                 }
                 
                 if (cupomSalvo) {
                     cupomAplicado = JSON.parse(cupomSalvo);
-                    // O valor do input será preenchido após o carregarCarrinho ser chamado no DOMContentLoaded
+                    // Garante que o input mostre o código do cupom
+                    document.getElementById('coupon-input').value = cupomAplicado.codigo;
                 } else {
                     cupomAplicado = null;
                 }
                 
             } catch (e) {
                 console.error("Erro ao carregar o carrinho do localStorage:", e);
-                carrinho = []; 
+                carrinho = []; // Garante que a aplicação não quebre se o storage estiver corrompido
                 cupomAplicado = null;
             }
         }
+         
+        function atualizarObservacao(index, textarea) {
+            if (carrinho[index]) {
+                carrinho[index].observacao = textarea.value.trim();
+                salvarCarrinho();
+            }
+        }
+
 
         // --- FUNÇÕES DE FORMATAÇÃO E VALIDAÇÃO ---
         function formatarTelefone(input) {
@@ -1745,6 +1689,7 @@
             const campoMesa = document.getElementById('campo-mesa');
             const camposEndereco = document.getElementById('campos-endereco');
             
+            // Lógica de reset e exibição
             campoMesa.style.display = 'none';
             camposEndereco.style.display = 'none';
             
@@ -1753,6 +1698,7 @@
             document.getElementById('rua').removeAttribute('required');
             document.getElementById('numero').removeAttribute('required');
 
+            // Limpa os valores ao mudar de opção (boa prática)
             document.getElementById('mesa').value = '';
             document.getElementById('cep').value = '';
             document.getElementById('rua').value = '';
@@ -1769,11 +1715,6 @@
                 document.getElementById('numero').setAttribute('required', 'required');
             }
         });
-
-
-        // ===================================
-        // === CONTROLE DE ETAPAS DO MODAL ===
-        // ===================================
 
         function showEtapa(etapa) {
             document.querySelectorAll('.modal-card').forEach(card => card.style.display = 'none');
@@ -1818,9 +1759,17 @@
             }
         }
 
-        // ===================================
-        // === LÓGICA DO CARRINHO ===
-        // ===================================
+            function atualizarCarrinhoFlutuante() {
+            const badge = document.getElementById('carrinho-badge');
+            
+            // Soma a quantidade de TODOS os itens no carrinho
+            const totalItems = carrinho.reduce((sum, item) => sum + item.quantidade, 0); 
+            
+            badge.textContent = totalItems;
+            
+            // Exibe ou esconde o badge
+            badge.style.display = totalItems > 0 ? 'flex' : 'none'; 
+        }
 
         function calcularTotalDoCarrinho() {
             let totalValor = carrinho.reduce((sum, item) => sum + (item.preco * item.quantidade), 0);
@@ -1838,39 +1787,27 @@
             return totalValor - totalDescontoParaBotao;
         }
 
-        function atualizarCarrinhoFlutuante() {
-            const totalItens = carrinho.reduce((sum, item) => sum + item.quantidade, 0);
-            const carrinhoFlutuante = document.getElementById('carrinho-flutuante');
-            const badge = document.getElementById('carrinho-badge');
-            
-            if (totalItens > 0) {
-                carrinhoFlutuante.style.display = 'flex'; 
-                badge.style.display = 'flex'; 
-                badge.textContent = totalItens;
-            } else {
-                carrinhoFlutuante.style.display = 'flex'; 
-                badge.style.display = 'none'; 
-                badge.textContent = '0';
-            }
-            
-            // 🚨 NOVO: Atualiza a seção de sugestões
-            updateSuggestions();
-        }
-
-        // 🚨 FUNÇÃO MODIFICADA: Adicionada a observacao = '' por padrão
+        // 🚨 FUNÇÃO ATUALIZADA: Agora busca o caminho da imagem no data-img 🚨
         function adicionarAoCarrinho(nome, preco, buttonElement) {
             const precoFloat = parseFloat(String(preco).replace(',', '.'));
-
-            const itemExistente = carrinho.find(item => item.nome === nome && item.observacao === '');
+            
+            // Busca o elemento pai .card para pegar o caminho da imagem
+            const cardElement = buttonElement.closest('.card');
+            // 🚨 NOVO: Obtém a URL da imagem do atributo data-img 🚨
+            const imagemUrl = cardElement ? cardElement.getAttribute('data-img') : 'img-produtos/placeholder.png'; 
+            
+            const itemExistente = carrinho.find(item => item.nome === nome);
             if (itemExistente) {
                 itemExistente.quantidade++;
             } else {
-                // 🚨 NOVO: Incluindo 'observacao' vazia
-                carrinho.push({ nome, preco: precoFloat, quantidade: 1, observacao: '' });
+                // 🚨 NOVO: Adiciona a imagem e a observação (vazia) 🚨
+                carrinho.push({ nome, preco: precoFloat, quantidade: 1, imagem: imagemUrl, observacao: '' });
             }
             
+            // 💾 Salva no localStorage 
             salvarCarrinho();
             
+            // Feedback visual
             if (buttonElement) {
                 const originalText = buttonElement.textContent;
                 buttonElement.textContent = '✅ Adicionado!';
@@ -1885,85 +1822,52 @@
             }
             
             atualizarCarrinhoFlutuante();
-            aplicarCupom(true); 
+            aplicarCupom(true); // Tenta reaplicar o cupom (silencioso)
         }
 
-        // 🚨 FUNÇÃO MODIFICADA: Adicionada a observacao = '' por padrão
-        function adicionarCaipifrutaSabor(nomeCompleto, preco, buttonElement) {
+        // 🚨 FUNÇÃO ATUALIZADA: Agora recebe o caminho da imagem diretamente 🚨
+        function adicionarCaipifrutaSabor(nomeCompleto, preco, imagemUrl) {
             const precoFloat = parseFloat(String(preco).replace(',', '.'));
             
-            // Procura por um item existente sem observação, pois o sabor já define o item
-            const itemExistente = carrinho.find(item => item.nome === nomeCompleto && item.observacao === '');
+            const itemExistente = carrinho.find(item => item.nome === nomeCompleto);
 
             if (itemExistente) {
                 itemExistente.quantidade++;
             } else {
-                // 🚨 NOVO: Incluindo 'observacao' vazia
-                carrinho.push({ nome: nomeCompleto, preco: precoFloat, quantidade: 1, observacao: '' });
+                // 🚨 NOVO: Adiciona a imagem e a observação (vazia) 🚨
+                carrinho.push({ nome: nomeCompleto, preco: precoFloat, quantidade: 1, imagem: imagemUrl, observacao: '' });
             }
             
+            // 💾 Salva no localStorage
             salvarCarrinho();
             
-            if (buttonElement) {
-                const menu = buttonElement.closest('.sabores-menu');
-                if (menu) {
-                     // Fecha o dropdown após a seleção
-                     menu.style.display = 'none';
-                }
-            }
-            
-            atualizarCarrinhoFlutuante();
-            aplicarCupom(true); 
+            // Feedback visual e fechar dropdown
+            // (Melhor fechar o dropdown na função global window.onclick)
 
-            // Mostrar a mensagem de atenção no lugar do alert()
-            showAtencaoMessage(`✅ ${nomeCompleto.split('(')[0].trim()} adicionado ao carrinho!`);
-            
-            // É importante retornar aqui para não continuar a lógica de animação de botão (se houver)
-            return; 
+            atualizarCarrinhoFlutuante();
+            aplicarCupom(true); // Tenta reaplicar o cupom (silencioso)
+
+            // Adicional: alertar que adicionou (para produtos com dropdown)
+            // alert(`✅ ${nomeCompleto} adicionado ao carrinho!`); // Removido para não ser invasivo.
         }
 
-
+        /** * 🚨 FUNÇÃO CORRIGIDA: Adiciona chamada para redesenhar a lista.
+         */
         function removerItemCarrinho(index) {
             carrinho.splice(index, 1); 
             
+            // 💾 Salva no localStorage
             salvarCarrinho();
             
             atualizarCarrinhoFlutuante();
-            aplicarCupom(true); 
+            aplicarCupom(true); // Tenta reaplicar o cupom (silencioso)
+            
+            // 🚨 CORREÇÃO ESSENCIAL: Redesenha a lista do carrinho no modal para sumir com o item.
             atualizarListaCarrinhoModal(); 
         }
         
-        // ===========================================
-        // === 🚨 NOVO: LÓGICA DE OBSERVAÇÃO DO ITEM 🚨 ===
-        // ===========================================
-
-        function abrirObsModal(index) {
-            obsItemIndex = index;
-            const item = carrinho[index];
-            
-            document.getElementById('obs-item-title').textContent = `Observação para: ${item.nome}`;
-            document.getElementById('obs-text').value = item.observacao || ''; // Carrega a observação existente
-            document.getElementById('obs-modal').style.display = 'block';
-        }
-
-        function fecharObsModal() {
-            document.getElementById('obs-modal').style.display = 'none';
-            obsItemIndex = -1;
-        }
-
-        function salvarObservacao() {
-            if (obsItemIndex >= 0 && obsItemIndex < carrinho.length) {
-                const obsText = document.getElementById('obs-text').value.trim();
-                carrinho[obsItemIndex].observacao = obsText;
-                salvarCarrinho();
-                atualizarListaCarrinhoModal(); 
-                showAtencaoMessage(`Observação salva para: ${carrinho[obsItemIndex].nome.split('(')[0].trim()}`);
-            }
-            fecharObsModal();
-        }
-
         // ===================================
-        // === LÓGICA DO CUPOM - MANTIDO
+        // === LÓGICA DO CUPOM ===
         // ===================================
 
         function removerCupom() {
@@ -1974,6 +1878,7 @@
             document.getElementById('coupon-message').style.color = 'gray';
             document.getElementById('remove-coupon-btn').style.display = 'none';
 
+            // 💾 Salva no localStorage
             salvarCarrinho();
 
             atualizarListaCarrinhoModal();
@@ -1986,7 +1891,7 @@
             const removeBtn = document.getElementById('remove-coupon-btn');
             const codigoCupom = input.value.trim().toUpperCase();
             
-            // Usa o código do input se houver, ou o cupom aplicado (se isSilent for true)
+            // Se for silencioso e não houver cupom no input, usa o que já está aplicado
             const cupomParaTestar = codigoCupom.length > 0 ? codigoCupom : (cupomAplicado ? cupomAplicado.codigo : null);
 
             let novoCupomAplicado = null;
@@ -2010,7 +1915,7 @@
                 const cupom = cuponsValidos[cupomParaTestar];
 
                 if (totalItens >= cupom.minPurchase) {
-                    novoCupomAplicado = { ...cupom, codigo: cupomParaTestar };
+                    novoCupomAplicado = { ...cupom, codigo: cupomParaTestar }; // Armazena o código também
                     
                     if (!isSilent) {
                         messageDisplay.textContent = `✅ ${cupom.message}`;
@@ -2020,31 +1925,28 @@
                     input.value = cupomParaTestar;
 
                 } else {
-                    // O cupom é válido, mas o valor mínimo não foi atingido
-                    if (codigoCupom.length > 0) {
-                         // Se foi uma tentativa manual de aplicar, limpa o input
+                    // Limpa o cupom se a condição mínima não for atendida
+                    if (codigoCupom.length > 0) { // Se o usuário digitou
+                        input.value = '';
                         if (!isSilent) {
                             messageDisplay.textContent = `🚫 Pedido mínimo de R$${cupom.minPurchase.toFixed(2).replace('.', ',')} necessário.`;
                         }
                     }
+                    // Se a chamada foi silenciosa, apenas deixa novoCupomAplicado como null
                 }
             } else if (codigoCupom.length > 0 && !isSilent) {
                 messageDisplay.textContent = '🚫 Cupom inválido ou expirado.';
-            } else if (!cupomAplicado && codigoCupom.length === 0 && !isSilent) {
-                messageDisplay.textContent = 'Digite um cupom e clique em Aplicar.';
-                messageDisplay.style.color = 'gray';
             }
 
-
+            // Atualiza o cupom principal e salva.
             cupomAplicado = novoCupomAplicado;
             salvarCarrinho();
 
             atualizarListaCarrinhoModal(); 
         }
 
-        // ==================================================================================
-        // =========🚨 FUNÇÃO MODIFICADA: ATUALIZAR LISTA CARRINHO MODAL 🚨=========
-        // ==================================================================================
+
+        // 🚨 FUNÇÃO MAIS MODIFICADA: Atualização Visual do Carrinho no Modal 🚨
         function atualizarListaCarrinhoModal() {
             const lista = document.getElementById('lista-carrinho');
             const totalDisplay = document.getElementById('carrinho-total');
@@ -2061,84 +1963,64 @@
             if (carrinho.length === 0) {
                  lista.innerHTML = '<li>Seu carrinho está vazio.</li>';
                  discountDisplay.style.display = 'none';
+                 // Limpa o cupom se o carrinho esvaziar
                  cupomAplicado = null;
                  descontoValor = 0;
                  messageDisplay.textContent = ''; 
                  removeBtn.style.display = 'none';
                  input.value = ''; 
-                 salvarCarrinho(); 
+                 salvarCarrinho(); // 💾 Salva o carrinho vazio
             }
 
+            // 1. Calcular o subtotal dos itens
             carrinho.forEach((item, index) => {
                 const li = document.createElement('li');
                 const subtotal = item.preco * item.quantidade;
                 totalGeral += subtotal;
                 
-                const precoFormatado = item.preco.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-                const subtotalFormatado = subtotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+                const precoFormatado = item.preco.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 2 });
+                const subtotalFormatado = subtotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 2 });
 
-                // --- LÓGICA PARA ENCONTRAR A IMAGEM (NOVO) ---
-                let imageUrl = '';
+                // Lógica para esconder o campo de observação se estiver vazio
+                const obsDisplay = item.observacao ? 'block' : 'none';
                 
-                // 1. Tenta encontrar o card original pelo data-id do produto
-                // O data-id é o identificador mais robusto
-                
-                let originalCard = null;
-                
-                // Tentativa de mapeamento pelo nome limpo (para itens de sabor)
-                let nomeBusca = item.nome.split(' (')[0].trim();
-                if (nomeBusca.includes('Caipfruta')) {
-                    originalCard = document.querySelector('[data-id="caipifrutas-base"]');
-                } else if (nomeBusca.includes('Gin')) {
-                     originalCard = document.querySelector('[data-id="gins-base"]');
-                } else if (nomeBusca.includes('Mojito')) {
-                     originalCard = document.querySelector('[data-id="mojito-base"]');
-                } else if (nomeBusca.includes('Soda Italiana')) {
-                     originalCard = document.querySelector('[data-id="soda-italiana-base"]');
-                } else if (nomeBusca.includes('Copão')) {
-                     // Tenta buscar o copão base (Ex: Copão Pitu)
-                     const copaoBaseName = nomeBusca.split(' - ')[0].trim(); 
-                     originalCard = document.querySelector(`[data-name="${copaoBaseName}"]`);
-                } else {
-                     // Busca direta pelo data-name exato (para itens sem sabor)
-                     originalCard = document.querySelector(`[data-name="${nomeBusca}"]`);
-                }
-                
-                
-                if (originalCard) {
-                     const imageDiv = originalCard.querySelector('.product-image');
-                     if (imageDiv) {
-                         imageUrl = imageDiv.style.backgroundImage;
-                     }
-                }
-                // --- FIM LÓGICA PARA ENCONTRAR A IMAGEM ---
-
-                // Conteúdo formatado com o novo layout
                 li.innerHTML = `
-                    <div class="item-carrinho-row">
-                        <div class="item-carrinho-img" style="${imageUrl}"></div>
-                        <div class="item-details-content">
-                            <span class="item-name-qty">
-                                ${item.nome}
-                                <br>
-                                <small style="color: #666;">${item.quantidade}x ${precoFormatado}</small>
-                            </span>
-                            <div class="item-action-buttons">
-                                <span style="font-weight: bold; margin-right: 5px;">
-                                    ${subtotalFormatado}
-                                </span>
-                                <button class="btn-obs-item" onclick="abrirObsModal(${index})" title="Adicionar/Editar Observação">
-                                    <i class="fas fa-pencil-alt"></i>
-                                </button>
-                                <button class="btn-remover" onclick="removerItemCarrinho(${index})" title="Remover Item">❌</button>
-                            </div>
+                    <div class="item-main-details">
+                        <div class="item-thumbnail" style="background-image: url('${item.imagem}');"></div>
+                        <div class="item-info">
+                            <p class="item-title">${item.nome}</p>
+                            <p class="item-sub-info">${item.quantidade}x ${precoFormatado}</p>
+                        </div>
+                        <div class="item-actions">
+                            <span class="item-price-total">${subtotalFormatado}</span>
+                             <button class="btn-obs" title="Adicionar Observação" onclick="toggleObservationInput(${index}, this)">
+                                <i class="fas fa-pencil-alt"></i>
+                            </button>
+                            <button class="btn-remover" title="Remover Item" onclick="removerItemCarrinho(${index})">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
                         </div>
                     </div>
-                    ${item.observacao ? `<div class="item-obs">Obs: ${item.observacao}</div>` : ''}
+                    <div class="item-observation-container" style="display: ${obsDisplay};" id="obs-container-${index}">
+                        <textarea 
+                            placeholder="Ex: Sem gelo, com pouco açúcar, etc." 
+                            oninput="atualizarObservacao(${index}, this)"
+                        >${item.observacao}</textarea>
+                    </div>
                 `;
-
                 lista.appendChild(li);
             });
+            
+            // 🚨 NOVO: Função auxiliar para alternar a exibição da observação 🚨
+            function toggleObservationInput(index, button) {
+                const container = document.getElementById(`obs-container-${index}`);
+                const isVisible = container.style.display === 'block';
+                
+                // Toggle
+                container.style.display = isVisible ? 'none' : 'block';
+            }
+            window.toggleObservationInput = toggleObservationInput; // Torna a função acessível globalmente (do HTML)
+
 
             // 2. Calcular o desconto
             if (cupomAplicado) {
@@ -2147,9 +2029,11 @@
                 } else if (cupomAplicado.type === 'flat') {
                     totalDesconto = cupomAplicado.value;
                 } else if (cupomAplicado.type === 'note') {
+                    // CUPOM 'NOTE' NÃO ABATE VALOR
                     totalDesconto = 0; 
                 }
                 
+                // Garante que o desconto não exceda o total
                 totalDesconto = Math.min(totalDesconto, totalGeral); 
             }
             
@@ -2157,11 +2041,12 @@
 
             // 3. Exibir Desconto (Tratamento para cupons de valor e cupons de nota)
             if (descontoValor > 0) {
-                const descontoFormatado = descontoValor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+                const descontoFormatado = descontoValor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 2 });
                 discountDisplay.textContent = `Desconto (${cupomAplicado.codigo}): - ${descontoFormatado}`;
                 discountDisplay.style.display = 'block';
                 discountDisplay.style.color = '#4CAF50';
                 
+                // Garante que a mensagem de sucesso e o botão apareçam
                 if (messageDisplay.textContent === '') {
                      messageDisplay.textContent = `✅ Cupom ${cupomAplicado.codigo} aplicado!`;
                      messageDisplay.style.color = '#4CAF50';
@@ -2169,10 +2054,12 @@
                 removeBtn.style.display = 'inline-block';
 
             } else if (cupomAplicado && cupomAplicado.type === 'note') {
+                 // Exibe a nota/observação 
                 discountDisplay.textContent = `✅ Cupom ${cupomAplicado.codigo} aplicado (Sem abatimento em valor).`;
                 discountDisplay.style.display = 'block';
-                discountDisplay.style.color = '#00bcd4'; 
+                discountDisplay.style.color = '#00bcd4'; // Cor diferente para nota
 
+                 // Garante que a mensagem de sucesso e o botão apareçam
                 if (messageDisplay.textContent === '') {
                      messageDisplay.textContent = `✅ ${cupomAplicado.message}`;
                      messageDisplay.style.color = '#00bcd4';
@@ -2180,8 +2067,9 @@
                 removeBtn.style.display = 'inline-block';
             } else {
                 discountDisplay.style.display = 'none';
-                removeBtn.style.display = 'none'; 
+                removeBtn.style.display = 'none'; // Esconde se não houver cupom ativo
                 
+                // Se o input tem valor mas não há cupom aplicado (Ex: não atingiu o mínimo), não limpa a mensagem de erro
                 if (input.value === '') { 
                     messageDisplay.textContent = ''; 
                 }
@@ -2189,18 +2077,16 @@
 
             // 4. Calcular e exibir o Total Final
             const totalFinal = totalGeral - descontoValor;
-            totalDisplay.textContent = totalFinal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+            totalDisplay.textContent = totalFinal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 2 });
 
             if (carrinho.length === 0 && document.getElementById('myModal').style.display === 'block') {
+                // Se o carrinho esvaziar dentro do modal, fecha o modal.
                 fecharModal();
             }
             
+            // Atualiza o botão flutuante
             atualizarCarrinhoFlutuante();
         }
-        
-        // ===================================
-        // === VALIDAÇÃO E ENVIO ===
-        // ===================================
 
         function validarFormulario() {
             let isValid = true;
@@ -2214,6 +2100,7 @@
             const numero = document.getElementById('numero');
             const complemento = document.getElementById('complemento');
 
+            // Limpa mensagens de erro
             document.querySelectorAll('.error-message').forEach(el => el.style.display = 'none');
             
             if (nome.value.trim() === '') {
@@ -2240,6 +2127,7 @@
                  const cepRegex = /^\d{5}-\d{3}$/;
                  if (!cepRegex.test(cep.value.trim())) {
                     isValid = false; 
+                    // Se o CEP é inválido, marca como false
                  }
 
                  if (rua.value.trim() === '' || numero.value.trim() === '') {
@@ -2247,6 +2135,7 @@
                  }
             }
 
+            // Armazena os dados se for válido
             if (isValid) {
                 form.nome = nome.value.trim();
                 form.telefone = telefone.value.trim();
@@ -2265,17 +2154,15 @@
             
             return isValid;
         }
-
-// ==================================================================================
-// =========🚨 FUNÇÃO MODIFICADA PARA INCLUIR OBSERVAÇÕES E LINK CONDICIONAL 🚨=========
-// ==================================================================================
-        function gerarMensagemPedido() {
+           function gerarMensagemPedido() {
             let mensagemPedido = '';
             let totalItens = carrinho.reduce((sum, item) => sum + (item.preco * item.quantidade), 0);
             let totalFinal = totalItens - descontoValor;
             
+            // Garante que o valor final tenha exatamente duas casas decimais para busca
             const totalFinalParaBusca = totalFinal.toFixed(2); 
             
+            // TENTA ENCONTRAR O LINK DE PAGAMENTO
             const linkParaPagamento = linksDePagamentoFixos[totalFinalParaBusca] || null;
 
             const totalItensFormatado = totalItens.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
@@ -2302,18 +2189,14 @@
 
             mensagemPedido += `\n*🛒 ITENS DO PEDIDO 🛒*\n`;
 
-            // 2. Itens do Carrinho
+            // 2. Itens do Carrinho (AGORA COM OBSERVAÇÕES)
             carrinho.forEach(item => {
                 const precoUnitarioFormatado = item.preco.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
-                mensagemPedido += `• ${item.quantidade}x ${item.nome} (R$ ${precoUnitarioFormatado})`;
+                mensagemPedido += `• ${item.quantidade}x ${item.nome} (R$ ${precoUnitarioFormatado})\n`;
                 
-                // 🚨 NOVO: Incluindo observação
-                if (item.observacao) {
-                    // Substitui quebras de linha por espaço ou um separador para o WhatsApp
-                    const obsFormatada = item.observacao.replace(/\n/g, ' / '); 
-                    mensagemPedido += `\n  _Obs: ${obsFormatada}_`;
+                if (item.observacao && item.observacao.length > 0) {
+                     mensagemPedido += `  _Obs: ${item.observacao}_\n`;
                 }
-                mensagemPedido += `\n`; // Adiciona quebra de linha após o item
             });
 
             // 3. Total e Finalização (Com Desconto)
@@ -2335,11 +2218,13 @@
 
             // 4. LÓGICA CONDICIONAL DO LINK DE PAGAMENTO SOLICITADA PELO CLIENTE
             if (linkParaPagamento) {
+                // SE EXISTE O LINK FIXO (Valor Exato Encontrado, Ex: R$8.00)
                 mensagemPedido += `👇*FAÇA O SEU PAGAMENTO*👇\n`;
                 mensagemPedido += `🔗 ${linkParaPagamento} \n\n`;
                 mensagemPedido += `🤗 *Não* esqueça de nos enviar o *Comprovante*: 📃`
             }
             else {
+                // SE O LINK FIXO NÃO EXISTE (Valor Diferente de R$8.00, ou não mapeado)
                 mensagemPedido += `_Vamos criar o seu *link* de pagamento agora. *Só um estant*e._`;
             }
 
@@ -2357,30 +2242,28 @@
                 alert('Por favor, preencha todos os campos obrigatórios de contato e local corretamente.');
                 return; 
             }
-
             const { mensagem } = gerarMensagemPedido();
 
-            const numeroWhatsapp = '5562995679219'; 
+
+           const numeroWhatsapp = '5562995679219'; 
+            // ==🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨====
+           
             const url = `https://api.whatsapp.com/send?phone=${numeroWhatsapp}&text=${encodeURIComponent(mensagem)}`;
             
             window.open(url, '_blank');
             fecharModal(); 
             
-            // Limpa o carrinho e cupom após o envio
+            // Opcional: Esvaziar o carrinho após o envio
             carrinho = [];
-            cupomAplicado = null; 
+            cupomAplicado = null; // Limpa o cupom após o envio
             document.getElementById('coupon-input').value = '';
             document.getElementById('coupon-message').textContent = '';
             
+            // 💾 Salva o carrinho vazio após o envio
             salvarCarrinho();
             
             atualizarCarrinhoFlutuante();
         }
-
-        // ===================================
-        // LÓGICA DE FILTRAGEM (CORRIGIDA)
-        // ===================================
-
         function removerAcentos(text) {
             return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
         }
@@ -2398,6 +2281,7 @@
             searchResultsContainer.innerHTML = '';
             let resultsFound = 0;
 
+            // 1. Lógica de Restauração
             if (filter.length === 0) {
                 originalSections.style.display = 'block';
                 searchResultsContainer.style.display = 'none';
@@ -2406,117 +2290,61 @@
                 return;
             }
             
+            // 2. Prepara a Busca
             originalSections.style.display = 'none'; 
             searchResultsTitle.style.display = 'block';
             searchResultsTitle.textContent = `Resultados da Busca por "${input.value}"`;
             
+            // Reúne TODOS os cards de todas as seções
             const allOriginalCards = document.querySelectorAll('.product-grid .card');
 
-            allOriginalCards.forEach((card, index) => {
+            // 3. Filtragem (Estilo Mercado Livre: Contém a palavra-chave)
+            allOriginalCards.forEach(card => {
                 const name = removerAcentos(card.getAttribute('data-name') || '').toLowerCase();
                 const section = removerAcentos(card.getAttribute('data-section') || '').toLowerCase();
                 
+                // Extrai o texto completo do card para uma busca mais abrangente
                 const cardText = removerAcentos(card.textContent || '').toLowerCase();
 
+                // Verifica se o filtro está em qualquer parte do nome, seção ou conteúdo do card
                 if (name.includes(filter) || section.includes(filter) || cardText.includes(filter)) {
                     
-                    // 🚨 CORREÇÃO: Não usamos cloneNode(true) para evitar duplicação de IDs.
-                    // Em vez disso, criamos um novo card e copiamos o HTML interno.
-                    
-                    const newCard = document.createElement('div');
-                    newCard.className = card.className; // Copia as classes do card original
-                    // Copia todos os data attributes
-                    card.getAttributeNames().forEach(attrName => {
-                        if (attrName.startsWith('data-')) {
-                            newCard.setAttribute(attrName, card.getAttribute(attrName));
-                        }
-                    });
-                    
-                    // Copia o conteúdo interno (innerHTML)
-                    newCard.innerHTML = card.innerHTML;
-
-                    // Ajusta o estilo para ser menor no carrossel de busca
-                    newCard.style.minWidth = '180px'; 
-                    newCard.style.marginRight = '20px';
-                    newCard.style.display = 'inline-block';
-                    
-                    // Ajusta os botões onclick/toggleDropdown para ter novos IDs únicos
-                    // (Embora a função toggleDropdown tenha sido corrigida para aceitar strings, 
-                    // a clonagem de IDs ainda é um problema. O melhor é injetar o HTML limpo.)
-
-                    // Se houver dropdowns, garantimos que eles funcionem no novo card.
-                    // O ID do dropdown é o ID do menu, que é chamado pelo onclick do botão.
-                    newCard.querySelectorAll('.btn-sabores').forEach(btn => {
-                        const originalOnclick = btn.getAttribute('onclick');
-                        if (originalOnclick) {
-                            const originalIdMatch = originalOnclick.match(/'(.*?)'/);
-                            if (originalIdMatch && originalIdMatch[1]) {
-                                const originalDropdownId = originalIdMatch[1]; // Ex: 'saboresCaipiFrutas'
-                                
-                                // Gera um novo ID único (ex: 'saboresCaipiFrutas-search-1')
-                                const newDropdownId = `${originalDropdownId}-search-${resultsFound}`; 
-                                
-                                // Atualiza o onclick do botão com o novo ID
-                                btn.setAttribute('onclick', `toggleDropdown('${newDropdownId}')`);
-                                
-                                // Atualiza o ID do menu de sabores
-                                const menu = newCard.querySelector(`#${originalDropdownId}`);
-                                if (menu) {
-                                    menu.id = newDropdownId;
-                                }
-                            }
-                        }
-                    });
-
-
-                    searchResultsContainer.appendChild(newCard);
+                    const clone = card.cloneNode(true);
+                      searchResultsContainer.appendChild(clone);
                     resultsFound++;
                 }
             });
 
+            // 4. Exibição dos Resultados
             if (resultsFound > 0) {
-                searchResultsContainer.style.display = 'block'; 
+                searchResultsContainer.style.display = 'block'; // Mostra o carrossel de resultados
                 noResults.style.display = 'none';
             } else {
                 searchResultsContainer.style.display = 'none';
                 noResults.style.display = 'block';
-                searchResultsTitle.style.display = 'none'; 
+                searchResultsTitle.style.display = 'none'; // Esconde o título se não houver resultados
             }
         }
         
         // --- DROPDOWN E MODAL GERAL ---
         function toggleDropdown(id) {
-            // 🚨 CORREÇÃO: Acessa o elemento pelo ID passado
             const menu = document.getElementById(id);
-            if (!menu) return; // Se o elemento não for encontrado, ignora
-            
             const isVisible = menu.style.display === 'block';
 
-            // Fecha todos os outros dropdowns
             document.querySelectorAll('.sabores-menu').forEach(item => {
                 if (item.id !== id) {
                     item.style.display = 'none';
                 }
             });
 
-            // Alterna a visibilidade do dropdown clicado
             menu.style.display = isVisible ? 'none' : 'block';
         }
         
         window.onclick = function(event) {
             const modal = document.getElementById('myModal');
-            const obsModal = document.getElementById('obs-modal'); 
-
-            // Fecha o modal principal
             if (event.target == modal) {
                 fecharModal();
             }
-            // Fecha o modal de observação
-            if (event.target == obsModal) {
-                fecharObsModal();
-            }
-            
-            // Fechar dropdowns ao clicar fora (mantido)
             document.querySelectorAll('.sabores-menu').forEach(menu => {
                 const dropdownContainer = menu.closest('.dropdown-container');
                 const dropdownButton = dropdownContainer ? dropdownContainer.querySelector('.btn-sabores') : null;
@@ -2529,196 +2357,43 @@
                 }
             });
         }
-        
         document.addEventListener('DOMContentLoaded', () => {
-             // 1. Carrega o carrinho e o cupom salvo
              carregarCarrinho();
-             
-             // 2. Preenche o input do cupom se houver um salvo
-             if (cupomAplicado) {
-                 document.getElementById('coupon-input').value = cupomAplicado.codigo || '';
+              if (!cupomAplicado) {
+                 document.getElementById('coupon-input').value = '';
              }
-
-             // 3. Atualiza o ícone flutuante e aplica a lógica do cupom (silenciosamente)
-             atualizarCarrinhoFlutuante();
-             aplicarCupom(true);
+      atualizarCarrinhoFlutuante();
+              aplicarCupom(true);
         });
-
-// ===========================================
-// === 🚨 NOVO: LÓGICA DE SUGESTÃO (CROSS-SELLING) 🚨 ===
-// ===========================================
-
-const SUGGESTION_MAP = {
-    // Se o cliente pediu:             // Sugira estes data-id:
-    'moscow-mule': ['abacaxi-hortela', 'cha-tropical'], // Drink alcoolico sugere sem alcool
-    'jack-limoned': ['mocktail', 'grape-fresh'],        // Drink alcoolico sugere sem alcool
-    'copao-pitu': ['abacaxi-hortela'],                  // Copão sugere um refri/acompanhamento
-    'copao-rum': ['mocktail'],
-    'copao-51': ['cha-tropical'],
-    'caipifrutas-base': ['gins-base', 'soda-italiana-base'], // Caipi sugere Gin ou Soda
-    'Caipfruta de Morango 🍓': ['gin-red-fruts', 'soda-red-frits'], // Morango sugere Red Frits
-};
-
-/**
- * Verifica o carrinho e injeta sugestões relevantes (produtos que o usuário AINDA NÃO TEM).
- */
-function updateSuggestions() {
-    const container = document.getElementById('suggestion-section-content');
-    const title = document.getElementById('suggestion-title');
-    container.innerHTML = ''; // Limpa as sugestões anteriores
-    
-    if (carrinho.length === 0) {
-        container.style.display = 'none';
-        title.style.display = 'none';
-        return;
-    }
-    
-    // Conjunto de IDs de produtos que JÁ estão no carrinho (ou são muito semelhantes)
-    const currentItemIds = new Set(carrinho.map(item => {
-        // Mapeamento simplificado para verificar o que já está no carrinho
-        const nameCleaned = removerAcentos(item.nome.toLowerCase()).trim();
-        if (nameCleaned.includes('caipfruta de morango')) return 'Caipfruta de Morango 🍓';
-        if (nameCleaned.includes('moscow mule')) return 'moscow-mule';
-        
-        // Tenta encontrar o data-id do produto base
-        let card = document.querySelector(`[data-name="${item.nome.split(' ')[0]}"]`);
-        if(card) return card.getAttribute('data-id');
-        
-        return item.nome; // Se não encontrar, usa o nome completo como fallback
-    }));
-    
-    // Lista para armazenar os IDs únicos das sugestões
-    let suggestionsToAdd = new Set();
-    
-    // 1. Coleta sugestões baseadas no que está no carrinho
-    carrinho.forEach(item => {
-        // Tenta mapear o item do carrinho para uma chave no SUGGESTION_MAP
-        let itemKey = item.nome.includes('Caipfruta de Morango') ? 'Caipfruta de Morango 🍓' : 
-                        document.querySelector(`[data-name="${item.nome.split(' ')[0]}"]`)?.getAttribute('data-id');
-        
-        // Tratar itens que são "base" mas com sabor
-        if (item.nome.includes('Caipfruta')) itemKey = 'caipifrutas-base';
-        if (item.nome.includes('Gin')) itemKey = 'gins-base';
-        if (item.nome.includes('Mojito')) itemKey = 'mojito-base';
-        if (item.nome.includes('Soda Italiana')) itemKey = 'soda-italiana-base';
-        
-        
-        if (SUGGESTION_MAP[itemKey]) {
-            SUGGESTION_MAP[itemKey].forEach(suggestedId => {
-                // Adiciona apenas se o ID sugerido AINDA NÃO estiver no carrinho
-                if (!currentItemIds.has(suggestedId)) {
-                    suggestionsToAdd.add(suggestedId);
-                }
-            });
-        }
-    });
-
-    // 2. Injeta os cards das sugestões
-    let suggestionCount = 0;
-    suggestionsToAdd.forEach(suggestionId => {
-        let originalCard = document.querySelector(`[data-id="${suggestionId}"]`);
-        
-        // Se o originalCard não for encontrado pelo data-id (caso de sabor específico como gin-red-fruts)
-        if (!originalCard && suggestionId.includes('-')) {
-             originalCard = document.querySelector(`[data-id="${suggestionId.split('-')[0]}"]`);
-        }
-        
-        if (originalCard) {
-            // Usamos o método de cópia limpa, igual ao filtro
-            const clone = document.createElement('div');
-            clone.className = originalCard.className; 
-            originalCard.getAttributeNames().forEach(attrName => {
-                if (attrName.startsWith('data-')) {
-                    clone.setAttribute(attrName, originalCard.getAttribute(attrName));
-                }
-            });
-            clone.innerHTML = originalCard.innerHTML;
-
-            // Ajustes de estilo para a seção de sugestões
-            clone.style.minWidth = '180px'; 
-            clone.style.marginRight = '20px';
-            clone.style.display = 'inline-block';
-            
-            // Remove o dropdown se existir, ele não é útil na seção de sugestões
-            clone.querySelectorAll('.dropdown-container').forEach(el => el.remove()); 
-
-            let finalName = clone.getAttribute('data-name');
-            let priceFloat = parseFloat(clone.getAttribute('data-price')) || 0;
-            let onClickAction = `adicionarAoCarrinho('${finalName}', ${priceFloat}, this)`;
-
-            // Lógica de sobrescrita para sabores específicos sugeridos
-            if (suggestionId === 'gin-red-fruts') {
-                finalName = 'Gin Red-Fruts';
-                priceFloat = 20.00; // Preço do Gin base
-                clone.querySelector('.card-content h3').textContent = finalName;
-                onClickAction = `adicionarCaipifrutaSabor('${finalName} ', ${priceFloat}, this)`; // Usa a função de sabor para ser mais preciso
-            }
-             if (suggestionId === 'soda-red-frits') {
-                finalName = 'Soda Italiana sabir Red Frits';
-                priceFloat = 8.00; // Preço da Soda base
-                clone.querySelector('.card-content h3').textContent = 'Soda Red Frits';
-                onClickAction = `adicionarCaipifrutaSabor('${finalName}', ${priceFloat}, this)`;
-            }
-
-            // Remove o botão base se existir
-            clone.querySelector('.btn-add')?.remove(); 
-            
-            // Cria o novo botão (padrão)
-            const newButton = document.createElement('button');
-            newButton.className = 'btn-add';
-            newButton.textContent = `Adicionar ${finalName.split(' ')[0]}`;
-            newButton.setAttribute('onclick', onClickAction);
-            
-            // Corrige o preço (para garantir)
-            clone.querySelector('.price-real').textContent = priceFloat.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-
-
-            clone.querySelector('.card-content').appendChild(newButton);
-            container.appendChild(clone);
-            suggestionCount++;
-        }
-    });
-
-    // 3. Exibe a seção se houver sugestões
-    if (suggestionCount > 0) {
-        container.style.display = 'block';
-        title.style.display = 'block';
-    } else {
-        container.style.display = 'none';
-        title.style.display = 'none';
-    }
-}
-
-
-/**
- * Rola o carrossel (product-grid) na direção especificada. (MANTIDA)
- */
 function scrollCarousel(elementId, direction) {
     const carousel = document.getElementById(elementId);
     if (!carousel) return;
 
+    // Define a distância do scroll.
+    // Usamos a largura do próprio carrossel (clientWidth) para mover uma "página" de itens por vez.
     const scrollDistance = carousel.clientWidth;
 
     if (direction === 'next') {
+        // Rola para a direita
         carousel.scrollBy({
             left: scrollDistance,
             behavior: 'smooth'
         });
     } else if (direction === 'prev') {
+        // Rola para a esquerda
         carousel.scrollBy({
             left: -scrollDistance,
             behavior: 'smooth'
         });
     }
 }
-
 //================================
-//==Botão: Faça seu Copão========= (MANTIDA)
+//==Botão: Faça seu Copão=========
 
-const button = document.getElementById('myButton');
+         const button = document.getElementById('myButton');
 const textToType = "Cliqui aqui para Fazer seu Copão"; 
 const typingSpeed = 120; 
-const repeatInterval = 6000; 
+const repeatInterval = 6000; // 6 segundos
 
 let charIndex = 0;
 let typingTimeout; 
@@ -2732,151 +2407,79 @@ function typeWriter() {
         button.classList.add('typing-complete');
     }
 }
-
 function startTypingEffect() {
     button.textContent = ''; 
     charIndex = 0;
     button.classList.remove('typing-complete');
-    
     clearTimeout(typingTimeout); 
-    
     typeWriter();
 }
-
 startTypingEffect();
-
+// Repete o efeito a cada 6 segundos
 setInterval(startTypingEffect, repeatInterval);
-
-
-//-----------------------------------------
-//---__Mensagens de Atenção__-------------- (AJUSTADA PARA SER DINÂMICA)
-
-// Funcao auxiliar para mostrar a mensagem de atencao sob demanda (sem o ciclo)
-function showAtencaoMessage(message, isSuccess = true) {
-    // Insere o conteúdo, convertendo **texto** para <strong>texto</strong> (negrito)
-    // E *texto* para <em>texto</em> (itálico)
-    let finalMessage = message.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-    finalMessage = finalMessage.replace(/\*(.*?)\*/g, '<em>$1</em>');
-    
-    conteudoElement_Msg.innerHTML = finalMessage;
-    
-    const checkmarkCircle = boxElement_Msg.querySelector('.atencao-checkmark circle');
-    const checkmarkPath = boxElement_Msg.querySelector('.atencao-checkmark path');
-    const headerIcon = boxElement_Msg.querySelector('.atencao-icon');
-    
-    // Altera cores e ícone conforme sucesso/erro
-    if (isSuccess) {
-        headerIcon.textContent = '✅ Sucesso!';
-        headerIcon.style.color = '#4CAF50';
-        checkmarkCircle.setAttribute('fill', '#4CAF50');
-        checkmarkPath.setAttribute('stroke', '#fff');
-    } else {
-         headerIcon.textContent = '⚠️ Atenção!';
-         headerIcon.style.color = '#eb5757';
-         checkmarkCircle.setAttribute('fill', '#eb5757');
-         checkmarkPath.setAttribute('stroke', 'none'); 
-    }
-
-
-    // Exibe a caixa
-    boxElement_Msg.style.display = 'flex';
-
-    // Agenda para esconder a caixa após 3 segundos
-    setTimeout(() => {
-        boxElement_Msg.style.display = 'none';
-    }, 3000);
-}
-
-
-// 🚨 NOVO: Mensagens de Venda/Demanda Simulado e Tempo de Preparo
-const mensagensFixas = [
-    // Mensagens de Venda/Demanda Simulado (Índice 0-3)
-    (carrinho) => {
-        const item = ['Moscow Mule', 'CaipiFrutas', 'Gin Tônica'][Math.floor(Math.random() * 3)];
-        const count = Math.floor(Math.random() * (7 - 3 + 1)) + 3; // 3 a 7
-        return `**${count} drinks ${item}** foram vendidos na última hora!`;
-    },
-    (carrinho) => {
-        const section = ['Copões', 'Drinks com Álcool', 'Drinks Sem Álcool'][Math.floor(Math.random() * 3)];
-        return `Nossa seção de **${section}** está com alta demanda neste momento.`;
-    },
-    (carrinho) => {
-        const count = Math.floor(Math.random() * (5 - 2 + 1)) + 2; // 2 a 5
-        return `**${count}** pessoas estão montando seus pedidos agora! Não perca tempo.`;
-    },
-    // Mensagem de Cupom (Índice 3)
-    (carrinho) => `**Fernando** acabou de usar o **Cupom** de 5 reais de desconto adquirido no Instagram.`,
-    // Mensagem de Tempo de Preparo (Índice 4)
-    (carrinho) => {
-        if (carrinho.length > 0) {
-            const minTime = 15;
-            const maxTime = 25;
-            const time = Math.floor(Math.random() * (maxTime - minTime + 1)) + minTime;
-            return `O tempo de preparo estimado para *seu* pedido é de **${time} minutos**!`;
-        }
-        return `O Drink **Caipfruta** de morango foi o mais pedido hoje!`; // Padrão se o carrinho estiver vazio
-    }
+// 1. Mensagem de Boas-Vindas/Primeira Mensagem (Ser sempre a primeira vez)
+const primeiraMensagem = "O Drink **Caipfruta** de morango foi o mais pedido hoje!";
+//🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨
+// 2. Array com as mensagens que irão ALTERNAR
+const mensagensAlternadas = [
+    "**5 pessoas** hoje fizeram seus próprios **Copões**!",
+    "**Victor** acabou de usar o **Cupom** de Frete Grátis.",
+    "Há **3 usuários** navegando e montando seus pedidos neste momento.",
+    "**Fernando** acabou de usar o **Cupom** de 5 reais de desconto adquirido no Instagram **Nuance**.",
+    "O tempo das entregas pode subir devido ao alto volume de pedidos!"
 ];
-
-// O array que será embaralhado
-let mensagensAlternadas_Dynamic = [...mensagensFixas];
-
-
-let currentIndex_Msg = 0; 
-const boxElement_Msg = document.getElementById('atencao-box');
-const conteudoElement_Msg = document.getElementById('mensagem-conteudo');
-
-const tempoExibicao_Msg = 9000; 
-const tempoIntervalo_Msg = 20000; 
-const tempoEspera_Msg = tempoIntervalo_Msg - tempoExibicao_Msg; 
-
+// Função para embaralhar um array (algoritmo Fisher-Yates)
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
+        [array[i], array[j]] = array[j], array[i];
     }
     return array;
 }
+// Verifica se o usuário já visitou o site
+const isFirstVisit = localStorage.getItem('hasVisited') === null;
+localStorage.setItem('hasVisited', 'true'); // Marca a visita para a próxima vez
+let mensagensParaExibir = [];
+if (isFirstVisit) {
+    // Na primeira visita, exibe a primeira mensagem, e depois o resto embaralhado
+    mensagensParaExibir.push(primeiraMensagem);
+    mensagensParaExibir = mensagensParaExibir.concat(shuffleArray([...mensagensAlternadas]));
+} else {
+    // Em visitas subsequentes, embaralha todas as mensagens, incluindo a "Negroni"
+    mensagensParaExibir = shuffleArray([primeiraMensagem, ...mensagensAlternadas]);
+}
+let currentIndex = 0; // Índice inicial da mensagem
+const boxElement = document.getElementById('atencao-box');
+const conteudoElement = document.getElementById('mensagem-conteudo');
+// Configurações de tempo
+const tempoExibicao = 9000; // Tempo que a mensagem fica VISÍVEL (9 segundos)
+const tempoIntervalo = 20000; // Tempo TOTAL do ciclo (20 segundos)
+const tempoEspera = tempoIntervalo - tempoExibicao; // Tempo que fica invisível (21 segundos)
+function showNextMessage() {
+    // Pega a mensagem atual
+    // O array 'mensagensParaExibir' está agora com a ordem definida (ou embaralhada)
+    let message = mensagensParaExibir[currentIndex];
 
-function showNextMessageCycle() {
-    // Re-embaralha o array (exceto na primeira visita)
-    if (currentIndex_Msg === 0) {
-        shuffleArray(mensagensAlternadas_Dynamic);
-    }
-    
-    // Pega a função da mensagem e a executa, passando o carrinho
-    const messageFunc = mensagensAlternadas_Dynamic[currentIndex_Msg];
-    let message = messageFunc(carrinho); 
-
-    // Insere o conteúdo e formata o texto para negrito/itálico
-    let finalMessage = message.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-    finalMessage = finalMessage.replace(/\*(.*?)\*/g, '<em>$1</em>');
-    
-    conteudoElement_Msg.innerHTML = finalMessage;
-
-    // Garante que o ícone de atenção seja exibido (é o padrão para estas mensagens)
-    boxElement_Msg.querySelector('.atencao-icon').textContent = '⚠️ Atenção!';
-    boxElement_Msg.querySelector('.atencao-icon').style.color = '#eb5757';
-    boxElement_Msg.querySelector('.atencao-checkmark circle').setAttribute('fill', '#eb5757');
-    boxElement_Msg.querySelector('.atencao-checkmark path').setAttribute('stroke', 'none'); 
+    // Insere o conteúdo, convertendo **texto** para <strong>texto</strong> (negrito)
+    conteudoElement.innerHTML = message.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
 
     // 1. Exibe a caixa (Display ON)
-    boxElement_Msg.style.display = 'flex';
+    boxElement.style.display = 'flex';
 
     // 2. Agenda para esconder a caixa após o tempo de exibição
     setTimeout(() => {
-        boxElement_Msg.style.display = 'none';
+        boxElement.style.display = 'none';
 
-        // 3. Agenda a próxima exibição após o tempo de espera
-        setTimeout(showNextMessageCycle, tempoEspera_Msg);
-    }, tempoExibicao_Msg);
+        // 3. Agenda a próxima exibição após o tempo de espera (21 segundos)
+        setTimeout(showNextMessage, tempoEspera);
+    }, tempoExibicao);
 
     // Atualiza o índice para a próxima mensagem (circular)
-    currentIndex_Msg = (currentIndex_Msg + 1) % mensagensAlternadas_Dynamic.length;
+    currentIndex = (currentIndex + 1) % mensagensParaExibir.length;
 }
 
-// Inicia o ciclo de mensagens após um atraso de 1.8 segundos (1800 ms)
-setTimeout(showNextMessageCycle, 1800);    
+// Inicia o ciclo de mensagens após um atraso de 2 segundos (2000 ms)
+setTimeout(showNextMessage, 1800);    
     </script>
 </body>
 </html>
