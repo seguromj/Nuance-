@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -15,10 +16,9 @@
             padding: 0;
             background-color: #f4f4f9;
             color: #333;
-            /* 🚨 AJUSTE DE PADDING: Deixa espaço para a barra FIXA */
+            
             padding-top: 70px; 
         }
-
         /* ----------------------------------------------------- */
         /* 🚨 NOVO: BARRA DE PESQUISA/CARRINHO (PARTE FIXA) 🚨 */
         /* ----------------------------------------------------- */
@@ -94,10 +94,6 @@
             /* Certifica-se de que o header não é fixo */
             position: relative;
         }
-        
-        /* ---------------------------------------------------------------------------------- */
-        /* 🚨 ALTERADO: BOTÃO DO CARRINHO (MANTIDO) 🚨 */
-        /* ---------------------------------------------------------------------------------- */
         #carrinho-flutuante {
             position: relative; 
             background-color: white; /*Cor de fundo carrinho*/
@@ -219,10 +215,7 @@
             color: #EE5253; /* Destaque para a busca */
             display: none; 
         }
-        
-        /* === ESTILO: CARROSSEL HORIZONTAL (Product Grid) === */
-        /* Container da busca que será ativado/desativado */
-        #search-results-carousel-container {
+         #search-results-carousel-container {
              display: none; /* Começa escondido */
              overflow-x: auto; 
              scroll-snap-type: x mandatory; 
@@ -519,6 +512,17 @@
             align-items: center;
             gap: 10px;
             flex-shrink: 0; 
+            flex-direction: column; /* Organiza os elementos verticalmente */
+            justify-content: center;
+            align-items: flex-end; /* Alinha a lixeira/preço à direita */
+        }
+        
+        /* Contêiner de Preço e Ações */
+        .price-and-action-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 5px;
         }
 
         .item-price-total {
@@ -559,6 +563,52 @@
             color: #ee5253;
             transform: scale(1.1);
         }
+        
+        /* ---------------------------------------------------- */
+        /* 🚨 NOVO: Botões de Quantidade no Carrinho 🚨 */
+        /* ---------------------------------------------------- */
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 70px; /* Largura fixa para botões */
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .quantity-btn {
+            background-color: #f4f4f9;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 16px;
+            line-height: 1;
+            transition: background-color 0.2s;
+            color: #333;
+            font-weight: bold;
+        }
+        
+        .quantity-btn:hover {
+            background-color: #ddd;
+        }
+        
+        .quantity-btn:active {
+            transform: scale(0.95);
+        }
+
+        .item-quantity-display {
+            padding: 5px 0;
+            text-align: center;
+            font-weight: bold;
+            font-size: 14px;
+            color: #4CAF50;
+            width: 25px; 
+            flex-grow: 1;
+        }
+        /* FIM: Botões de Quantidade */
+
 
         /* 🚨 NOVO: Container de Observação (Campo de Texto) 🚨 */
         .item-observation-container {
@@ -747,8 +797,6 @@
             gap: 10px;
             margin-top: 15px;
         }
-
-/*=========================================*/
 /*=========================================*/
 /*===__Botões de seta para arrastar Produtos_====*/
 
@@ -817,8 +865,6 @@
 }
 
 
-/*=========================================*/
-/*=========================================*/
 /*==_Butão Faça seu Copão==================*/
 
         /* CONTAINER PARA CENTRALIZAR O BOTÃO ABAIXO DO H3 */
@@ -866,8 +912,6 @@
 }
 
 /*=====================================================================*/  
-
-
 /*------Mensagens de Atenção------------*/
 
 /* Estilo Base da Caixa de Atenção */
@@ -999,10 +1043,10 @@
                             Selecione o Sabor
                         </button>
                         <div id="saboresCaipiFrutas" class="sabores-menu">
-                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Caipfruta de Limão 🍋‍🟩', 10.00, 'img-produtos/Drinks-c-alcool/caipifrutas.jpg')">Limão 🍋‍🟩</button>
-                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Caipfruta de Morango 🍓', 10.00, 'img-produtos/Drinks-c-alcool/caipifrutas.jpg')">Morango 🍓</button>
-                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Caipfruta de Maracujá 🥂', 10.00, 'img-produtos/Drinks-c-alcool/caipifrutas.jpg')">Maracujá 🥂</button>
-                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Caipfruta de Manga 🥭', 10.00, 'img-produtos/Drinks-c-alcool/caipifrutas.jpg')">🥭 Manga 🥭</button>
+                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Caipfruta de Limão 🍋‍🟩', 10.00, 'img-produtos/Drinks-c-alcool/caipifrutas.jpg'); fecharDropdown('saboresCaipiFrutas');">Limão 🍋‍🟩</button>
+                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Caipfruta de Morango 🍓', 10.00, 'img-produtos/Drinks-c-alcool/caipifrutas.jpg'); fecharDropdown('saboresCaipiFrutas');">Morango 🍓</button>
+                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Caipfruta de Maracujá 🥂', 10.00, 'img-produtos/Drinks-c-alcool/caipifrutas.jpg'); fecharDropdown('saboresCaipiFrutas');">Maracujá 🥂</button>
+                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Caipfruta de Manga 🥭', 10.00, 'img-produtos/Drinks-c-alcool/caipifrutas.jpg'); fecharDropdown('saboresCaipiFrutas');">🥭 Manga 🥭</button>
                         </div>
                     </div>
                 </div>
@@ -1024,9 +1068,9 @@
                 Selecione o Sabor
             </button>
             <div id="saboresGin" class="sabores-menu"> 
-                <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Gin Tropical ', 20.00, 'img-produtos/Drinks-c-alcool/Caipigins.jpg')">Gin Tropical</button>
-                <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Gin Tônica ', 20.00, 'img-produtos/Drinks-c-alcool/Caipigins.jpg')">Gin Tônica</button>
-                <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Gin Red-Fruts ', 20.00, 'img-produtos/Drinks-c-alcool/Caipigins.jpg')">Gin Red-Fruts</button>
+                <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Gin Tropical ', 20.00, 'img-produtos/Drinks-c-alcool/Caipigins.jpg'); fecharDropdown('saboresGin');">Gin Tropical</button>
+                <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Gin Tônica ', 20.00, 'img-produtos/Drinks-c-alcool/Caipigins.jpg'); fecharDropdown('saboresGin');">Gin Tônica</button>
+                <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Gin Red-Fruts ', 20.00, 'img-produtos/Drinks-c-alcool/Caipigins.jpg'); fecharDropdown('saboresGin');">Gin Red-Fruts</button>
             </div>
         </div>
     </div>
@@ -1048,10 +1092,10 @@
                             Selecione o Sabor
                         </button>
                         <div id="saboresMogito" class="sabores-menu">
-                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Mojito Limão 🍋‍🟩', 15.00, 'img-produtos/Drinks-c-alcool/Mojitos.jpg')">🍋‍🟩 Limão 🍋‍🟩</button>
-                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Mojito Morango 🍓', 15.00, 'img-produtos/Drinks-c-alcool/Mojitos.jpg')">🍓 Morango 🍓</button>
-                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Mojito Maracujá 🥂', 15.00, 'img-produtos/Drinks-c-alcool/Mojitos.jpg')">🥂 Maracujá 🥂</button>
-                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Mojito Manga 🥭', 15.00, 'img-produtos/Drinks-c-alcool/Mojitos.jpg')">🥭 Manga 🥭</button>
+                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Mojito Limão 🍋‍🟩', 15.00, 'img-produtos/Drinks-c-alcool/Mojitos.jpg'); fecharDropdown('saboresMogito');">🍋‍🟩 Limão 🍋‍🟩</button>
+                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Mojito Morango 🍓', 15.00, 'img-produtos/Drinks-c-alcool/Mojitos.jpg'); fecharDropdown('saboresMogito');">🍓 Morango 🍓</button>
+                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Mojito Maracujá 🥂', 15.00, 'img-produtos/Drinks-c-alcool/Mojitos.jpg'); fecharDropdown('saboresMogito');">🥂 Maracujá 🥂</button>
+                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Mojito Manga 🥭', 15.00, 'img-produtos/Drinks-c-alcool/Mojitos.jpg'); fecharDropdown('saboresMogito');">🥭 Manga 🥭</button>
                         </div>
                     </div>
                 </div>
@@ -1148,11 +1192,11 @@
                         Selecione o Sabor
                     </button>
                     <div id="saboresSoda" class="sabores-menu">
-                        <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Soda Italiana sabir Limão Siciliano 🍋‍🟩', 8.00, 'img-produtos/Drinks-s-alcool/Soda-Italiana.jpeg')">🍋‍🟩 Limão Siciliano 🍋‍🟩</button>
-                        <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Soda Italiana sabir Red Frits', 8.00, 'img-produtos/Drinks-s-alcool/Soda-Italiana.jpeg')">🍎🍓 Red Frits 🍓🍎</button>
-                        <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Soda Italiana sabir Maracujá 🥂', 8.00, 'img-produtos/Drinks-s-alcool/Soda-Italiana.jpeg')">🥂 Maracujá 🥂</button>
-                        <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Soda Italiana sabir Maçã Verde 🍏', 8.00, 'img-produtos/Drinks-s-alcool/Soda-Italiana.jpeg')">🍏 Maçan Vrede 🍏</button>
-                        <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Soda Italiana sabir Abacaxi 🍍', 8.00, 'img-produtos/Drinks-s-alcool/Soda-Italiana.jpeg')">🍍 Abacaxi 🍍</button>
+                        <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Soda Italiana sabir Limão Siciliano 🍋‍🟩', 8.00, 'img-produtos/Drinks-s-alcool/Soda-Italiana.jpeg'); fecharDropdown('saboresSoda');">🍋‍🟩 Limão Siciliano 🍋‍🟩</button>
+                        <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Soda Italiana sabir Red Frits', 8.00, 'img-produtos/Drinks-s-alcool/Soda-Italiana.jpeg'); fecharDropdown('saboresSoda');">🍎🍓 Red Frits 🍓🍎</button>
+                        <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Soda Italiana sabir Maracujá 🥂', 8.00, 'img-produtos/Drinks-s-alcool/Soda-Italiana.jpeg'); fecharDropdown('saboresSoda');">🥂 Maracujá 🥂</button>
+                        <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Soda Italiana sabir Maçã Verde 🍏', 8.00, 'img-produtos/Drinks-s-alcool/Soda-Italiana.jpeg'); fecharDropdown('saboresSoda');">🍏 Maçan Vrede 🍏</button>
+                        <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Soda Italiana sabir Abacaxi 🍍', 8.00, 'img-produtos/Drinks-s-alcool/Soda-Italiana.jpeg'); fecharDropdown('saboresSoda');">🍍 Abacaxi 🍍</button>
                     </div>
                 </div>
             </div>
@@ -1287,10 +1331,10 @@
                             Selecione Sabor do Gelo 
                         </button>
                         <div id="saboresCopaoPitu" class="sabores-menu">
-                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Copão Pitu - Água de Coco 🥥', 27.00, 'img-produtos/img-Copoes/Img-Copoes.jpeg')">🥥 Água de Coco 🥥</button>
-                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Copão Pitu - Morango 🍓', 27.00, 'img-produtos/img-Copoes/Img-Copoes.jpeg')">🍓 Morango 🍓</button>
-                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Copão Pitu - Maracujá 🥂', 27.00, 'img-produtos/img-Copoes/Img-Copoes.jpeg')">🥂 Maracujá 🥂</button>
-                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Copão Pitu - Abacaxi 🍍', 27.00, 'img-produtos/img-Copoes/Img-Copoes.jpeg')">🍍 Abacaxi 🍍</button>
+                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Copão Pitu - Água de Coco 🥥', 27.00, 'img-produtos/img-Copoes/Img-Copoes.jpeg'); fecharDropdown('saboresCopaoPitu');">🥥 Água de Coco 🥥</button>
+                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Copão Pitu - Morango 🍓', 27.00, 'img-produtos/img-Copoes/Img-Copoes.jpeg'); fecharDropdown('saboresCopaoPitu');">🍓 Morango 🍓</button>
+                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Copão Pitu - Maracujá 🥂', 27.00, 'img-produtos/img-Copoes/Img-Copoes.jpeg'); fecharDropdown('saboresCopaoPitu');">🥂 Maracujá 🥂</button>
+                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Copão Pitu - Abacaxi 🍍', 27.00, 'img-produtos/img-Copoes/Img-Copoes.jpeg'); fecharDropdown('saboresCopaoPitu');">🍍 Abacaxi 🍍</button>
                         </div>
                     </div>
                 </div>
@@ -1309,10 +1353,10 @@
                             Selecione Sabor do Gelo 
                         </button>
                         <div id="saboresCopaoRum" class="sabores-menu">
-                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Copão Rum Prata - Água de Coco 🥥', 27.00, 'img-produtos/img-Copoes/Img-Copoes.jpeg')">🥥 Água de Coco 🥥</button>
-                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Copão Rum Prata - Morango 🍓', 27.00, 'img-produtos/img-Copoes/Img-Copoes.jpeg')">🍓 Morango 🍓</button>
-                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Copão Rum Prata - Maracujá 🥂', 27.00, 'img-produtos/img-Copoes/Img-Copoes.jpeg')">🥂 Maracujá 🥂</button>
-                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Copão Rum Prata - Abacaxi 🍍', 27.00, 'img-produtos/img-Copoes/Img-Copoes.jpeg')">🍍 Abacaxi 🍍</button>
+                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Copão Rum Prata - Água de Coco 🥥', 27.00, 'img-produtos/img-Copoes/Img-Copoes.jpeg'); fecharDropdown('saboresCopaoRum');">🥥 Água de Coco 🥥</button>
+                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Copão Rum Prata - Morango 🍓', 27.00, 'img-produtos/img-Copoes/Img-Copoes.jpeg'); fecharDropdown('saboresCopaoRum');">🍓 Morango 🍓</button>
+                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Copão Rum Prata - Maracujá 🥂', 27.00, 'img-produtos/img-Copoes/Img-Copoes.jpeg'); fecharDropdown('saboresCopaoRum');">🥂 Maracujá 🥂</button>
+                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Copão Rum Prata - Abacaxi 🍍', 27.00, 'img-produtos/img-Copoes/Img-Copoes.jpeg'); fecharDropdown('saboresCopaoRum');">🍍 Abacaxi 🍍</button>
                         </div>
                     </div>
                 </div>
@@ -1331,10 +1375,10 @@
                             Selecione Sabor do Gelo 
                         </button>
                         <div id="saboresCopao51" class="sabores-menu">
-                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Copão 51 - Água de Coco 🥥', 27.00, 'img-produtos/img-Copoes/Img-Copoes.jpeg')">🥥 Água de Coco 🥥</button>
-                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Copão 51 - Morango 🍓', 27.00, 'img-produtos/img-Copoes/Img-Copoes.jpeg')">🍓 Morango 🍓</button>
-                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Copão 51 - Maracujá 🥂', 27.00, 'img-produtos/img-Copoes/Img-Copoes.jpeg')">🥂 Maracujá 🥂</button>
-                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Copão 51 - Abacaxi 🍍', 27.00, 'img-produtos/img-Copoes/Img-Copoes.jpeg')">🍍 Abacaxi 🍍</button>
+                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Copão 51 - Água de Coco 🥥', 27.00, 'img-produtos/img-Copoes/Img-Copoes.jpeg'); fecharDropdown('saboresCopao51');">🥥 Água de Coco 🥥</button>
+                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Copão 51 - Morango 🍓', 27.00, 'img-produtos/img-Copoes/Img-Copoes.jpeg'); fecharDropdown('saboresCopao51');">🍓 Morango 🍓</button>
+                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Copão 51 - Maracujá 🥂', 27.00, 'img-produtos/img-Copoes/Img-Copoes.jpeg'); fecharDropdown('saboresCopao51');">🥂 Maracujá 🥂</button>
+                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Copão 51 - Abacaxi 🍍', 27.00, 'img-produtos/img-Copoes/Img-Copoes.jpeg'); fecharDropdown('saboresCopao51');">🍍 Abacaxi 🍍</button>
                         </div>
                     </div>
                 </div>
@@ -1374,10 +1418,10 @@
                             Selecione Sabor Gelo 
                         </button>
                         <div id="saboresCombo51" class="sabores-menu">
-                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Combo 51 - Coco 🥥', 27.00, 'img-produtos/Drinks-c-alcool/Mojitos.jpg')">🥥 coco 🥥</button>
-                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Combo 51 - Morango 🍓', 27.00, 'img-produtos/Drinks-c-alcool/Mojitos.jpg')">🍓 Morango 🍓</button>
-                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Combo 51 - Maracujá 🥂', 27.00, 'img-produtos/Drinks-c-alcool/Mojitos.jpg')">🥂 Maracujá 🥂</button>
-                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Combo 51 - Abacaxi 🍍', 27.00, 'img-produtos/Drinks-c-alcool/Mojitos.jpg')">🍍 Abacaxi 🍍</button>
+                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Combo 51 - Coco 🥥', 27.00, 'img-produtos/Drinks-c-alcool/Mojitos.jpg'); fecharDropdown('saboresCombo51');">🥥 coco 🥥</button>
+                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Combo 51 - Morango 🍓', 27.00, 'img-produtos/Drinks-c-alcool/Mojitos.jpg'); fecharDropdown('saboresCombo51');">🍓 Morango 🍓</button>
+                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Combo 51 - Maracujá 🥂', 27.00, 'img-produtos/Drinks-c-alcool/Mojitos.jpg'); fecharDropdown('saboresCombo51');">🥂 Maracujá 🥂</button>
+                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Combo 51 - Abacaxi 🍍', 27.00, 'img-produtos/Drinks-c-alcool/Mojitos.jpg'); fecharDropdown('saboresCombo51');">🍍 Abacaxi 🍍</button>
                         </div>
                     </div>
                 </div>
@@ -1396,10 +1440,10 @@
                             Selecione Sabor Gelo 
                         </button>
                         <div id="saboresComboRum" class="sabores-menu">
-                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Combo Rum - Coco 🥥', 27.00, 'img-produtos/Drinks-c-alcool/Mojitos.jpg')">🥥 coco 🥥</button>
-                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Combo Rum - Morango 🍓', 27.00, 'img-produtos/Drinks-c-alcool/Mojitos.jpg')">🍓 Morango 🍓</button>
-                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Combo Rum - Maracujá 🥂', 27.00, 'img-produtos/Drinks-c-alcool/Mojitos.jpg')">🥂 Maracujá 🥂</button>
-                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Combo Rum - Abacaxi 🍍', 27.00, 'img-produtos/Drinks-c-alcool/Mojitos.jpg')">🍍 Abacaxi 🍍</button>
+                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Combo Rum - Coco 🥥', 27.00, 'img-produtos/Drinks-c-alcool/Mojitos.jpg'); fecharDropdown('saboresComboRum');">🥥 coco 🥥</button>
+                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Combo Rum - Morango 🍓', 27.00, 'img-produtos/Drinks-c-alcool/Mojitos.jpg'); fecharDropdown('saboresComboRum');">🍓 Morango 🍓</button>
+                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Combo Rum - Maracujá 🥂', 27.00, 'img-produtos/Drinks-c-alcool/Mojitos.jpg'); fecharDropdown('saboresComboRum');">🥂 Maracujá 🥂</button>
+                            <button class="btn-sabor-item" onclick="adicionarCaipifrutaSabor('Combo Rum - Abacaxi 🍍', 27.00, 'img-produtos/Drinks-c-alcool/Mojitos.jpg'); fecharDropdown('saboresComboRum');">🍍 Abacaxi 🍍</button>
                         </div>
                     </div>
                 </div>
@@ -1520,12 +1564,6 @@
 
 
 
-
-
-
-
-
-
 <div id="atencao-box">
     <div class="atencao-header">
         <div class="atencao-checkmark">
@@ -1541,10 +1579,6 @@
   </div>
          
 <script>
-  
-        // =======================
-        // === JAVASCRIPT (Lógica) ===
-        // =======================
         
         let carrinho = [];
         let etapaAtual = 1; 
@@ -1571,8 +1605,9 @@
             // A chave é o valor total formatado como string "XX.XX"
             "8.00": "https://mpago.li/2fbY9KG", 
             "16.00": "https://mpago.la/1N84Gia",
-            "9.99": "https://mpago.la/1wfhtfi",
+            "13.00": "https://mpago.la/247gSmK",
             "10.00": "https://mpago.li/31rBFxx",
+            "18.00": "https://mpago.la/19vEZUV",
             
             // Adicione os seus outros links fixos aqui
         };
@@ -1598,15 +1633,7 @@
             "NUANCE10": { type: "percent", value: 0.10, minPurchase: 50.00, message: "10% OFF em pedidos acima de R$50!" },          // --- NUANCE10 ---
             "MEGA20": { type: "flat", value: 20.00, minPurchase: 100.00, message: "R$20,00 de desconto!" }                          // --- MEGA20 ---
         }; 
-        
-        // =================================================================
-        // 💾 FUNÇÕES DE LOCAL STORAGE - NOVO CÓDIGO 💾
-        // =================================================================
-
-        /**
-         * Salva o estado atual do carrinho no localStorage.
-         */
-        function salvarCarrinho() {
+               function salvarCarrinho() {
             try {
                 // Converte o array de objetos para uma string JSON e armazena
                 localStorage.setItem('carrinhoNuance', JSON.stringify(carrinho));
@@ -1651,14 +1678,36 @@
                 cupomAplicado = null;
             }
         }
-        
-        // 🚨 NOVO: Atualiza a observação de um item no carrinho 🚨
+         
         function atualizarObservacao(index, textarea) {
             if (carrinho[index]) {
                 carrinho[index].observacao = textarea.value.trim();
                 salvarCarrinho();
             }
         }
+        
+        // ----------------------------------------------------
+        // 🚨 NOVO: Lógica de Quantidade no Carrinho 🚨
+        // ----------------------------------------------------
+        function alterarQuantidade(index, operacao) {
+            if (carrinho[index]) {
+                if (operacao === 'aumentar') {
+                    carrinho[index].quantidade++;
+                } else if (operacao === 'diminuir' && carrinho[index].quantidade > 1) {
+                    carrinho[index].quantidade--;
+                } else if (operacao === 'diminuir' && carrinho[index].quantidade === 1) {
+                    // Se for 1 e tentar diminuir, remove
+                    removerItemCarrinho(index);
+                    return; // Sai da função para evitar o processamento duplicado
+                }
+                
+                salvarCarrinho();
+                atualizarCarrinhoFlutuante();
+                aplicarCupom(true); 
+                atualizarListaCarrinhoModal(); // Redesenha a lista
+            }
+        }
+        window.alterarQuantidade = alterarQuantidade; // Torna global para o HTML/Modal
 
 
         // --- FUNÇÕES DE FORMATAÇÃO E VALIDAÇÃO ---
@@ -1724,11 +1773,6 @@
             }
         });
 
-
-        // ===================================
-        // === CONTROLE DE ETAPAS DO MODAL ===
-        // ===================================
-
         function showEtapa(etapa) {
             document.querySelectorAll('.modal-card').forEach(card => card.style.display = 'none');
             
@@ -1772,13 +1816,7 @@
             }
         }
 
-        // ===================================
-        // === LÓGICA DO CARRINHO ===
-        // ===================================
-        
-        /** * 🚨 FUNÇÃO CORRIGIDA E ADICIONADA: Atualiza o contador flutuante.
-         */
-        function atualizarCarrinhoFlutuante() {
+            function atualizarCarrinhoFlutuante() {
             const badge = document.getElementById('carrinho-badge');
             
             // Soma a quantidade de TODOS os itens no carrinho
@@ -1860,15 +1898,19 @@
             // 💾 Salva no localStorage
             salvarCarrinho();
             
-            // Feedback visual e fechar dropdown
-            // (Melhor fechar o dropdown na função global window.onclick)
-
             atualizarCarrinhoFlutuante();
             aplicarCupom(true); // Tenta reaplicar o cupom (silencioso)
-
-            // Adicional: alertar que adicionou (para produtos com dropdown)
-            // alert(`✅ ${nomeCompleto} adicionado ao carrinho!`); // Removido para não ser invasivo.
         }
+        
+        // 🚨 NOVO: Função para fechar o dropdown pelo ID 🚨
+        function fecharDropdown(id) {
+            const menu = document.getElementById(id);
+            if (menu) {
+                menu.style.display = 'none';
+            }
+        }
+        window.fecharDropdown = fecharDropdown; // Torna global
+
 
         /** * 🚨 FUNÇÃO CORRIGIDA: Adiciona chamada para redesenhar a lista.
          */
@@ -2011,13 +2053,20 @@
                             <p class="item-sub-info">${item.quantidade}x ${precoFormatado}</p>
                         </div>
                         <div class="item-actions">
-                            <span class="item-price-total">${subtotalFormatado}</span>
-                             <button class="btn-obs" title="Adicionar Observação" onclick="toggleObservationInput(${index}, this)">
-                                <i class="fas fa-pencil-alt"></i>
-                            </button>
-                            <button class="btn-remover" title="Remover Item" onclick="removerItemCarrinho(${index})">
-                                <i class="fas fa-trash-alt"></i>
-                            </button>
+                            <div class="price-and-action-group">
+                                <span class="item-price-total">${subtotalFormatado}</span>
+                                 <button class="btn-obs" title="Adicionar Observação" onclick="toggleObservationInput(${index}, this)">
+                                    <i class="fas fa-pencil-alt"></i>
+                                </button>
+                                <button class="btn-remover" title="Remover Item" onclick="removerItemCarrinho(${index})">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </div>
+                             <div class="quantity-controls">
+                                <button class="quantity-btn" onclick="alterarQuantidade(${index}, 'diminuir')">-</button>
+                                <span class="item-quantity-display">${item.quantidade}</span>
+                                <button class="quantity-btn" onclick="alterarQuantidade(${index}, 'aumentar')">+</button>
+                            </div>
                         </div>
                     </div>
                     <div class="item-observation-container" style="display: ${obsDisplay};" id="obs-container-${index}">
@@ -2106,10 +2155,6 @@
             // Atualiza o botão flutuante
             atualizarCarrinhoFlutuante();
         }
-        
-        // ===================================
-        // === VALIDAÇÃO E ENVIO ===
-        // ===================================
 
         function validarFormulario() {
             let isValid = true;
@@ -2177,11 +2222,7 @@
             
             return isValid;
         }
-
-// ==================================================================================
-// =========🚨 FUNÇÃO MODIFICADA PARA BUSCAR E INCLUIR O LINK CONDICIONAL 🚨=========
-// ==================================================================================
-        function gerarMensagemPedido() {
+           function gerarMensagemPedido() {
             let mensagemPedido = '';
             let totalItens = carrinho.reduce((sum, item) => sum + (item.preco * item.quantidade), 0);
             let totalFinal = totalItens - descontoValor;
@@ -2259,7 +2300,6 @@
         }
 
 
-        // 🚨 FUNÇÃO MODIFICADA PARA USAR O OBJETO COM O LINK 🚨
         function enviarPedidoWhatsapp() {
             if (carrinho.length === 0) {
                 alert('Seu carrinho está vazio.');
@@ -2270,16 +2310,12 @@
                 alert('Por favor, preencha todos os campos obrigatórios de contato e local corretamente.');
                 return; 
             }
-
-            // OBTÉM MENSAGEM E O LINK (se existir)
             const { mensagem } = gerarMensagemPedido();
 
 
-            // ==================================================================================
-            // *** ATENÇÃO: SUBSTITUA ESTE NÚMERO PELO SEU WHATSAPP REAL ***
-            // ==================================================================================
-            const numeroWhatsapp = '5562995679219'; 
-            // ==🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨====
+           const numeroWhatsapp = '5562995679219'; 
+            // ==🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨====
+           
             const url = `https://api.whatsapp.com/send?phone=${numeroWhatsapp}&text=${encodeURIComponent(mensagem)}`;
             
             window.open(url, '_blank');
@@ -2296,11 +2332,6 @@
             
             atualizarCarrinhoFlutuante();
         }
-
-        // ===================================
-        // ⚠️ LÓGICA MODIFICADA: FILTRAGEM DE PRODUTOS DINÂMICA (ESTILO MERCADO LIVRE) ⚠️
-        // ===================================
-
         function removerAcentos(text) {
             return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
         }
@@ -2347,13 +2378,7 @@
                 if (name.includes(filter) || section.includes(filter) || cardText.includes(filter)) {
                     
                     const clone = card.cloneNode(true);
-                    
-                    // Ajusta o estilo do clone para que os dropdowns funcionem corretamente
-                    // (Remove listeners e IDs duplicados ou ajusta conforme a necessidade. 
-                    // Neste caso, a função adicionarCaipifrutaSabor já usa o `closest('.card')` 
-                    // então clonar é seguro).
-                    
-                    searchResultsContainer.appendChild(clone);
+                      searchResultsContainer.appendChild(clone);
                     resultsFound++;
                 }
             });
@@ -2388,8 +2413,6 @@
             if (event.target == modal) {
                 fecharModal();
             }
-            
-            // Fechar dropdowns ao clicar fora
             document.querySelectorAll('.sabores-menu').forEach(menu => {
                 const dropdownContainer = menu.closest('.dropdown-container');
                 const dropdownButton = dropdownContainer ? dropdownContainer.querySelector('.btn-sabores') : null;
@@ -2398,40 +2421,19 @@
                     event.target !== menu && !menu.contains(event.target) && 
                     dropdownButton && event.target !== dropdownButton && !dropdownButton.contains(event.target)) {
                     
-                    menu.style.display = 'none';
+                    // Removido: O fechamento automático ao clicar no botão de sabor agora é feito via função fecharDropdown()
+                    // Adicionado na função fecharDropdown (linha ~840) para resolver o problema.
                 }
             });
         }
-        
-        // Inicializa o carrinho ao carregar
         document.addEventListener('DOMContentLoaded', () => {
-             // 🚨 NOVO: Carrega o carrinho e o cupom do localStorage
              carregarCarrinho();
-             
-             // Garante que o input do cupom esteja vazio ao carregar
-             // (Já está definido na carregarCarrinho se houver cupom)
-             if (!cupomAplicado) {
+              if (!cupomAplicado) {
                  document.getElementById('coupon-input').value = '';
              }
-
-             // 🚨 CORREÇÃO: Atualiza o contador de itens na badge ao carregar
-             atualizarCarrinhoFlutuante();
-             
-             // (Não precisa do aplicarCupom(true) aqui, pois ele será chamado ao abrir o modal, 
-             // mas é bom para recalcular o desconto se as regras de minPurchase mudaram)
-             aplicarCupom(true);
+      atualizarCarrinhoFlutuante();
+              aplicarCupom(true);
         });
-
-
-
-
-
-
-/**
- * Rola o carrossel (product-grid) na direção especificada.
- * @param {string} elementId - O ID da div que contém os produtos (ex: 'grid-1').
- * @param {string} direction - A direção do scroll ('prev' para voltar, 'next' para avançar).
- */
 function scrollCarousel(elementId, direction) {
     const carousel = document.getElementById(elementId);
     if (!carousel) return;
@@ -2454,8 +2456,6 @@ function scrollCarousel(elementId, direction) {
         });
     }
 }
-
-//================================
 //================================
 //==Botão: Faça seu Copão=========
 
@@ -2476,38 +2476,22 @@ function typeWriter() {
         button.classList.add('typing-complete');
     }
 }
-
 function startTypingEffect() {
     button.textContent = ''; 
     charIndex = 0;
     button.classList.remove('typing-complete');
-    
-    // Limpa qualquer timeout pendente antes de iniciar um novo ciclo
     clearTimeout(typingTimeout); 
-    
     typeWriter();
 }
-
-// Inicia o efeito imediatamente
 startTypingEffect();
-
 // Repete o efeito a cada 6 segundos
 setInterval(startTypingEffect, repeatInterval);
 
 
 
-
-
-
-
     
-    
-        
-     //-----------------------------------------
-//---__Mensagens de Atenção__--------------
-
 // 1. Mensagem de Boas-Vindas/Primeira Mensagem (Ser sempre a primeira vez)
-const primeiraMensagem = "O Drink **Caipfruta** de morango foi o mais pedido hoje!";
+const primeiraMensagem = "O Drink **CaipFrutas** foi o mais pedido hoje!";
 
 // 2. Array com as mensagens que irão ALTERNAR
 const mensagensAlternadas = [
@@ -2516,13 +2500,13 @@ const mensagensAlternadas = [
     "Há **3 usuários** navegando e montando seus pedidos neste momento.",
     "**Fernando** acabou de usar o **Cupom** de 5 reais de desconto adquirido no Instagram **Nuance**.",
     "O tempo das entregas pode subir devido ao alto volume de pedidos!"
-];
+    ];
 
 // Função para embaralhar um array (algoritmo Fisher-Yates)
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = array[j], array[i];
+        [array[i], array[j]] = [array[j], array[i]];
     }
     return array;
 }
@@ -2576,7 +2560,7 @@ function showNextMessage() {
 }
 
 // Inicia o ciclo de mensagens após um atraso de 2 segundos (2000 ms)
-setTimeout(showNextMessage, 1800);    
+setTimeout(showNextMessage, 2000); 
     </script>
 </body>
 </html>
