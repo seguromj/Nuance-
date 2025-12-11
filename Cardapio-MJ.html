@@ -1912,29 +1912,7 @@
                 const li = document.createElement('li');
                 
                 // Linha principal do item
-                li.innerHTML = `
-                    <div class="item-carrinho-row">
-                        <div class="item-carrinho-img" style="background-image: url('${item.imgSrc || ''}')"></div>
-                        <div class="item-details-content">
-                            <div class="item-name-qty">
-                                ${item.nome}
-                                <br>
-                                <small>${formatarMoeda(item.preco)}</small>
-                            </div>
-                            <div class="item-action-buttons">
-                                <button class="btn-obs-item" title="Adicionar Observação" onclick="abrirObsModal(${index})">
-                                    <i class="fas fa-comment-dots"></i>
-                                </button>
-                                <button class="btn-remover" onclick="removerDoCarrinho(${index})">
-                                    <i class="fas fa-trash-alt"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    ${item.observacao ? `<p class="item-obs">Obs: ${item.observacao}</p>` : ''}
-                `;
-                lista.appendChild(li);
-            });
+                
             
             document.getElementById('carrinho-total').textContent = formatarMoeda(total);
             document.getElementById('carrinho-badge').textContent = carrinho.length;
