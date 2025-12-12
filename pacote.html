@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -195,10 +196,9 @@
              border-radius: 60%;
         }
   
-  
         
         
-/* --- Estilos do Botão Animado --- */
+/* --- Estilos do Botão Animado de Orçamento --- */
 .action-button {
     display: block;
     width: 80%;
@@ -242,6 +242,68 @@
 
     .link-btn {
         text-decoration: none;
+    }
+    
+/* --- ESTILOS DOS BOTÕES FIXOS --- */
+    .fixed-button {
+        position: fixed; /* Fixa o botão na tela */
+        bottom: 30px; /* 30px do fundo */
+        z-index: 1000; /* Garante que fique acima de outros elementos */
+        
+        /* Estilo do link/botão */
+        background-color: red; /* Verde da marca */
+        color: var(--color-text-light); /* Texto claro */
+        padding: 15px 20px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: bold;
+        text-transform: uppercase;
+        box-shadow: 0 4px 15px rgba(0, 86, 69, 0.7); /* Sombra mais forte */
+        transition: background-color 0.3s, transform 0.3s;
+    }
+    
+    .fixed-button2 {
+        position: fixed; /* Fixa o botão na tela */
+        bottom: 30px; /* 30px do fundo */
+        z-index: 1000; /* Garante que fique acima de outros elementos */
+        
+        /* Estilo do link/botão */
+        background-color: blue; /* Verde da marca */
+        color: var(--color-text-light); /* Texto claro */
+        padding: 15px 20px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: bold;
+        text-transform: uppercase;
+        box-shadow: 0 4px 15px rgba(0, 86, 69, 0.7); /* Sombra mais forte */
+        transition: background-color 0.3s, transform 0.3s;
+    }
+
+    .fixed-button:hover {
+        background-color: #00796b; /* Um verde um pouco mais claro no hover */
+        transform: scale(1.05); /* Efeito de escala no hover */
+    }
+    
+    /* Posições específicas */
+    .back-button-fixed {
+        left: 30px; /* Canto inferior esquerdo */
+    }
+    
+    .menu-button-fixed {
+        right: 30px; /* Canto inferior direito */
+    }
+    
+    @media (max-width: 600px) {
+        .fixed-button {
+            bottom: 20px;
+            padding: 10px 15px;
+        }
+        .back-button-fixed {
+            left: 20px;
+        }
+        .menu-button-fixed {
+            right: 20px;
+        }
     }
   
     </style>
@@ -292,8 +354,7 @@
             Solicitar Orçamento
             </button>
             </a>
-            <!------------------------>
-        </div>
+            </div>
 
         <div class="package" id="premium">
             <h2>OPEN PREMIUM</h2>
@@ -331,8 +392,6 @@
             </button>
             </a>
         </div>
-        <!------------------------------------>
-        
         <div class="package" id="gold">
             <h2>NUANCE GOLD</h2>
             <p class="ideal-for">ideal</p>
@@ -368,9 +427,16 @@
             Solicitar Orçamento
             </button>
             </a>
-            <!------------------------>
-        </div>
+            </div>
     </div>
+    
+    <a href="index.html" class="fixed-button back-button-fixed">
+        VOLTAR
+    </a>
+    
+    <a href="Cardapio-MJ.html" class="fixed-button2 menu-button-fixed">
+        CARDÁPIO
+    </a>
     
     <script>
         // JavaScript para Interatividade (Melhora a experiência de usuário)
