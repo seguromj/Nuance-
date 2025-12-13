@@ -946,7 +946,7 @@
             id="go-to-menu-btn" 
             class="hidden" 
             onclick="showMainContent()">
-            Visualizar Cardápio
+            Visualizar
         </button>
     </div>
 </div>
@@ -1178,7 +1178,7 @@
             
             // Lógica de mensagens
             if (selectedStateCode === 'GO' && selectedCity === 'ANÁPOLIS') {
-                finalMessage = `😍<br> A nossa loja mais próxima de você está a <br><strong>1.6 km</strong>!<br> Seu pedido chegará até você entre <strong>20</strong> a <strong>30</strong> minutos.`;
+                finalMessage = `😍<br> A nossa loja mais próxima de você está a <br><strong>1.6 km</strong>!<br> Seu pedido chegará até você entre <strong>20</strong> a <strong>30</strong> minutos.<br><strong>Visualize Nossa cardápio</strong>.📖`;
                 loadingTitleElement.textContent = 'Região de Delivery Confirmada!';
                 
                 // AÇÃO 1: Anápolis (Libera conteúdo principal)
@@ -1190,7 +1190,7 @@
                 // AÇÃO 2: Outras cidades de GO (Redireciona para pacote.html)
                 buttonAction = "window.location.href='pacote.html'"; 
             } else {
-                finalMessage = `No momento, só realizamos entrega de Drinks Prontos em <strong>Anápolis</strong>.<br> Nossos servisus ainda não chegou em ${selectedCity}, mas fique a vontade e confira nosso Cardáio e venha nos visitar`;
+                finalMessage = `No momento, só realizamos entrega de Drinks Prontos em <strong>Anápolis</strong>.<br> Nossos servisus ainda não chegou em ${selectedCity}, mas fique a vontade e visualize nosso Cardáio e venha nos visitar qualquer dia. 🤗`;
                 loadingTitleElement.textContent = 'Delivery Fora da Área!';
                 
                 // AÇÃO 3: Outros estados (Libera conteúdo principal)
