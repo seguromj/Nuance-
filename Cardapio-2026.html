@@ -724,8 +724,7 @@
         <div style="margin-top:20px; font-weight:bold; font-size:1.2em">Total: R$ <span id="modal-total">0.00</span></div>
         <button class="btn-main" onclick="openCheckout()" style="margin-top:15px">Finalizar Compra</button>
         <button class="btn-main" style="background:#999; margin-top:10px" onclick="toggleCart()">Continuar Comprando</button>
-    <br><br><br><br><br><br>
-	</div>
+    </div>
 </div>
 
 <div id="checkout-modal">
@@ -756,8 +755,7 @@
             <div class="form-group"><label>Complemento</label><input type="text" id="dev-comp" placeholder="Apt, bloco, ponto de ref..."></div>
         </div>
         <button class="btn-main" onclick="sendWhatsApp()">Confirmar e Pagar</button>
-    <br><br><br><br><br><br>
-	</div>
+    </div>
 </div>
 
 <div id="payment-modal">
@@ -781,7 +779,6 @@
         <button class="btn-main" onclick="finalizarWhatsApp()" style="background: #25D366;">
             Finalizar Compra / WhatsApp <i class="fab fa-whatsapp"></i>
         </button>
-		   <br><br><br><br><br><br>
     </div>
 </div>
 
@@ -1052,6 +1049,8 @@
             cartDot.innerText = totalItems;
         } else {
             cartDot.style.display = 'none';
+            // FECHA O CARRINHO SE FICAR VAZIO
+            document.getElementById('cart-modal').style.display = 'none';
         }
 
         document.getElementById('modal-total').innerText = totalComDesconto.toFixed(2);
@@ -1222,7 +1221,19 @@
         i.value = v;
     }
 
-    function toggleCart() { const m = document.getElementById('cart-modal'); renderCartItems(); m.style.display = m.style.display === 'block' ? 'none' : 'block'; }
+    function toggleCart() { 
+        const m = document.getElementById('cart-modal'); 
+        
+        // BLOQUEIA A ENTRADA SE O CARRINHO ESTIVER VAZIO
+        if (cart.length === 0) {
+            alert("Seu carrinho está vazio! Adicione algum drink primeiro.");
+            return;
+        }
+
+        renderCartItems(); 
+        m.style.display = m.style.display === 'block' ? 'none' : 'block'; 
+    }
+
     function openCheckout() { document.getElementById('cart-modal').style.display = 'none'; document.getElementById('checkout-modal').style.display = 'block'; }
     function closeCheckout() { document.getElementById('checkout-modal').style.display = 'none'; document.getElementById('cart-modal').style.display = 'block'; }
     function closePayment() { document.getElementById('payment-modal').style.display = 'none'; document.getElementById('checkout-modal').style.display = 'block'; }
