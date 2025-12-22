@@ -112,7 +112,6 @@
     
     
         /* MODAIS E CARRINHO */
-        .cart-footer { position: fixed; bottom: 720px; left: 50%; transform: translateX(-50%); width: 50%; max-width: 500px; background: var(--dark); color: white; padding: 15px; border-radius: 20px; display: none; justify-content: space-between; align-items: center; z-index: 999; }
         #cart-modal, #checkout-modal, #payment-modal, #flavor-modal { display: none; position: fixed; bottom: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; }
         .modal-content { position: absolute; bottom: 0; background: white; width: 100%; border-top-left-radius: 30px; border-top-right-radius: 30px; padding: 25px; box-sizing: border-box; max-height: 90vh; overflow-y: auto; }
         
@@ -219,7 +218,6 @@
     font-size: 14px;
     text-align: left;
     flex: 1;
-    text-align: center;
 }
 
 .cart-top-trigger {
@@ -602,15 +600,14 @@
             <h2>Copão</h2>
                 
     <div style="text-align:center; margin: 20px 0;">
-    <h3 class="h3-pegar-cupom" style="display:block; width:100%; margin-bottom:10px">
-     Faça seu <strong>COPÃO</strong><br>👇 Cliqui Aqui 👇</h3>
+    <h3 class="h3-pegar-cupom" style="display:block; width:100%; margin-bottom:10px">Faça seu <strong>COPÃO</strong><br>👇 Cliqui Aqui 👇</h3>
     <a href="Cliente-Nuance.html" class="wave-button">
     <span class="letter">F</span>
     <span class="letter">A</span>
     <span class="letter">Z</span>
     <span class="letter">E</span>
     <span class="letter">R</span>
-    <span class="letter">&nbsp;</span>
+    <span class="letter">&nbsp;</span> <span class="letter">C</span>
     <span class="letter">C</span>
     <span class="letter">O</span>
     <span class="letter">P</span>
@@ -698,15 +695,6 @@
 
     
     <hr>  
-    
-    
-<div id="cart-footer" class="cart-footer" onclick="toggleCart()">
-<div>
-    <i class="fas fa-shopping-cart" style="font-size: 20px; background: linear-gradient(to right, #FFD33D, #E84E36); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"></i>
-    <span id="cart-count">0</span>
-   • Carrinho</div>
-    <strong>R$ <span id="cart-total-display">0.00</span></strong>
-</div>
 
 <div id="flavor-modal">
     <div class="modal-content">
@@ -736,7 +724,6 @@
         <div style="margin-top:20px; font-weight:bold; font-size:1.2em">Total: R$ <span id="modal-total">0.00</span></div>
         <button class="btn-main" onclick="openCheckout()" style="margin-top:15px">Finalizar Compra</button>
         <button class="btn-main" style="background:#999; margin-top:10px" onclick="toggleCart()">Continuar Comprando</button>
-            <br><br><br><br><br>
     </div>
 </div>
 
@@ -768,7 +755,6 @@
             <div class="form-group"><label>Complemento</label><input type="text" id="dev-comp" placeholder="Apt, bloco, ponto de ref..."></div>
         </div>
         <button class="btn-main" onclick="sendWhatsApp()">Confirmar e Pagar</button>
-            <br><br><br><br><br>
     </div>
 </div>
 
@@ -787,14 +773,13 @@
         </div>
 
         <a id="pay-link" href="#" target="_blank" class="btn-main" style="display: block; text-decoration: none; background: #009ee3; margin-bottom: 10px;">
-        Pagar Agora<i class="fas fa-lock"></i>
+            Pagar Agora <i class="fas fa-lock"></i>
         </a>
 
         <button class="btn-main" onclick="finalizarWhatsApp()" style="background: #25D366;">
             Finalizar Compra / WhatsApp <i class="fab fa-whatsapp"></i>
         </button>
-               <br><br><br><br><br>
-       </div>
+    </div>
 </div>
 
         
@@ -1066,9 +1051,6 @@
             cartDot.style.display = 'none';
         }
 
-        document.getElementById('cart-footer').style.display = cart.length > 0 ? 'flex' : 'none';
-        document.getElementById('cart-count').innerText = totalItems;
-        document.getElementById('cart-total-display').innerText = totalComDesconto.toFixed(2);
         document.getElementById('modal-total').innerText = totalComDesconto.toFixed(2);
     }
 
