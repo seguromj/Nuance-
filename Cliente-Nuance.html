@@ -386,87 +386,88 @@
 
             
             const EXPECTED_COUPON_COUNT = 31; 
-            
-// ---------------------------------------------------------------------------------------
-// 🚨BLOCO 0: SEU BLOCO ORIGINAL (6:00 às 8:59)🚨
-// ---------------------------------------------------------------------------------------
-            const BLOCK_0 = [
-	"FRETE_B87H", "FRETE_NTC6", "FRETE_5S24", "FRETE_VVGG", "FRETE_UHL1", "FRETE_NIP5", "FRETE_KXSU", "FRETE_5PQU", 
-	"FRETE_JIGJ", "FRETE_FDTM", "FRETE_6HVK", "FRETE_ES8K", "FRETE_EWVG", "FRETE_897F", "FRETE_EGAQ", "FRETE_5F57", 
-	"FRETE_5OBZ", "FRETE_4FHU", "FRETE_C2QI", "FRETE_S3B0", "FRETE_P6FW", "FRETE_NMQ4", "FRETE_8ZWI", "FRETE_IT6G", 
-	"FRETE_PTLR", "FRETE_EVJS", "FRETE_EHVB", "FRETE_NRBO", "FRETE_050I", "FRETE_7Q9D", "FRETE_ILUP"
+			const BLOCK_0 = [
+	"MAYCK-T7KW",  "MAYCK-1ILL",  "MAYCK-9MFC",  "MAYCK-7ESB",  "MAYCK-TBJG",
+	"MAYCK-7LZB",  "MAYCK-FNRS",  "MAYCK-EORT",  "MAYCK-6YRN",  "MAYCK-TQ57",
+	"MAYCK-BXA9",  "MAYCK-AIRE",  "MAYCK-NVF0",  "MAYCK-V0V1",  "MAYCK-DNY0",
+	"MAYCK-UKVT",  "MAYCK-RUEM",  "MAYCK-CNYT",  "MAYCK-T8VC",  "MAYCK-BFA0",
+	"MAYCK-PSQE",  "MAYCK-P4VN",  "MAYCK-XS5A",  "MAYCK-QWSJ",  "MAYCK-XE2M",
+	"MAYCK-VPJK",  "MAYCK-Q7GY",  "MAYCK-NYV5",  "MAYCK-PCDK",  "MAYCK-EYT5",
+	"MAYCK-BBKL"   
 ];
 
-// ---------------------------------------------------------------------------------------
-// 🚨BLOCO 1: (9:00 às 11:59)🚨
-// ---------------------------------------------------------------------------------------
 const BLOCK_1 = [
-	"FRETE_7OJF", "FRETE_MJSL", "FRETE_SBRS", "FRETE_CQQQ", "FRETE_FP2J", "FRETE_IUF7", "FRETE_MWBC", "FRETE_BTDO", 
-	"FRETE_WGK4", "FRETE_5966", "FRETE_3IIV", "FRETE_EEPA", "FRETE_ZFZZ", "FRETE_N3I3", "FRETE_GY5T", "FRETE_QVGX", 
-	"FRETE_PYA6", "FRETE_O8OF", "FRETE_ZIT2", "FRETE_B449", "FRETE_USV6", "FRETE_5KBL", "FRETE_I859", "FRETE_21KK", 
-	"FRETE_SZTC", "FRETE_4W8F", "FRETE_CZC1", "FRETE_T3U0", "FRETE_NCXN", "FRETE_0WAR", "FRETE_HIZS"
+	"MAYCK-LCXM",  "MAYCK-SF8P",  "MAYCK-TN3X",  "MAYCK-Z4VO",  "MAYCK-AE38",
+	"MAYCK-PAA6",  "MAYCK-YFXQ",  "MAYCK-K6FK",  "MAYCK-7QGN",  "MAYCK-VL71",
+	"MAYCK-HHPB",  "MAYCK-75HT",  "MAYCK-BUDU",  "MAYCK-3U75",  "MAYCK-X8ZR",
+	"MAYCK-LHLQ",  "MAYCK-WVVK",  "MAYCK-NG15",  "MAYCK-7P5J",  "MAYCK-RW0J",
+	"MAYCK-D41X",  "MAYCK-T4D2",  "MAYCK-7MWM",  "MAYCK-8XA1",  "MAYCK-HG9E",
+	"MAYCK-IC7G",  "MAYCK-J3SW",  "MAYCK-HNY4",  "MAYCK-3Y8U",  "MAYCK-OPZ0",
+	"MAYCK-75BX"   
 ];
 
-// ---------------------------------------------------------------------------------------
-// 🚨BLOCO 2: (12:00 às 14:59)🚨
-// ---------------------------------------------------------------------------------------
 const BLOCK_2 = [
-	"FRETE_2J38", "FRETE_I0I0", "FRETE_RWKO", "FRETE_ER46", "FRETE_09R7", "FRETE_2T1E", "FRETE_2JXO", "FRETE_NMCM", 
-	"FRETE_WMN4", "FRETE_JNM8", "FRETE_X4QQ", "FRETE_3CXB", "FRETE_8IJV", "FRETE_QKVL", "FRETE_TA9Y", "FRETE_X91I", 
-	"FRETE_8J21", "FRETE_VP0N", "FRETE_LB6Y", "FRETE_CHZO", "FRETE_9RS3", "FRETE_ADG7", "FRETE_F37G", "FRETE_Q3A6", 
-	"FRETE_13H2", "FRETE_3ECV", "FRETE_N2Y4", "FRETE_L2N3", "FRETE_HUNZ", "FRETE_GQKE", "FRETE_2AIK"
+	"MAYCK-UQ7M",  "MAYCK-7C7Z",  "MAYCK-VTK5",  "MAYCK-H8PU",  "MAYCK-NKPA",
+	"MAYCK-DI3G",  "MAYCK-TIZI",  "MAYCK-819Y",  "MAYCK-VQ3F",  "MAYCK-UYDV",
+	"MAYCK-RBTO",  "MAYCK-U863",  "MAYCK-4N9E",  "MAYCK-YQLW",  "MAYCK-HWFG",
+	"MAYCK-SRT3",  "MAYCK-32MS",  "MAYCK-Y1XN",  "MAYCK-1MEO",  "MAYCK-RPXP",
+	"MAYCK-PSDJ",  "MAYCK-9BCM",  "MAYCK-IMIC",  "MAYCK-7A1M",  "MAYCK-OICG",
+	"MAYCK-ETE7",  "MAYCK-KGC7",  "MAYCK-BLMT",  "MAYCK-KKXW",  "MAYCK-2YVT",
+	"MAYCK-EUQD"   
 ];
 
-// ---------------------------------------------------------------------------------------
-// 🚨BLOCO 3: (15:00 às 17:59)🚨
-// ---------------------------------------------------------------------------------------
 const BLOCK_3 = [
-	"FRETE_39GO", "FRETE_40PF", "FRETE_T15K", "FRETE_MPI0", "FRETE_6OJ8", "FRETE_4OF8", "FRETE_M9N4", "FRETE_V4ZV", 
-	"FRETE_VFMH", "FRETE_BKJD", "FRETE_N8KG", "FRETE_6V6F", "FRETE_O5N8", "FRETE_BSG0", "FRETE_F3N2", "FRETE_JV80", 
-	"FRETE_1BZH", "FRETE_7ULB", "FRETE_22LM", "FRETE_GUCU", "FRETE_I60Z", "FRETE_P0DQ", "FRETE_GBQH", "FRETE_SI2L", 
-	"FRETE_74WW", "FRETE_ASJT", "FRETE_3PRF", "FRETE_3ZWV", "FRETE_L7VB", "FRETE_MILO", "FRETE_9RQF"
+	"MAYCK-BGT6",  "MAYCK-726E",  "MAYCK-V1IW",  "MAYCK-222G",  "MAYCK-UM04",
+	"MAYCK-4KE0",  "MAYCK-AEBV",  "MAYCK-5X6J",  "MAYCK-02DU",  "MAYCK-WPL3",
+	"MAYCK-5EGP",  "MAYCK-0OQZ",  "MAYCK-Q4O4",  "MAYCK-2ZMI",  "MAYCK-JH0V",
+	"MAYCK-CGCR",  "MAYCK-NORC",  "MAYCK-1UKN",  "MAYCK-WL45",  "MAYCK-9DRW",
+	"MAYCK-XD90",  "MAYCK-1JIL",  "MAYCK-1SPQ",  "MAYCK-88LO",  "MAYCK-YGKB",
+	"MAYCK-R4DH",  "MAYCK-UEUP",  "MAYCK-IUBN",  "MAYCK-JX78",  "MAYCK-3OSR",
+	"MAYCK-MEWT"   
 ];
 
-// ---------------------------------------------------------------------------------------
-// 🚨BLOCO 4: (18:00 às 20:59)🚨
-// ---------------------------------------------------------------------------------------
 const BLOCK_4 = [
-	"FRETE_CKJV", "FRETE_CC4W", "FRETE_3DOP", "FRETE_HY62", "FRETE_LEAN", "FRETE_625H", "FRETE_RLW6", "FRETE_YCM0", 
-	"FRETE_ZHW5", "FRETE_OKK6", "FRETE_OF6R", "FRETE_411I", "FRETE_L7TO", "FRETE_R44C", "FRETE_AYS3", "FRETE_0WAZ", 
-	"FRETE_OVDL", "FRETE_4XM8", "FRETE_GPGH", "FRETE_OSSZ", "FRETE_TL44", "FRETE_BKOG", "FRETE_MUR2", "FRETE_VSCG", 
-	"FRETE_9V26", "FRETE_4JH4", "FRETE_4CLQ", "FRETE_SL4F", "FRETE_XCNX", "FRETE_0ZWD", "FRETE_9IWN"
+	"MAYCK-VOZZ",  "MAYCK-7IGX",  "MAYCK-3TAT",  "MAYCK-HI4G",  "MAYCK-M34K",
+	"MAYCK-MTQ4",  "MAYCK-EYWS",  "MAYCK-K0SQ",  "MAYCK-CMPB",  "MAYCK-6STU",
+	"MAYCK-XPW4",  "MAYCK-JM51",  "MAYCK-YT68",  "MAYCK-H7NH",  "MAYCK-6KFV",
+	"MAYCK-6AWT",  "MAYCK-6NKJ",  "MAYCK-9HWS",  "MAYCK-FL1H",  "MAYCK-969M",
+	"MAYCK-5Q5O",  "MAYCK-PZD1",  "MAYCK-9MFH",  "MAYCK-7XLS",  "MAYCK-LZ0I",
+	"MAYCK-OZ6G",  "MAYCK-WG0O",  "MAYCK-ZCYD",  "MAYCK-4DHS",  "MAYCK-0OM7",
+	"MAYCK-ASA9"   
 ];
 
-// ---------------------------------------------------------------------------------------
-// 🚨BLOCO 5: (21:00 às 23:59)🚨
-// ---------------------------------------------------------------------------------------
 const BLOCK_5 = [
-	"FRETE_9N6V", "FRETE_UTLS", "FRETE_3AIR", "FRETE_KGGN", "FRETE_P37D", "FRETE_WTT2", "FRETE_3IGI", "FRETE_J5FV", 
-	"FRETE_0DGE", "FRETE_IA9P", "FRETE_AX6D", "FRETE_XXED", "FRETE_WMKS", "FRETE_SJ3K", "FRETE_VF4K", "FRETE_MUSV", 
-	"FRETE_GQPQ", "FRETE_TTM2", "FRETE_FJ8F", "FRETE_3210", "FRETE_X3XL", "FRETE_INI1", "FRETE_RDTP", "FRETE_E3ME", 
-	"FRETE_PF6W", "FRETE_P9U9", "FRETE_TYN3", "FRETE_6ONF", "FRETE_SR3X", "FRETE_JJ1A", "FRETE_Q9AP"
+	"MAYCK-DSSC",  "MAYCK-Y2QH",  "MAYCK-A9UT",  "MAYCK-BV0J",  "MAYCK-1EFS",
+	"MAYCK-WTJZ",  "MAYCK-Q6JM",  "MAYCK-JAAD",  "MAYCK-1C73",  "MAYCK-9L3Q",
+	"MAYCK-3NXM",  "MAYCK-8RHF",  "MAYCK-4ZUC",  "MAYCK-G5YS",  "MAYCK-YONS",
+	"MAYCK-O752",  "MAYCK-5IC2",  "MAYCK-RC6P",  "MAYCK-IIY6",  "MAYCK-ZQTE",
+	"MAYCK-33FS",  "MAYCK-55KR",  "MAYCK-VRRS",  "MAYCK-BXSS",  "MAYCK-GCGI",
+	"MAYCK-CKLN",  "MAYCK-6F75",  "MAYCK-VW1E",  "MAYCK-NG79",  "MAYCK-P5SZ",
+	"MAYCK-VZQ3"   
 ];
 
-// ---------------------------------------------------------------------------------------
-// 🚨BLOCO 6: (00:00 às 02:59)🚨
-// ---------------------------------------------------------------------------------------
 const BLOCK_6 = [
-	"FRETE_15RA", "FRETE_U5QF", "FRETE_OT1Z", "FRETE_I54K", "FRETE_XRIT", "FRETE_VR7T", "FRETE_9SLR", "FRETE_7WLA", 
-	"FRETE_9JMO", "FRETE_V5UI", "FRETE_6S7P", "FRETE_0E94", "FRETE_6G87", "FRETE_LMPT", "FRETE_OHYA", "FRETE_H5DG", 
-	"FRETE_3K6R", "FRETE_X2QS", "FRETE_EJEY", "FRETE_DKKO", "FRETE_UOZB", "FRETE_X5NQ", "FRETE_E9B1", "FRETE_G307", 
-	"FRETE_GL0P", "FRETE_NVH3", "FRETE_F3Y4", "FRETE_ABHE", "FRETE_15F4", "FRETE_NTTC", "FRETE_PFAO"
+	"MAYCK-P188",  "MAYCK-AVCF",  "MAYCK-OHDI",  "MAYCK-XJFG",  "MAYCK-MQD3",
+	"MAYCK-0I8D",  "MAYCK-V0X0",  "MAYCK-OCCZ",  "MAYCK-57GP",  "MAYCK-XQQN",
+	"MAYCK-7WQP",  "MAYCK-5A4G",  "MAYCK-CVX8",  "MAYCK-LCJT",  "MAYCK-0PLX",
+	"MAYCK-Q7XH",  "MAYCK-9VTA",  "MAYCK-41O9",  "MAYCK-IUTM",  "MAYCK-28UC",
+	"MAYCK-9S0T",  "MAYCK-CKSL",  "MAYCK-8MS3",  "MAYCK-1S59",  "MAYCK-O58D",
+	"MAYCK-H83Q",  "MAYCK-4WCK",  "MAYCK-9CEK",  "MAYCK-8HAL",  "MAYCK-UT9D",
+	"MAYCK-HRUI"   
 ];
 
-// ---------------------------------------------------------------------------------------
-// 🚨BLOCO 7: (03:00 às 05:59)🚨
-// ---------------------------------------------------------------------------------------
 const BLOCK_7 = [
-	"FRETE_53IM", "FRETE_3WAB", "FRETE_1WX2", "FRETE_7ZBT", "FRETE_MMH5", "FRETE_OI5W", "FRETE_38CD", "FRETE_AOQA", 
-	"FRETE_EVAF", "FRETE_15LA", "FRETE_WLRU", "FRETE_SNDG", "FRETE_9A7K", "FRETE_ZJGU", "FRETE_GQ4X", "FRETE_TVI9", 
-	"FRETE_74PC", "FRETE_IC0D", "FRETE_Q9QD", "FRETE_5RDB", "FRETE_K7KC", "FRETE_9ARO", "FRETE_7JCU", "FRETE_6N4D", 
-	"FRETE_4M2A", "FRETE_Z91M", "FRETE_UT1P", "FRETE_PV5G", "FRETE_W7ZI", "FRETE_3A7G", "FRETE_6QFD"
+	"MAYCK-HZSJ",  "MAYCK-YJ4G",  "MAYCK-H19T",  "MAYCK-QBGX",  "MAYCK-07JV",
+	"MAYCK-5BJP",  "MAYCK-JOBK",  "MAYCK-W84P",  "MAYCK-RQVT",  "MAYCK-A3RQ",
+	"MAYCK-13N3",  "MAYCK-Z794",  "MAYCK-YKQR",  "MAYCK-XWHT",  "MAYCK-DLN3",
+	"MAYCK-6ERW",  "MAYCK-D4DS",  "MAYCK-ZBUB",  "MAYCK-GV25",  "MAYCK-X181",
+	"MAYCK-3W4J",  "MAYCK-LXEY",  "MAYCK-1ARW",  "MAYCK-2Q98",  "MAYCK-WYQI",
+	"MAYCK-GGGR",  "MAYCK-C5YB",  "MAYCK-UI6S",  "MAYCK-SMWY",  "MAYCK-PR18",
+	"MAYCK-QSJN"   
 ];
 
+			
+// ---------------------------------------------------------------------------------------
 
             const BLOCKS_OF_COUPONS = [
                 BLOCK_0, BLOCK_1, BLOCK_2, BLOCK_3, BLOCK_4, BLOCK_5, BLOCK_6, BLOCK_7
