@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BeeDrinks - Cardápio Digital</title>
+    <title>NUANCE - Cardápio Digital</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { --primary: #FFD700; 
@@ -19,6 +19,42 @@
                 
         
         
+    
+    
+    
+    
+
+.logo-container45 {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    justify-content: center; /* Centraliza no rodapé */
+    margin-top: 20px;
+    cursor: pointer; /* Criatividade: indica que é clicável */
+    text-decoration: none; /* Remove sublinhado do link */
+}
+
+#insta-icon {
+    opacity: 0;
+    transform: translateX(100px) rotate(0deg); /* Começa na direita sem girar */
+    transition: transform 1.5s ease-out, opacity 1s ease-out;
+}
+
+#brand-name {
+    color: black; /* Ajustado para preto pois o fundo do mini-rodape é branco */
+    font-size: 2rem;
+    letter-spacing: 2px;
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+/* Classe que será adicionada pelo JS para iniciar a animação */
+.start-animation {
+    opacity: 1 !important;
+    transform: translateX(0) rotate(-360deg) !important; /* Rola para a esquerda */
+}
+
+    
     
          body { font-family: 'Segoe UI', sans-serif; margin: 0; background-color: var(--gray); color: var(--dark); padding-top: 70px; }
         
@@ -96,7 +132,8 @@
         .carousel-container:active { cursor: grabbing; }
         .carousel-container::-webkit-scrollbar { display: none; }
 
-        .product-card { background: white; min-width: 250px; border-radius: 15px; padding: 15px; box-shadow: var(--shadow); flex-shrink: 0; text-align: center; pointer-events: auto;}
+        .product-card { background: white; min-width: 250px; border-radius: 15px; padding: 15px; box-shadow: var(--shadow); flex-shrink: 0; text-align: center; pointer-events: auto; transition: transform 0.3s;}
+        .product-card:hover { transform: translateY(-5px); } /* Criatividade: leve flutuação ao passar o mouse */
         .product-card img { width: 200px; height: 180px; object-fit: cover; border-radius: 20px; pointer-events: none; }
         .product-card h3 { color: var(--Laranja);}
         
@@ -107,7 +144,11 @@
         
        
         
-        .btn-main, .btn-add { background: var(--primary); border: none; width: 100%; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        .btn-main, .btn-add { background: var(--primary); border: none; width: 100%; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: all 0.2s; position: relative; overflow: hidden; }
+        
+        /* Animação de sucesso no botão */
+        .btn-added-success { background-color: var(--success) !important; transform: scale(0.95); color: white; }
+        
         .btn-flavor { background: var(--verde); color: var(--primary); }
     
     
@@ -140,6 +181,12 @@
     
     /*=====================================================================
 /* 1. Estilo Básico do Botão Pegar CUPOM*/
+    
+  .papaiNoel {
+      font-size: 30px;
+  }  
+    
+    
 .wave-button {
     text-decoration: none; /* Remove o sublinhado do link */
     display: inline-block;
@@ -319,9 +366,9 @@
     
         
         
-        .mini-rodape {
-    background: #0f0f0f;
-    color: #ffffff;
+.mini-rodape {
+    background: white;
+    color: black;
     padding: 20px 15px;
     font-family: sans-serif;
     border-top: 1px solid #333;
@@ -363,7 +410,6 @@
 }
 
 .btn-social {
-    background: red;
     padding: 5px 12px;
     border-radius: 20px;
     font-size: 11px;
@@ -390,6 +436,29 @@
     50% { transform: translateY(-3px); }
 }
 
+/* Estilos dos Barmans no Rodapé */
+.barmans-footer {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+    margin-bottom: 15px;
+}
+.barman-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    font-weight: bold;
+}
+.barman-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--primary);
+}
+
 /* No computador, ele fica em uma linha só */
 @media (min-width: 768px) {
     .mini-grid {
@@ -397,20 +466,33 @@
         justify-content: space-between;
     }
 }
+/* --- NOVA ANIMAÇÃO DO JOINHA --- */
+.thumb-animation {
+    position: fixed;
+    font-size: 24px;
+    z-index: 9999;
+    pointer-events: none;
+    /* Alterado para 1.5s para ser mais devagar */
+    transition: all 2.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
 
    </style>
 </head>
 <body>
 
 <div class="top-bar-branding">
-    <h3 class="h3-pegar-cupom">Pegue seu <strong>CUPOM</strong></h3>
+    <h3 class="h3-pegar-cupom"><span class="papaiNoel"></span> Pegue seu <strong>CUPOM</strong></h3>
     
     <div style="display: flex; align-items: center;">
         <a href="Cliente-Nuance.html" class="wave-button" style="padding: 8px 15px; font-size: 12px;">
-            <span class="letter">P</span><span class="letter">E</span><span class="letter">G</span><span class="letter">A</span><span class="letter">R</span>
+            <span class="letter">P</span>
+            <span class="letter">E</span>
+            <span class="letter">G</span>
+            <span class="letter">A</span>
+            <span class="letter">R</span>
         </a>
 
-        <div class="cart-top-trigger" onclick="toggleCart()">
+        <div id="cart-anchor" class="cart-top-trigger" onclick="toggleCart()">
             <i class="fas fa-shopping-cart"></i>
             <div id="cart-dot" class="cart-badge-dot"></div>
         </div>
@@ -484,7 +566,7 @@
                         <span class="price">R$ 20.00
                         <span class="badge-ml">350ml</span>
                         </span>
-                    <button class="btn-add" onclick="addToCart('Moscow Mule', 20.00, 'img-produtos/Drinks-c-alcool/Moscow-mule.jpg')">Adicionar</button>
+                    <button class="btn-add" onclick="animateAdd(this); addToCart('Moscow Mule', 20.00, 'img-produtos/Drinks-c-alcool/Moscow-mule.jpg')">Adicionar</button>
                 </div>
                 <div class="product-card">
                     <img src="img-produtos/Drinks-c-alcool/Jack-limoned.jpg">
@@ -493,7 +575,7 @@
                         <span class="price">R$ 25.00
                         <span class="badge-ml">350ml</span>
                         </span>
-                    <button class="btn-add" onclick="addToCart('Jack Limoned', 25.00, 'img-produtos/Drinks-c-alcool/Jack-limoned.jpg')">Adicionar</button>
+                    <button class="btn-add" onclick="animateAdd(this); addToCart('Jack Limoned', 25.00, 'img-produtos/Drinks-c-alcool/Jack-limoned.jpg')">Adicionar</button>
                 </div>
                 
                 <div class="product-card">
@@ -503,7 +585,7 @@
                         <span class="price">R$ 18.00
                         <span class="badge-ml">350ml</span>
                         </span>
-                    <button class="btn-add" onclick="addToCart('Joge Amado', 18.00, 'img-produtos/Drinks-c-alcool/Joge-amado.jpeg')">Adicionar</button>
+                    <button class="btn-add" onclick="animateAdd(this); addToCart('Joge Amado', 18.00, 'img-produtos/Drinks-c-alcool/Joge-amado.jpeg')">Adicionar</button>
                 </div>
                     
                 <div class="product-card">
@@ -513,7 +595,7 @@
                         <span class="price">R$ 20.00
                         <span class="badge-ml">350ml</span>
                         </span>
-                    <button class="btn-add" onclick="addToCart('Pina Colada', 20.00, 'img-produtos/Drinks-c-alcool/Pina-colada.jpg')">Adicionar</button>
+                    <button class="btn-add" onclick="animateAdd(this); addToCart('Pina Colada', 20.00, 'img-produtos/Drinks-c-alcool/Pina-colada.jpg')">Adicionar</button>
                 </div>
                 
                 
@@ -542,7 +624,7 @@
                      <span class="price">R$ 8,00
                      <span class="badge-ml">350ml</span>
                      </span>
-                    <button class="btn-add" onclick="addToCart('AlMongorango', 8.00, 'img-produtos/Drinks-s-alcool/Mongorango.jpeg')">Adicionar</button>
+                    <button class="btn-add" onclick="animateAdd(this); addToCart('AlMongorango', 8.00, 'img-produtos/Drinks-s-alcool/Mongorango.jpeg')">Adicionar</button>
                 </div>
                    
                 <div class="product-card">
@@ -552,7 +634,7 @@
                      <span class="price">R$ 6,00
                      <span class="badge-ml">350ml</span>
                      </span>
-                    <button class="btn-add" onclick="addToCart('Abacaxi Hortelã', 6.00, 'img-produtos/Drinks-s-alcool/Abacixi-Hortelã.jpeg')">Adicionar</button>
+                    <button class="btn-add" onclick="animateAdd(this); addToCart('Abacaxi Hortelã', 6.00, 'img-produtos/Drinks-s-alcool/Abacixi-Hortelã.jpeg')">Adicionar</button>
                 </div>
                     
                 <div class="product-card">
@@ -562,7 +644,7 @@
                      <span class="price">R$ 10,00
                      <span class="badge-ml">350ml</span>
                      </span>
-                    <button class="btn-add" onclick="addToCart('Chá Tropical', 10.00, 'img-produtos/Drinks-s-alcool/Cha-tropical.jpeg')">Adicionar</button>
+                    <button class="btn-add" onclick="animateAdd(this); addToCart('Chá Tropical', 10.00, 'img-produtos/Drinks-s-alcool/Cha-tropical.jpeg')">Adicionar</button>
                 </div>
                     
                 <div class="product-card">
@@ -572,17 +654,17 @@
                      <span class="price">R$ 6,00
                      <span class="badge-ml">350ml</span>
                      </span>
-                    <button class="btn-add" onclick="addToCart('Grape Fresh', 6.00, 'img-produtos/Drinks-s-alcool/Grape-Fresh.jpeg')">Adicionar</button>
+                    <button class="btn-add" onclick="animateAdd(this); addToCart('Grape Fresh', 6.00, 'img-produtos/Drinks-s-alcool/Grape-Fresh.jpeg')">Adicionar</button>
                 </div>
                     
                 <div class="product-card">
                     <img src="img-produtos/Drinks-s-alcool/Hibisco-Spritz.jpeg">
                     <h3>Hibisco Spritz</h3>
-                     <span class="old-price">R$ 12,99</span> 
+                     <span class="old-price)R$ 12,99</span> 
                      <span class="price">R$ 10,00
                      <span class="badge-ml">350ml</span>
                      </span>
-                    <button class="btn-add" onclick="addToCart('Hibisco Spritz', 10.00, 'img-produtos/Drinks-s-alcool/Hibisco-Spritz.jpeg')">Adicionar</button>
+                    <button class="btn-add" onclick="animateAdd(this); addToCart('Hibisco Spritz', 10.00, 'img-produtos/Drinks-s-alcool/Hibisco-Spritz.jpeg')">Adicionar</button>
                 </div>
                    
                 <div class="product-card">
@@ -592,7 +674,7 @@
                      <span class="price">R$ 18,00
                      <span class="badge-ml">350ml</span>
                      </span>
-                    <button class="btn-add" onclick="addToCart('Mocktail', 18.00, 'img-produtos/Drinks-s-alcool/Mocktail.jpeg')">Adicionar</button>
+                    <button class="btn-add" onclick="animateAdd(this); addToCart('Mocktail', 18.00, 'img-produtos/Drinks-s-alcool/Mocktail.jpeg')">Adicionar</button>
                 </div>
             </div>
         </div>
@@ -681,12 +763,12 @@
                 <div class="product-card">
                     <img src="https://images.unsplash.com/photo-1597075095400-b2489955d49f?w=300">
                     <h3>Combo Amigos Fixo</h3><span class="price">R$ 100.00</span>
-                    <button class="btn-add" onclick="addToCart('Combo Amigos Fixo', 100.00, 'https://images.unsplash.com/photo-1597075095400-b2489955d49f?w=300')">Adicionar</button>
+                    <button class="btn-add" onclick="animateAdd(this); addToCart('Combo Amigos Fixo', 100.00, 'https://images.unsplash.com/photo-1597075095400-b2489955d49f?w=300')">Adicionar</button>
                 </div>
                 <div class="product-card">
                     <img src="https://images.unsplash.com/photo-1597075095400-b2489955d49f?w=300">
                     <h3>Combo Shot Galera</h3><span class="price">R$ 45.00</span>
-                    <button class="btn-add" onclick="addToCart('Combo Shot Galera', 45.00, 'https://images.unsplash.com/photo-1597075095400-b2489955d49f?w=300')">Adicionar</button>
+                    <button class="btn-add" onclick="animateAdd(this); addToCart('Combo Shot Galera', 45.00, 'https://images.unsplash.com/photo-1597075095400-b2489955d49f?w=300')">Adicionar</button>
                
 				</div>
             </div>
@@ -695,7 +777,7 @@
 </div>
 
     
-    <hr>  
+    
 
 <div id="flavor-modal">
     <div class="modal-content">
@@ -801,39 +883,77 @@
         </div>
    <div id="mensagem-conteudo" class="atencao-body"></div>
   </div>
-        
-        
-        
-        <footer class="mini-rodape">
+
+<footer class="mini-rodape">
     <div class="mini-grid">
-        <div class="logo-mini">Nuance <span class="dot">.</span></div>
+        <div class="barmans-footer">
+            <div class="barman-item">
+                <img src="imgs/Logo-principal.jpg" alt="Darwin" class="barman-img">
+                <span>Barman Darwin</span>
+            </div>
+            <div class="barman-item">
+                <img src="imgs/Logo-principal.jpg" alt="Douglas" class="barman-img">
+                <span>Barman Douglas</span>
+            </div>
+        </div>
         
         <div class="links-mini">
-            <a href="#">Início</a>
+            <a href="#" style="font-size: 30px;">Início</a>
         </div>
 
-        <div class="social-mini">
-            <a href="https://www.instagram.com/nuance_drinks?igsh=MXEwcDh1Y3FpenozNw==" class="btn-social">Insta</a>
-            <a href="https://wa.me/62995679219?text=Ol%C3%A1!" class="btn-social">Whats</a>
+	        <div class="social-mini">
+            <a href="https://wa.me/62995679219?text=Ol%C3%A1!" style="font-size: 30px;" target="_blank" class="insta-link"><i class="fab fa-whatsapp"></i></a>
         </div>
     </div>
     
     <div class="barra-final">
-        <p>&copy; <span id="ano-mini"></span> • Feito com <span class="magic">✨</span></p>
+        <p>&copy; <span id="ano-mini"></span> • Nuance <span class="magic">❤️</span></p>
     </div>
-                <br><br><br>
+    
+    
+    <a href="https://www.instagram.com/nuance_drinks?igsh=MXEwcDh1Y3FpenozNw==" target="_blank" class="logo-container45">
+        <svg id="insta-icon" width="50" height="50" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <linearGradient id="insta-gradient" x1="0%" y1="100%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#f09433"/>
+                    <stop offset="25%" stop-color="#e6683c"/>
+                    <stop offset="50%" stop-color="#dc2743"/>
+                    <stop offset="75%" stop-color="#cc2366"/>
+                    <stop offset="100%" stop-color="#bc1888"/>
+                </linearGradient>
+            </defs>
+            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.355 2.618 6.778 6.98 6.978 1.28.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" fill="url(#insta-gradient)"/>
+        </svg>
+
+        <h1 id="brand-name"></h1>
+    </a>
+        <br><br><br>
 </footer>
 
         
         
 <script>
-        document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('ano-mini').textContent = new Date().getFullYear();
-});
+    const icon = document.getElementById('insta-icon');
+const brandNameContainer = document.getElementById('brand-name');
+const text = "nuance _drinks";
 
-        
-        
-        
+
+function revealText(str) {
+    let i = 0;
+    // Limpa o conteúdo antes de começar
+    brandNameContainer.innerHTML = "";
+    // Divide o texto em letras e as adiciona uma por uma
+    const interval = setInterval(() => {
+        if (i < str.length) {
+            brandNameContainer.innerHTML += str.charAt(i);
+            i++;
+        } else {
+            clearInterval(interval);
+        }
+    }, 100); // Velocidade do surgimento das letras (100ms)
+}
+
+    
         
     let cart = [];
     let currentFlavorProduct = null;
@@ -849,7 +969,7 @@
 	3: ["MAYCK5ZHA", "MAYCK4NK6", "MAYCKHLWG", "MAYCKU39U", "MAYCKYO3Q", "MAYCKWXH9", "MAYCKOBHZ", "MAYCK73GW", "MAYCK0TJ9", "MAYCKVGDC", "MAYCK9V9Q", "MAYCK2ZKK", "MAYCKC6W9", "MAYCKKPV2", "MAYCKVFS0", "MAYCKEVHQ", "MAYCK6UY6", "MAYCKPYJN", "MAYCKIXXM", "MAYCKE3AB", "MAYCKHQW0", "MAYCKFUHX", "MAYCKHCJG", "MAYCK0Z54", "MAYCKXDJG", "MAYCK8S8C", "MAYCKOVT0", "MAYCKUWYR", "MAYCKQPJN", "MAYCK9FMA", "MAYCKHQ61"], // 15:00 - 17:59
 	4: ["MAYCK1VKW", "MAYCKT46I", "MAYCKDI36", "MAYCKTDNH", "MAYCK1YOY", "MAYCKU4Y5", "MAYCKLEAW", "MAYCK4CC4", "MAYCKD2O0", "MAYCKRQJ5", "MAYCKRE86", "MAYCKY5U3", "MAYCKDC27", "MAYCKT21C", "MAYCKVP50", "MAYCK3AR2", "MAYCKIO74", "MAYCKXRR6", "MAYCKC64Y", "MAYCK1Q0W", "MAYCK0BWZ", "MAYCK8JQB", "MAYCKUQBG", "MAYCKSRU4", "MAYCKA6UM", "MAYCKYQB3", "MAYCKZI7X", "MAYCK2GO0", "MAYCKR7PL", "MAYCKX6CW", "MAYCKI9C4"], // 18:00 - 20:59
 	5: ["MAYCKPGI3", "MAYCK3JH0", "MAYCKY1I6", "MAYCKBF9R", "MAYCK7HVL", "MAYCKFA9E", "MAYCKZUKH", "MAYCK8IFX", "MAYCK31BF", "MAYCK2SS3", "MAYCKO509", "MAYCK7U9G", "MAYCK0E3K", "MAYCKT1EN", "MAYCKRMS2", "MAYCKAXDJ", "MAYCK3X1S", "MAYCKSYKV", "MAYCKGNAO", "MAYCK31XI", "MAYCKMKZ3", "MAYCKKHCI", "MAYCKMVY1", "MAYCKKCV6", "MAYCKQ98M", "MAYCKBW2Y", "MAYCKG6MY", "MAYCKJDIY", "MAYCKWVA9", "MAYCKLRAW", "MAYCK11FR"], // 21:00 - 23:59
-	6: ["MAYCKZWVU", "MAYCKK5L2", "MAYCKD263", "MAYCK2ICX", "MAYCK38C0", "MAYCKLVG0", "MAYCK315G", "MAYCK6YJS", "MAYCK3BKG", "MAYCKXQIA", "MAYCKNKQI", "MAYCKZZYV", "MAYCKYEGK", "MAYCK7HHL", "MAYCKFGNS", "MAYCKWJRJ", "MAYCK8QIJ", "MAYCKQJXX", "MAYCKXQV9", "MAYCK3BGI", "MAYCK0A5W", "MAYCK8Y3B", "MAYCKJ7C9", "MAYCKSL7R", "MAYCKDISB", "MAYCKG1LU", "MAYCK4Y4P", "MAYCKPJBH", "MAYCKM21F", "MAYCKHCX7", "MAYCKEBTA"], // 00:00 - 02:59
+	6: ["MAYCKZWVU", "MAYCKK5L2", "MAYCKD263", "MAYCK2ICX", "MAYCK38C0", "MAYCKLVG0", "MAYCK315G", "MAY6YJS", "MAYCK3BKG", "MAYCKXQIA", "MAYCKNKQI", "MAYCKZZYV", "MAYCKYEGK", "MAYCK7HHL", "MAYCKFGNS", "MAYCKWJRJ", "MAYCK8QIJ", "MAYCKQJXX", "MAYCKXQV9", "MAYCK3BGI", "MAYCK0A5W", "MAYCK8Y3B", "MAYCKJ7C9", "MAYCKSL7R", "MAYCKDIB", "MAYCKG1LU", "MAYCK4Y4P", "MAYCKPJBH", "MAYCKM21F", "MAYCKHCX7", "MAYCKEBTA"], // 00:00 - 02:59
 	7: ["MAYCKULDZ", "MAYCKIODH", "MAYCK619J", "MAYCKJ1AX", "MAYCKITVK", "MAYCKP7UA", "MAYCK28D0", "MAYCKC38O", "MAYCKXGSB", "MAYCKP0ZG", "MAYCKEG0A", "MAYCKS7PO", "MAYCKO57B", "MAYCK3LUU", "MAYCKSPWH", "MAYCK430P", "MAYCKDOQE", "MAYCKMFBW", "MAYCKX8PO", "MAYCKI8IF", "MAYCK06H3", "MAYCKM7AQ", "MAYCKXPH0", "MAYCKM393", "MAYCKGWPV", "MAYCK2UAT", "MAYCK04SA", "MAYCKS9KC", "MAYCKQ8CB", "MAYCK2DYS", "MAYCKOXEU"] // 03:00 - 05:59
 };
 
@@ -890,7 +1010,24 @@
         "100.00": "https://mpago.la/14fLE5V",
     };
 
+    // AQUI ESTÁ A ÚNICA FUNÇÃO ONLOAD QUE IMPORTA:
     window.onload = function() {
+        // --- 1. Lógica da Animação do Instagram com Observer ---
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    setTimeout(() => {
+                        icon.classList.add('start-animation');
+                        revealText(text);
+                    }, 500);
+                    observer.unobserve(entry.target); // Executa apenas uma vez
+                }
+            });
+        }, { threshold: 0.5 });
+
+        observer.observe(document.querySelector('.logo-container45'));
+
+        // --- 2. Lógica Original do Carrinho e Loja ---
         const savedCart = localStorage.getItem('beeDrinksCart');
         if (savedCart) {
             cart = JSON.parse(savedCart);
@@ -950,6 +1087,67 @@
         return status.includes("Aberto");
     }
 
+    // NOVA FUNÇÃO: Som de Feedback
+    function playSuccessSound() {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+
+        oscillator.type = 'sine';
+        oscillator.frequency.setValueAtTime(880, audioCtx.currentTime); // Nota lá
+        oscillator.frequency.exponentialRampToValueAtTime(1100, audioCtx.currentTime + 0.1);
+        
+        gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
+
+        oscillator.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+
+        oscillator.start();
+        oscillator.stop(audioCtx.currentTime + 0.2);
+    }
+
+    // NOVA FUNÇÃO: Animar botão e Joinha Voador
+    function animateAdd(btn) {
+        playSuccessSound();
+        
+        // Início da animação do Joinha
+        const thumb = document.createElement('div');
+        thumb.innerHTML = '👍';
+        thumb.className = 'thumb-animation';
+        
+        // Pega as posições
+        const btnRect = btn.getBoundingClientRect();
+        const cartAnchor = document.getElementById('cart-anchor').getBoundingClientRect();
+        
+        // Posiciona no botão inicialmente
+        thumb.style.left = btnRect.left + (btnRect.width / 2) + 'px';
+        thumb.style.top = btnRect.top + 'px';
+        
+        document.body.appendChild(thumb);
+        
+        // Pequeno timeout para o navegador processar a posição inicial antes de animar
+        setTimeout(() => {
+            thumb.style.left = cartAnchor.left + (cartAnchor.width / 2) + 'px';
+            thumb.style.top = cartAnchor.top + 'px';
+            thumb.style.opacity = '0';
+            thumb.style.transform = 'scale(0.5) rotate(45deg)';
+        }, 100); // Aumentado um pouco o delay inicial para suavidade
+        
+        // Remove o elemento após a animação (aumentado para 1.6s para casar com a transição lenta)
+        setTimeout(() => {
+            thumb.remove();
+        }, 1600);
+
+        const originalText = btn.innerText;
+        btn.classList.add('btn-added-success');
+        btn.innerText = "Adicionado! ✓";
+        setTimeout(() => {
+            btn.classList.remove('btn-added-success');
+            btn.innerText = originalText;
+        }, 1000);
+    }
+
     function addToCart(name, price, image) {
         if (!isStoreOpen()) {
             alert("Desculpe, estamos fechados no momento. Não é possível realizar pedidos.");
@@ -970,13 +1168,18 @@
         currentFlavorProduct = { name, price, image };
         document.getElementById('flavor-title').innerText = name;
         const container = document.getElementById('flavor-options');
-        container.innerHTML = flavors.map(f => `<button class="flavor-btn" onclick="addFlavorToCart('${f}')">${f}</button>`).join('');
+        container.innerHTML = flavors.map(f => `<button class="flavor-btn" onclick="addFlavorToCart('${f}', this)">${f}</button>`).join('');
         document.getElementById('flavor-modal').style.display = 'block';
     }
 
-    function addFlavorToCart(flavor) {
+    function addFlavorToCart(flavor, btn) {
+        // Chamamos a animação enviando o botão clicado no modal
+        animateAdd(btn);
         addToCart(`${currentFlavorProduct.name} (${flavor})`, currentFlavorProduct.price, currentFlavorProduct.image);
-        closeModal('flavor-modal');
+        // Pequeno atraso para fechar o modal e deixar ver o joinha saindo (Aumentado para acompanhar a lentidão)
+        setTimeout(() => {
+            closeModal('flavor-modal');
+        }, 500);
     }
 
     function applyCoupon() {
@@ -1054,10 +1257,10 @@
         } else {
             cartDot.style.display = 'none';
             // FECHA O CARRINHO SE FICAR VAZIO
-            document.getElementById('cart-modal').style.display = 'none';
+            if(document.getElementById('cart-modal')) document.getElementById('cart-modal').style.display = 'none';
         }
 
-        document.getElementById('modal-total').innerText = totalComDesconto.toFixed(2);
+        if(document.getElementById('modal-total')) document.getElementById('modal-total').innerText = totalComDesconto.toFixed(2);
     }
 
     function renderCartItems() {
@@ -1171,6 +1374,7 @@
     }
 
     function finalizarWhatsApp() {
+        playSuccessSound();
         const type = document.getElementById('delivery-type').value;
         let msg = `*🐝 NOVO PEDIDO - BEEDRINKS*\n\n`;
         
