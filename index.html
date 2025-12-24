@@ -976,36 +976,39 @@
   const areaInstalacao = document.getElementById('container-instalacao');
   const botaoInstalar = document.getElementById('btnInstalarApp');
 
-  // Detecta se o site pode ser instalado
+  // Verifica se o usuário já recusou a instalação nesta sessão
+  const jaRecusou = sessionStorage.getItem('nuance_recusou_app');
+
   window.addEventListener('beforeinstallprompt', (e) => {
-    // Impede que o Android mostre a barra padrão
     e.preventDefault();
-    // Guarda o evento para disparar no clique do botão
     promptDeInstalacao = e;
-    // Mostra o container no rodapé
-    areaInstalacao.style.display = 'block';
+
+    // Só mostra o botão se ele não tiver recusado nesta sessão
+    if (!jaRecusou) {
+      areaInstalacao.style.display = 'block';
+    }
   });
 
   botaoInstalar.addEventListener('click', () => {
     if (promptDeInstalacao) {
-      // Abre a janelinha oficial de instalação
       promptDeInstalacao.prompt();
-      
       promptDeInstalacao.userChoice.then((escolha) => {
         if (escolha.outcome === 'accepted') {
-          console.log('Cliente aceitou a instalação');
+          console.log('Cliente instalou!');
+        } else {
+          // Se ele recusar, salvamos a escolha para não incomodar mais nesta sessão
+          sessionStorage.setItem('nuance_recusou_app', 'true');
         }
-        // Esconde o botão após a escolha
         areaInstalacao.style.display = 'none';
       });
     }
   });
 
-  // Se o cliente já instalou, não mostra o botão
   window.addEventListener('appinstalled', () => {
     areaInstalacao.style.display = 'none';
   });
 </script>
+
 
 
 
