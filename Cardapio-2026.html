@@ -515,6 +515,10 @@
     transition: all 2.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
+/* --- ESTILOS DO MODAL ADMIN --- */
+#admin-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 2000; }
+.btn-admin-trigger { position: fixed; bottom: 10px; right: 10px; background: rgba(255,255,255,0.5); border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; z-index: 1002; font-size: 12px; color: #555; }
+
    </style>
 </head>
 <body>
@@ -568,7 +572,7 @@
                 
             <div class="carousel-container drag-scroll">
                     
-                <div class="product-card">
+                <div class="product-card" id="card-caipfrutas">
                     <img src="img-produtos/Drinks-c-alcool/caipifrutas.jpg">
                     <h3>CaipFrutas</h3>
                         <span class="old-price">R$ 12.00</span> 
@@ -578,7 +582,7 @@
                     <button class="btn-add btn-flavor" onclick="openFlavorModal('CaipFrutas', 10.00, ['🍋‍🟩 Limão 🍋‍🟩', '🍓 Morango 🍓', '🥂 Maracujá 🥂', '🥭 Manga 🥭'], 'img-produtos/Drinks-c-alcool/caipifrutas.jpg')">Escolher Sabor</button>
 				</div>
                     
-                <div class="product-card">
+                <div class="product-card" id="card-gins">
                     <img src="img-produtos/Drinks-c-alcool/Caipigins.jpg">
                     <h3>GIN's</h3>
                         <span class="old-price">R$ 22.99</span> 
@@ -588,7 +592,7 @@
                     <button class="btn-add btn-flavor" onclick="openFlavorModal('GIN`s', 20.00, ['Gin Tropical', 'Gin Tônica', 'Gin Red-Fruts'], 'img-produtos/Drinks-c-alcool/Caipigins.jpg')">Escolher Fruta</button>
                 </div>
                     
-                <div class="product-card">
+                <div class="product-card" id="card-mojito">
                     <img src="img-produtos/Drinks-c-alcool/Mojitos.jpg">
                     <h3>Mojito</h3>
                         <span class="old-price">R$ 16.99</span> 
@@ -598,7 +602,7 @@
                     <button class="btn-add btn-flavor" onclick="openFlavorModal('Mojito', 15.00, ['🍋‍🟩 Limão 🍋‍🟩', '🍓 Morango 🍓', '🥂 Maracujá 🥂', '🥭 Manga 🥭'], 'img-produtos/Drinks-c-alcool/Mojitos.jpg')">Escolher Sabor</button>
                 </div>
                     
-                <div class="product-card">
+                <div class="product-card" id="card-moscow">
                     <img src="img-produtos/Drinks-c-alcool/Moscow-mule.jpg">
                     <h3>Moscow Mule</h3>
                         <span class="old-price">R$ 22.99</span> 
@@ -607,7 +611,7 @@
                         </span>
                     <button class="btn-add" onclick="animateAdd(this); addToCart('Moscow Mule', 20.00, 'img-produtos/Drinks-c-alcool/Moscow-mule.jpg')">Adicionar</button>
                 </div>
-                <div class="product-card">
+                <div class="product-card" id="card-jack">
                     <img src="img-produtos/Drinks-c-alcool/Jack-limoned.jpg">
                     <h3>Jack Limoned</h3>
                         <span class="old-price">R$ 27.99</span> 
@@ -617,7 +621,7 @@
                     <button class="btn-add" onclick="animateAdd(this); addToCart('Jack Limoned', 25.00, 'img-produtos/Drinks-c-alcool/Jack-limoned.jpg')">Adicionar</button>
                 </div>
                 
-                <div class="product-card">
+                <div class="product-card" id="card-jorge">
                     <img src="img-produtos/Drinks-c-alcool/Joge-amado.jpeg">
                     <h3>Joge Amado</h3>
                         <span class="old-price">R$ 19.99</span> 
@@ -627,7 +631,7 @@
                     <button class="btn-add" onclick="animateAdd(this); addToCart('Joge Amado', 18.00, 'img-produtos/Drinks-c-alcool/Joge-amado.jpeg')">Adicionar</button>
                 </div>
                     
-                <div class="product-card">
+                <div class="product-card" id="card-pina">
                     <img src="img-produtos/Drinks-c-alcool/Pina-colada.jpg">
                     <h3>Pina Colada</h3>
                         <span class="old-price">R$ 21.99</span> 
@@ -646,7 +650,7 @@
                 
             <div class="carousel-container drag-scroll">
                     
-                <div class="product-card">
+                <div class="product-card" id="card-soda">
                     <img src="img-produtos/Drinks-s-alcool/Soda-Italiana.jpeg">
                     <h3>Soda Italiana</h3>
                      <span class="old-price">R$ 8,00</span> 
@@ -656,7 +660,7 @@
                     <button class="btn-add btn-flavor" onclick="openFlavorModal('Soda Italiana', 8.00, ['🍋‍🟩 Limão Siciliano 🍋‍🟩', '🍎🍓 Red Frits 🍓🍎', '🥂 Maracujá 🥂', '🍏 Maçan Vrede 🍏', '🍍 Abacaxi 🍍'], 'img-produtos/Drinks-s-alcool/Soda-Italiana.jpeg')">Escolher Sabor</button>
                 </div>
                     
-                <div class="product-card">
+                <div class="product-card" id="card-mongorango">
                     <img src="img-produtos/Drinks-s-alcool/Mongorango.jpeg">
                     <h3>Mongorango</h3>
                      <span class="old-price">R$ 9,99</span> 
@@ -666,7 +670,7 @@
                     <button class="btn-add" onclick="animateAdd(this); addToCart('Mongorango', 8.00, 'img-produtos/Drinks-s-alcool/Mongorango.jpeg')">Adicionar</button>
                 </div>
                    
-                <div class="product-card">
+                <div class="product-card" id="card-abacaxi-h">
                     <img src="img-produtos/Drinks-s-alcool/Abacixi-Hortelã.jpeg">
                     <h3>Abacaxi Hortelã</h3>
                      <span class="old-price">R$ 7,99</span> 
@@ -676,7 +680,7 @@
                     <button class="btn-add" onclick="animateAdd(this); addToCart('Abacaxi Hortelã', 6.00, 'img-produtos/Drinks-s-alcool/Abacixi-Hortelã.jpeg')">Adicionar</button>
                 </div>
                     
-                <div class="product-card">
+                <div class="product-card" id="card-cha">
                     <img src="img-produtos/Drinks-s-alcool/Cha-tropical.jpeg">
                     <h3>Chá Tropical</h3>
                      <span class="old-price">R$ 11,99</span> 
@@ -686,7 +690,7 @@
                     <button class="btn-add" onclick="animateAdd(this); addToCart('Chá Tropical', 10.00, 'img-produtos/Drinks-s-alcool/Cha-tropical.jpeg')">Adicionar</button>
                 </div>
                     
-                <div class="product-card">
+                <div class="product-card" id="card-grape">
                     <img src="img-produtos/Drinks-s-alcool/Grape-Fresh.jpeg">
                     <h3>Grape Fresh</h3>
                      <span class="old-price">R$ 7,99</span> 
@@ -696,7 +700,7 @@
                     <button class="btn-add" onclick="animateAdd(this); addToCart('Grape Fresh', 6.00, 'img-produtos/Drinks-s-alcool/Grape-Fresh.jpeg')">Adicionar</button>
                 </div>
                     
-                <div class="product-card">
+                <div class="product-card" id="card-hibisco">
                     <img src="img-produtos/Drinks-s-alcool/Hibisco-Spritz.jpeg">
                     <h3>Hibisco Spritz</h3>
                      <span class="old-price)R$ 12,99</span> 
@@ -706,7 +710,7 @@
                     <button class="btn-add" onclick="animateAdd(this); addToCart('Hibisco Spritz', 10.00, 'img-produtos/Drinks-s-alcool/Hibisco-Spritz.jpeg')">Adicionar</button>
                 </div>
                    
-                <div class="product-card">
+                <div class="product-card" id="card-mocktail">
                     <img src="img-produtos/Drinks-s-alcool/Mocktail.jpeg">
                     <h3>Mocktail</h3>
                      <span class="old-price">R$ 19,99</span> 
@@ -741,7 +745,7 @@
                 
             <div class="carousel-container drag-scroll">
                     
-                <div class="product-card">
+                <div class="product-card" id="card-pitu1">
                     <img src="https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=300">
                     <h3>Pitu <span class="badge-ml">100ml</span></h3>
                     <h3>Red Bull <span class="badge-ml">350ml</span></h3>
@@ -753,7 +757,7 @@
                     <button class="btn-add btn-flavor" onclick="openFlavorModal('Pitu com Red Bull e Gelo sabor ', 27.00, ['Red Label', 'Jack Daniels', 'Ballantines', 'Passport'], 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=300')">Escolher sabor do Gelo</button>
                 </div>
                     
-                <div class="product-card">
+                <div class="product-card" id="card-pitu2">
                     <img src="https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=300">
                     <h3>Pitu <span class="badge-ml">100ml</span></h3>
                     <h3>Red Bull <span class="badge-ml">350ml</span></h3>
@@ -765,7 +769,7 @@
                     <button class="btn-add btn-flavor" onclick="openFlavorModal('Pitu com Red Bull e Gelo sabor ', 27.00, ['Red Label', 'Jack Daniels', 'Ballantines', 'Passport'], 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=300')">Escolher sabor do Gelo</button>
                 </div>
                 
-                <div class="product-card">
+                <div class="product-card" id="card-pitu3">
                     <img src="https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=300">
                     <h3>Pitu <span class="badge-ml">100ml</span></h3>
                     <h3>Red Bull <span class="badge-ml">350ml</span></h3>
@@ -784,27 +788,27 @@
         <div class="menu-section" data-category="combo">
             <h2>Combos</h2>
             <div class="carousel-container drag-scroll">
-                <div class="product-card">
+                <div class="product-card" id="card-combo1">
                     <img src="https://images.unsplash.com/photo-1597075095400-b2489955d49f?w=300">
                     <h3>Combo Destilado</h3><span class="price">R$ 100.00</span>
                     <button class="btn-add btn-flavor" onclick="openFlavorModal('Combo Destilado', 100.00, ['Vodka + 4 Energ', 'Gin + 4 Tonic', 'Whisky + 4 Energ', 'Vinho + Suco'], 'https://images.unsplash.com/photo-1597075095400-b2489955d49f?w=300')">Escolher Combo</button>
                 </div>
-                <div class="product-card">
+                <div class="product-card" id="card-combo2">
                     <img src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=300">
                     <h3>Combo Casal</h3><span class="price">R$ 50.00</span>
                     <button class="btn-add btn-flavor" onclick="openFlavorModal('Combo Casal', 50.00, ['2 Gins', '2 Caipirinhas', '2 Mojitos', '2 Sodas'], 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=300')">Escolher Bebidas</button>
                 </div>
-                <div class="product-card">
+                <div class="product-card" id="card-combo3">
                     <img src="https://images.unsplash.com/photo-1597075095400-b2489955d49f?w=300">
                     <h3>Combo Balde</h3><span class="price">R$ 80.00</span>
                     <button class="btn-add btn-flavor" onclick="openFlavorModal('Combo Balde', 80.00, ['6 Long Necks', '5 Cervejas + Porção', '4 Drinks VIP', '10 Shots'], 'https://images.unsplash.com/photo-1597075095400-b2489955d49f?w=300')">Escolher Itens</button>
                 </div>
-                <div class="product-card">
+                <div class="product-card" id="card-combo4">
                     <img src="https://images.unsplash.com/photo-1597075095400-b2489955d49f?w=300">
                     <h3>Combo Amigos Fixo</h3><span class="price">R$ 100.00</span>
                     <button class="btn-add" onclick="animateAdd(this); addToCart('Combo Amigos Fixo', 100.00, 'https://images.unsplash.com/photo-1597075095400-b2489955d49f?w=300')">Adicionar</button>
                 </div>
-                <div class="product-card">
+                <div class="product-card" id="card-combo5">
                     <img src="https://images.unsplash.com/photo-1597075095400-b2489955d49f?w=300">
                     <h3>Combo Shot Galera</h3><span class="price">R$ 45.00</span>
                     <button class="btn-add" onclick="animateAdd(this); addToCart('Combo Shot Galera', 45.00, 'https://images.unsplash.com/photo-1597075095400-b2489955d49f?w=300')">Adicionar</button>
@@ -975,11 +979,7 @@
         <br><br><br>
 </footer>
 
-	<!--====================================================================-->
-<!--====================================================================-->
-
-
-<div id="container-instalacao" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80%; max-width: 300px; background: rgba(0,0,0,0.95); padding: 30px 20px; text-align: center; border: 1px solid #d4af37; border-radius: 15px; z-index: 10000; box-shadow: 0 0 20px rgba(0,0,0,0.8);">
+	<div id="container-instalacao" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80%; max-width: 300px; background: rgba(0,0,0,0.95); padding: 30px 20px; text-align: center; border: 1px solid #d4af37; border-radius: 15px; z-index: 10000; box-shadow: 0 0 20px rgba(0,0,0,0.8);">
     <p style="color: #fff; margin: 0 0 20px 0; font-family: sans-serif; font-size: 16px; line-height: 1.5;">Leve a <strong>NUANCE</strong> no seu bolso! <br>Instale nosso App. 🍸</p>
     
     <button id="btnInstalarApp" style="width: 100%; background-color: #fff; color: #000; border: none; padding: 12px; border-radius: 5px; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 12px; margin-bottom: 10px;">
@@ -990,6 +990,34 @@
         Agora não
     </button>
 </div>
+
+<div id="admin-modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button class="btn-back" onclick="closeModal('admin-modal')"><i class="fas fa-arrow-left"></i></button>
+            <h2 style="margin:0">Editar Produto</h2>
+        </div>
+        <div class="form-group">
+            <label>ID do Card (Ex: card-caipfrutas)</label>
+            <input type="text" id="adm-id">
+        </div>
+        <div class="form-group">
+            <label>Novo Nome</label>
+            <input type="text" id="adm-nome">
+        </div>
+        <div class="form-group">
+            <label>Novo Preço (Ex: 15.00)</label>
+            <input type="text" id="adm-preco">
+        </div>
+        <div class="form-group">
+            <label>Nova Imagem (URL)</label>
+            <input type="text" id="adm-img">
+        </div>
+        <button class="btn-main" onclick="salvarAdmin()">Salvar e Sincronizar</button>
+        <br><br><br><br>
+    </div>
+</div>
+<button class="btn-admin-trigger" onclick="loginAdmin()"><i class="fas fa-cog"></i></button>
 
 <script>
   let promptDeInstalacao;
@@ -1044,11 +1072,6 @@
 
 
 
-<!--====================================================================-->
-<!--====================================================================-->
-    
-        
-        
 <script>
     const icon = document.getElementById('insta-icon');
 const brandNameContainer = document.getElementById('brand-name');
@@ -1179,6 +1202,7 @@ function revealText(str) {
             updateUI();
         }
         checkStoreStatus();
+        sincronizarProdutosPlanilha();
     };
 
     function saveCart() { localStorage.setItem('beeDrinksCart', JSON.stringify(cart)); }
@@ -1717,6 +1741,55 @@ function showNextMessage() {
 
 // Inicia o ciclo de mensagens após um atraso de 4 segundos (4000 ms)
 setTimeout(showNextMessage, 4000);
+
+// --- LÓGICA ADMIN ---
+function loginAdmin() {
+    const pass = prompt("Senha Administrativa:");
+    if(pass === "111219") {
+        document.getElementById('admin-modal').style.display = 'block';
+    } else {
+        alert("Senha incorreta!");
+    }
+}
+
+function salvarAdmin() {
+    const id = document.getElementById('adm-id').value;
+    const nome = document.getElementById('adm-nome').value;
+    const preco = document.getElementById('adm-preco').value;
+    const img = document.getElementById('adm-img').value;
+
+    if(!id) { alert("ID do Card é obrigatório!"); return; }
+
+    const FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLScCadaja6iLfwVL7fH6aVs_iXTJpZgBREY-Ju98Zqg3KKslWg/formResponse";
+    const formData = new FormData();
+    formData.append("entry.1278482765", "ADMIN-EDIT"); // Usando campo Nome para identificar edit
+    formData.append("entry.62718261", `ID:${id}|N:${nome}|P:${preco}|I:${img}`); // String de dados
+    
+    fetch(FORM_URL, { method: "POST", mode: "no-cors", body: formData });
+    alert("Alteração enviada! Aguarde a sincronização.");
+    location.reload();
+}
+
+function sincronizarProdutosPlanilha() {
+    // Como não há banco de dados real aqui, simulamos a leitura da planilha via cache local ou parâmetro
+    // Em um sistema real, você usaria o Google Sheets API ou uma URL de CSV.
+    // Para este código, usaremos o localStorage para persistir as edições feitas pelo Admin no navegador
+    const edits = JSON.parse(localStorage.getItem('adminEdits') || "[]");
+    edits.forEach(edit => {
+        const card = document.getElementById(edit.id);
+        if(card) {
+            if(edit.nome) card.querySelector('h3').innerText = edit.nome;
+            if(edit.img) card.querySelector('img').src = edit.img;
+            if(edit.preco) {
+                const priceSpan = card.querySelector('.price');
+                if(priceSpan) {
+                    const ml = priceSpan.querySelector('.badge-ml')?.outerHTML || "";
+                    priceSpan.innerHTML = `R$ ${parseFloat(edit.preco).toFixed(2)} ${ml}`;
+                }
+            }
+        }
+    });
+}
 </script>
 </body>
 </html>
