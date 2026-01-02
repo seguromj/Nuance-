@@ -1752,42 +1752,10 @@ function showNextMessage() {
 // Inicia o ciclo de mensagens após um atraso de 4 segundos (4000 ms)
 setTimeout(showNextMessage, 4000);
 
-// --- LÓGICA DE EDIÇÃO (MODO ADMIN) ---
-function toggleAdminMode() {
-    const password = prompt("Digite a senha de administrador:");
-    if (password === "111219") {
-        document.body.classList.toggle('admin-active');
-        alert("Modo de edição ativado/desativado!");
-    } else {
-        alert("Senha incorreta!");
-    }
-}
-
-function editProduct(pencilEl) {
-    const card = pencilEl.parentElement;
-    const title = card.querySelector('h3');
-    const img = card.querySelector('img');
-    const price = card.querySelector('.price');
-
-    const novoTitulo = prompt("Novo nome do produto:", title.innerText);
-    if (novoTitulo) title.innerText = novoTitulo;
-
-    const novaImg = prompt("Nova URL da imagem:", img.src);
-    if (novaImg) img.src = novaImg;
-
-    const novoPreco = prompt("Novo preço (Ex: R$ 25.00):", price.innerText);
-    if (novoPreco) {
-        const mlBadge = card.querySelector('.badge-ml')?.innerText || '';
-        price.innerHTML = novoPreco + (mlBadge ? ` <span class="badge-ml">${mlBadge}</span>` : '');
-    }
-    
-    alert("Alterações aplicadas na tela!");
-}
 
 
 
-
-
+//🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨🚨
 // --- CONFIGURAÇÃO DA PLANILHA PARA EDIÇÃO ---
 const LINK_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRAb5Ou99MR6hD2_t7XPdZRzYBf-4ZE7HkqfSZ7PwU0POKTHfs6232ezYPT3yYzbKLzAX3Muwp4BxPo/pub?gid=0&single=true&output=csv";
 
