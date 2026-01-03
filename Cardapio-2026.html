@@ -1579,48 +1579,47 @@ async function carregarDadosDaPlanilha() {
 
         for (let i = 1; i < linhas.length; i++) {
             const colunas = linhas[i].split(/,(?=(?:[^"]*"[^"]*")*[^"]*$)/);
-            if (colunas.length >= 4) {
+            if (colunas.length >= 6) { // Verificamos se há pelo menos 6 colunas
                 const pID = colunas[1] ? colunas[1].replace(/"/g, '').trim() : ''; 
                 const pNome = colunas[2] ? colunas[2].replace(/"/g, '').trim() : ''; 
                 const pPreco = colunas[3] ? colunas[3].replace(/"/g, '').trim() : ''; 
                 const pImagem = colunas[4] ? colunas[4].replace(/"/g, '').trim() : ''; 
                 
-                if(!pID || !pNome) continue;
-
-                // O campo sabores está na Coluna G (índice 6)
-                const pSaboresRaw = colunas[6] ? colunas[6].replace(/"/g, '').trim() : '';
+                // AJUSTE: O campo sabores está na Coluna F (índice 5)
+                const pSaboresRaw = colunas[5] ? colunas[5].replace(/"/g, '').trim() : '';
                 const pSaboresArray = pSaboresRaw ? pSaboresRaw.split(',').map(s => s.trim()) : [];
+
+                if(!pID || !pNome) continue;
 
                 const cardExistente = document.querySelector(`.product-card[data-id="${pID}"]`);
                 if (cardExistente) {
                     cardExistente.querySelector('h3').innerText = pNome;
                     if (pImagem) cardExistente.querySelector('img').src = pImagem;
                     
-                    // Atualiza o preço exibido visualmente
                     cardExistente.querySelector('.price').innerHTML = `R$ ${pPreco}`;
                     
-                    // Converte pPreco para número real para o carrinho
                     const precoNumerico = parseFloat(pPreco.replace('R$', '').replace(',', '.').trim());
-                    
                     let btnAdd = cardExistente.querySelector('.btn-add');
                     
-                    // Se houver sabores na planilha (Coluna G), transforma o botão em seletor de sabor
+                    // Se houver sabores na Coluna F da planilha, transforma o botão em seletor de sabor
                     if (pSaboresArray.length > 0) {
                         btnAdd.classList.add('btn-flavor');
                         btnAdd.innerText = "Escolher Sabor";
                         btnAdd.onclick = () => openFlavorModal(pNome, precoNumerico, pSaboresArray, pImagem);
                     } else {
-                        // Se não houver sabores na planilha, ele volta a ser um botão normal de adicionar
-                        // ou mantém os sabores fixos se você não preencheu nada na planilha.
-                        // Para forçar a atualização de preço mesmo nos que já têm sabor:
+                        // Se não houver sabores na planilha, verifica se o botão já era de sabor originalmente no HTML
                         if (btnAdd.classList.contains('btn-flavor')) {
-                           // Pega os sabores que já estavam no onclick original do HTML se a planilha estiver vazia
-                           // Mas atualiza o preço e o nome passados para a função
+                           // Tenta extrair os sabores originais do atributo onclick fixo caso a planilha esteja sem a coluna F preenchida
                            const regexSabores = /\[(.*?)\]/;
-                           const matches = btnAdd.getAttribute('onclick').match(regexSabores);
+                           const onclickAtrib = btnAdd.getAttribute('onclick');
+                           const matches = onclickAtrib ? onclickAtrib.match(regexSabores) : null;
                            if (matches) {
-                               const saboresOriginais = eval("[" + matches[1] + "]");
-                               btnAdd.onclick = () => openFlavorModal(pNome, precoNumerico, saboresOriginais, pImagem);
+                               try {
+                                   const saboresOriginais = eval("[" + matches[1] + "]");
+                                   btnAdd.onclick = () => openFlavorModal(pNome, precoNumerico, saboresOriginais, pImagem);
+                               } catch(e) {
+                                   btnAdd.onclick = function() { animateAdd(this); addToCart(pNome, precoNumerico, pImagem); };
+                               }
                            }
                         } else {
                            btnAdd.onclick = function() { animateAdd(this); addToCart(pNome, precoNumerico, pImagem); };
