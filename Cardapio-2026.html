@@ -1588,7 +1588,7 @@ async function carregarDadosDaPlanilha() {
                 const pID = parseInt(pIDStr);
 
                 // --- LOGICA STATUS 999 ---
-                if (pID === 999) {
+                if (pID === 100) {
                     const regexAberto = /Aberto:?\s*(\d{2}):(\d{2})/i;
                     const regexFechado = /Fechado:?\s*(\d{2}):(\d{2})/i;
                     const matchAberto = pNome.match(regexAberto);
