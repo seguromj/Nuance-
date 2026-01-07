@@ -1,0 +1,429 @@
+
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   
+    <title>Mayckon | Portfólio de Ações Profissional</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="shortcut icon" href="Foto-perfil.png" type="image/x-con">
+   
+    <style>
+        /* VARIÁVEIS DE COR */
+        :root {
+            --background-dark: #000000;
+            --card-color: #1a1a1a;
+            --primary-color: #f8f8f8; 
+            --secondary-color: #007BFF;
+            --text-secondary: #999999;
+            --bg-dark: #0d1117;
+            --bg-card: #161b22;
+            --accent: #58a6ff;
+            --text-main: #c9d1d9;
+            --text-dim: #8b949e;
+            --border: #30363d;
+            --code-yellow: #d2a8ff;
+        }
+
+        /* ANIMAÇÃO DE QUEDA (BACKGROUND) */
+        @keyframes fall {
+            0% {
+                transform: translateY(-10vh);
+                opacity: 0;
+            }
+            20% { opacity: 0.8; }
+            80% { opacity: 0.8; }
+            100% {
+                transform: translateY(100vh);
+                opacity: 0;
+            }
+        }
+
+        /* ANIMAÇÃO DA BORDA VIBRANTE */
+        @keyframes vibrate-border {
+            0% {
+                box-shadow: 0 0 0 0px rgba(0, 123, 255, 0.7);
+            }
+            50% {
+                box-shadow: 0 0 0 15px rgba(0, 123, 255, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0px rgba(0, 123, 255, 0);
+            }
+        }
+
+        /* RESET E TIPOGRAFIA */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-dark);
+            color: var(--primary-color);
+            line-height: 1.5;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 30px 10px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* ESTILO DOS CARACTERES DO FUNDO */
+        .particle-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .code-particle {
+            position: absolute;
+            color: var(--secondary-color);
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            user-select: none;
+            opacity: 0;
+        }
+
+        .main-container {
+            width: 100%;
+            max-width: 480px;
+            padding: 0 10px;
+            z-index: 10;
+            position: relative;
+        }
+
+        /* --- CABEÇALHO (PERFIL) --- */
+        .profile-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-top: 10px;
+        }
+
+        .profile-image {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--secondary-color);
+            margin-bottom: 15px;
+            /* Aplicação da vibração */
+            animation: vibrate-border 2s infinite ease-out;
+        }
+
+        .profile-name {
+            font-size: 1.8em;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .profile-title {
+            font-size: 1em;
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+        /* --- LINKS --- */
+        .action-link {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: var(--card-color);
+            padding: 18px 20px;
+            margin-bottom: 12px;
+            border-radius: 12px;
+            text-decoration: none;
+            color: var(--primary-color);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+            border: 1px solid #333;
+        }
+
+        .action-link:hover {
+            background-color: #252525;
+            transform: translateY(-3px);
+            border-color: var(--secondary-color);
+        }
+
+        .link-main-text {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .link-icon-text {
+            font-size: 1.2em;
+            width: 25px;
+            text-align: center;
+            color: var(--secondary-color);
+        }
+        
+        .whatsapp .link-icon-text { color: #25D366; }
+        .instagram .link-icon-text {
+             background: -webkit-linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+             -webkit-background-clip: text;
+             -webkit-text-fill-color: transparent;
+        }
+
+        .link-arrow {
+            font-size: 1.2em;
+            color: var(--text-secondary);
+            opacity: 0.5;
+        }
+
+        .site-footer {
+            margin-top: 50px;
+            text-align: center;
+            font-size: 0.85em;
+            color: var(--text-secondary);
+            letter-spacing: 1px;
+        }
+    /*____________________*/
+     
+        /* Cabeçalho com Logo Centralizada */
+        
+        .logo {
+            max-height: 100px;
+            width: auto;
+            /* Se ainda não tiver o arquivo, ele mostrará o alt estilizado */
+            font-family: 'Fira Code', monospace;
+            font-weight: bold;
+            color: var(--accent);
+            letter-spacing: 5px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        /* Estilo Dev / Terminal */
+        .terminal-block {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .terminal-block::before {
+            content: "● ● ●";
+            position: absolute;
+            top: 10px;
+            left: 15px;
+            color: #444;
+            font-size: 10px;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Fira Code', monospace;
+            color: var(--accent);
+        }
+
+        .intro-text {
+            font-size: 1.2rem;
+            border-left: 3px solid var(--accent);
+            padding-left: 20px;
+            margin-bottom: 50px;
+            color: var(--text-main);
+        }
+
+        .feature-item {
+            margin-bottom: 40px;
+        }
+
+        .feature-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .feature-header span {
+            font-size: 1.5rem;
+        }
+
+        .code-syntax {
+            font-family: 'Fira Code', monospace;
+            color: var(--code-yellow);
+            font-size: 0.9rem;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .footer-brand {
+            text-align: center;
+            padding: 60px 20px;
+            border-top: 1px solid var(--border);
+            font-family: 'Fira Code', monospace;
+        }
+
+        .highlight-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .highlight-list li {
+            margin-bottom: 15px;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .highlight-list li::before {
+            content: ">";
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        strong {
+            color: #fff;
+        }
+    
+    
+    
+    </style>
+</head>
+<body>
+    
+    <div class="particle-background" id="particleBackground"></div>
+
+    <div class="main-container">
+        
+        <header class="profile-header">
+            <img src="Foto-perfil.png" alt="Mayckon" class="profile-image">
+            <h1 class="profile-name">Desenvolvedores</h1>
+            <p class="profile-title">
+               💻 full stack 💻
+            </p>
+        </header>
+
+        <main class="action-list">
+
+            <a href="Projetos.html" class="action-link">
+                <span class="link-main-text">
+                    <span class="link-icon-text">🛠️</span> Ver Meus Projetos</span>
+                <span class="link-arrow"><i class="fas fa-chevron-right"></i></span>
+            </a>
+
+            <a href="mailto:seuemail@exemplo.com" class="action-link">
+                <span class="link-main-text">
+                    <span class="link-icon-text"><i class="fa-solid fa-dollar-sign"></i></span> Solicitar Orçamento Web
+                </span>
+                <span class="link-arrow"><i class="fas fa-chevron-right"></i></span>
+            </a>
+            
+        </main>
+        
+        
+    <main class="container">
+        
+        <div class="intro-text">
+            No ecossistema digital, a estagnação é o maior risco. A Albatroz nasce com o propósito de oferecer ao seu negócio a mesma resiliência e maestria da ave que domina os oceanos: uma estrutura preparada para voos de longa distância, com precisão técnica e inovação constante.
+        </div>
+
+        <section class="feature-item">
+            <div class="terminal-block">
+                <div class="feature-header">
+                    <span>🧠</span>
+                    <h3>Alta Disponibilidade: O Ciclo que Nunca Para</h3>
+                </div>
+                <p>
+                    O Albatroz possui a capacidade única de descansar uma metade do cérebro enquanto a outra mantém o controle do voo. Na Albatroz, aplicamos esse conceito à <strong>arquitetura de sistemas</strong>. Criamos soluções onde o Backend e o Frontend trabalham em harmonia ininterrupta. Enquanto um processo entrega performance ao usuário, o outro garante a segurança e o monitoramento em segundo plano. Desenvolvemos sistemas resilientes, projetados para estarem sempre ativos e alertas, não importa a turbulência.
+                </p>
+            </div>
+        </section>
+
+        <section class="feature-item">
+            <span class="code-syntax">function renderView() {</span>
+            <div class="feature-header">
+                <span>📐</span>
+                <h3>Envergadura e Alcance (Frontend)</h3>
+            </div>
+            <p>
+                Com a maior envergadura da natureza, o albatroz cobre distâncias globais com o mínimo esforço. Projetamos interfaces de <strong>Frontend</strong> que dão essa amplitude ao seu negócio. Design responsivo e intuitivo que permite que sua marca alcance qualquer dispositivo, em qualquer lugar do mundo, com elegância e fluidez.
+            </p>
+        </section>
+
+        <section class="feature-item">
+            <span class="code-syntax">class ServerInfrastructure {</span>
+            <div class="feature-header">
+                <span>⚓</span>
+                <h3>Estrutura e Sustentação (Backend)</h3>
+            </div>
+            <p>
+                O voo dinâmico exige uma engenharia interna impecável. Nosso desenvolvimento de <strong>Backend</strong> é focado em robustez e escalabilidade. Construímos as fundações sólidas que permitem que seu site suporte grandes volumes de tráfego, garantindo que a tecnologia por trás da tela seja tão poderosa quanto a imagem que ela projeta.
+            </p>
+        </section>
+
+        <section class="terminal-block">
+            <h3>Por que a Albatroz é a parceira ideal para o seu projeto?</h3>
+            <ul class="highlight-list">
+                <li><strong>Vigilância Constante:</strong> Sistemas inteligentes que mantêm a operação ativa 24/7.</li>
+                <li><strong>Eficiência de Voo:</strong> Código otimizado para performance máxima com o menor consumo de recursos.</li>
+                <li><strong>Maestria Full Stack:</strong> O domínio completo do ecossistema, do servidor à interação do usuário.</li>
+            </ul>
+        </section>
+
+    </main>
+
+    <footer class="footer-brand">
+        <h2 style="font-size: 0.8rem; ">Albatroz<br> – Desenvolvimento de Sites e Sistemas.</h2>
+        <p style="font-size: 0.8rem; color: var(--text-dim); margin-top: 30px;">Navegando o presente, construindo o futuro, sem nunca perder o rumo.</p>
+        <p style="font-size: 0.8rem; color: var(--text-dim); margin-top: 30px;">
+            -- System Status: Operational --
+        </p>
+    </footer>
+        
+
+        
+
+    <script>
+        const particleBackground = document.getElementById('particleBackground');
+        const characters = ['0', '1', '{', '}', '<', '>', '/', ';', '[', ']', '&&', '||', '!', '=>'];
+        const numberOfParticles = 50;
+
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.className = 'code-particle';
+            
+            // Texto aleatório do array
+            particle.innerText = characters[Math.floor(Math.random() * characters.length)];
+            
+            // Estilos aleatórios
+            const size = Math.random() * 12 + 10; // entre 10px e 22px
+            const startX = Math.random() * 100;
+            const duration = Math.random() * 5 + 5; // entre 5s e 10s
+            const delay = Math.random() * 10;
+            const opacity = Math.random() * 0.4 + 0.1; // Sutil para não atrapalhar a leitura
+
+            particle.style.fontSize = `${size}px`;
+            particle.style.left = `${startX}vw`;
+            particle.style.animation = `fall ${duration}s linear infinite`;
+            particle.style.animationDelay = `-${delay}s`;
+            particle.style.color = `rgba(0, 123, 255, ${opacity})`;
+            
+            particleBackground.appendChild(particle);
+        }
+
+        for (let i = 0; i < numberOfParticles; i++) {
+            createParticle();
+        }
+    </script>
+</body>
+</html>
