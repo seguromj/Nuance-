@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsApp Atendimento Profissional</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #111b21; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        #chat-window { width: 100%; max-width: 450px; height: 95vh; background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png'); background-color: #0b141a; display: flex; flex-direction: column; border-radius: 10px; overflow: hidden; box-shadow: 0 10px 20px rgba(0,0,0,0.5); position: relative; }
+        #header { background: #202c33; padding: 15px; color: #e9edef; display: flex; align-items: center; gap: 15px; border-bottom: 1px solid #2a3942; }
+        #header img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
+        #header .info { flex: 1; }
+        #header .info h2 { font-size: 16px; }
+        #header .info p { font-size: 12px; color: #8696a0; }
+        #messages { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; scroll-behavior: smooth; }
+        .bubble { max-width: 85%; padding: 8px 12px; border-radius: 8px; font-size: 14.5px; position: relative; line-height: 1.4; white-space: pre-wrap; animation: fadeIn 0.3s ease; cursor: pointer; transition: background 0.2s; -webkit-tap-highlight-color: transparent; user-select: none; }
+        .bubble.selected { background-color: rgba(0, 168, 132, 0.4) !important; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .bot { background: #202c33; color: #e9edef; align-self: flex-start; border-top-left-radius: 0; }
+        .user { background: #005c4b; color: #e9edef; align-self: flex-end; border-top-right-radius: 0; }
+        .warning { color: #ffbc2c; font-weight: bold; margin-bottom: 5px; display: block; font-size: 12px; }
+        .time { font-size: 10px; color: #8696a0; text-align: right; margin-top: 4px; display: block; }
+        .btn-whatsapp { display: block; background-color: #25d366; color: white; padding: 12px; border-radius: 5px; text-decoration: none; font-weight: bold; margin-top: 10px; text-align: center; }
+        #input-area { background: #202c33; padding: 10px; display: flex; align-items: center; gap: 10px; }
+        input { flex: 1; background: #2a3942; border: none; padding: 12px; border-radius: 8px; color: #e9edef; outline: none; font-size: 15px; }
+        button#send-btn { background: #00a884; border: none; cursor: pointer; color: white; width: 45px; height: 45px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 20px; }
+        #selection-menu { display: none; position: absolute; top: 0; left: 0; width: 100%; background: #202c33; height: 60px; z-index: 10; align-items: center; padding: 0 20px; color: white; justify-content: space-between; border-bottom: 1px solid #2a3942; }
+        .delete-icon { cursor: pointer; font-size: 20px; }
+    </style>
+</head>
+<body>
+
+<audio id="notificacao-som" src="https://assets.mixkit.co/active_storage/sfx/2358/2358-preview.mp3"></audio>
+
+<div id="chat-window">
+    <div id="selection-menu">
+        <span id="selection-count">0 selecionada</span>
+        <div style="display: flex; gap: 20px;">
+            <span class="delete-icon" onclick="apagarSelecionadas()">🗑️</span>
+            <span class="delete-icon" onclick="cancelarSelecao()">✕</span>
+        </div>
+    </div>
+
+    <div id="header">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRR8ploF1Vy8syIsHx0kt5tP9sOVAEkqgyEv188EttEfXYvPengMj9uXy4&s=10" alt="Bot">
+        <div class="info">
+            <h2 id="bot-name">Suporte Comercial</h2>
+            <p id="status-text">online</p>
+        </div>
+    </div>
+    <div id="messages"></div>
+    <div id="input-area">
+        <input type="text" id="user-input" placeholder="Digite uma opção..." autocomplete="off" onkeypress="handleEnter(event)">
+        <button id="send-btn" onclick="sendMessage()">➤</button>
+    </div>
+</div>
+
+<script>
+    const chatDisplay = document.getElementById('messages');
+    const userInput = document.getElementById('user-input');
+    const somNotificacao = document.getElementById('notificacao-som');
+    const selectionMenu = document.getElementById('selection-menu');
+    const selectionCountText = document.getElementById('selection-count');
+    
+    let nomeCliente = localStorage.getItem('nomeCliente') || "";
+    let currentStage = localStorage.getItem('currentStage') || "START";
+    let historico = JSON.parse(localStorage.getItem('historico')) || [];
+    let mensagensSelecionadas = [];
+    let pressTimer; // Timer para o pressionar longo
+
+    const menus = {
+        "MAIN": (nome) => `*MENU PRINCIPAL*\n\nOlá, ${nome}! Como posso ajudar?\n\n1- 🎁 Como faço para ter um Cupom?\n2- 💳 Eu fiz o Pagamento. Eagora?\n3- ⏳ Prazo de Entrega\n4- 👤 Falar com Humano\n6- 🛵 Faz entrega?\n5- 👋 Encerrar`,
+        "1": `*Para ter um cupom*\n\nClique no botão abaixo e Faça seu Cadastro,rapido e facil\n<a href="#" target="_blank" class="btn-whatsapp">Entrar</a>\n\n0- ↪️ Voltar ao Menu Principal\n5- 👋 Encerrar`,
+        "2": `Que ótimo\n\nSem duvidas, nossos especialistas já estão organizando seu pedido.\nNa duvida, Nos chame no botão abaixo:\n\nE nos envie o comprovante.\n<a href="https://wa.me/5562995679219" target="_blank" class="btn-whatsapp">WhatsApp - Pedidos</a>\n\n0- ↪️ Voltar ao Menu Principal\n5- 👋 Encerrar`,
+        "3": `*PRAZO DE ENTREGA*\n🛵 Nosso tempo de entrega é de 30 a 50 minutos.\n\n0- Voltar ao Menu Principal\n5- 👋 Encerrar`,
+        "4": `*ATENDIMENTO HUMANO*\n\nClique no botão abaixo para falar com um consultor:\n<a href="https://wa.me/5562995679219" target="_blank" class="btn-whatsapp">Entrar</a>\n\n0- ↪️ Voltar ao Menu Principal\n5- 👋 Encerrar`,
+        "6": `😊 Sim Fazemos Entregas😊\n\nVale lembrar que fazemos entregas somente em Anápolis\n\n0- ↪️ Voltar ao Menu Principal\n5- 👋 Encerrar`,
+       "5": `Atendimento finalizado com sucesso! 👋\nDigite "Oi" para recomeçar.`,
+      "100": `\n\n0- ↪️ Voltar ao Menu Principal\n5- 👋 Encerrar`
+    };
+
+    function salvar() {
+        localStorage.setItem('nomeCliente', nomeCliente);
+        localStorage.setItem('currentStage', currentStage);
+        localStorage.setItem('historico', JSON.stringify(historico));
+    }
+
+    function addMessage(text, sender, isWarning = false) {
+        const msgId = "id_" + Date.now() + Math.random();
+        const now = new Date();
+        const timeStr = now.getHours() + ":" + now.getMinutes().toString().padStart(2, '0');
+
+        historico.push({ id: msgId, text, sender, isWarning, time: timeStr });
+        renderMessage(msgId, text, sender, isWarning, timeStr);
+        salvar();
+
+        if (sender === 'bot') somNotificacao.play().catch(() => {});
+    }
+
+    function renderMessage(id, text, sender, isWarning, time) {
+        const div = document.createElement('div');
+        div.className = `bubble ${sender}`;
+        div.id = id;
+
+        // LÓGICA DE PRESSIONAR (LONG PRESS)
+        const startPress = () => {
+            pressTimer = window.setTimeout(() => {
+                alternarSelecao(id);
+            }, 600); // Meio segundo pressionado para ativar
+        };
+
+        const cancelPress = () => {
+            clearTimeout(pressTimer);
+        };
+
+        // Click simples só seleciona se já houver outras selecionadas (comportamento WhatsApp)
+        div.onclick = () => {
+            if (mensagensSelecionadas.length > 0) {
+                alternarSelecao(id);
+            }
+        };
+
+        // Eventos para Mobile e Desktop
+        div.onmousedown = startPress;
+        div.onmouseup = cancelPress;
+        div.ontouchstart = startPress;
+        div.ontouchend = cancelPress;
+        
+        let html = isWarning ? `<span class="warning">⚠️ Opção não reconhecida</span>` : "";
+        html += `${text}<span class="time">${time}</span>`;
+        div.innerHTML = html;
+        
+        chatDisplay.appendChild(div);
+        chatDisplay.scrollTop = chatDisplay.scrollHeight;
+    }
+
+    function sendMessage() {
+        const val = userInput.value.trim();
+        if (!val) return;
+
+        addMessage(val, 'user');
+        userInput.value = "";
+
+        setTimeout(() => {
+            processarLogica(val);
+        }, 600);
+    }
+
+    function processarLogica(input) {
+        if (!nomeCliente || currentStage === "START") {
+            // Limpa termos comuns para extrair apenas o nome
+            let nomeLimpo = input.replace(/meu nome é|me chamo|Eu me chamo|Olá, meu nome é|Ola, meu nome e|Prazer, eu me chamo|Prazer eu me chamo|pode me chamar de|sou o|sou a|sou/gi, "").trim();
+            nomeCliente = nomeLimpo.split(" ")[0]; // Pega a primeira palavra após a limpeza
+            
+            currentStage = "MENU";
+            addMessage(menus["MAIN"](nomeCliente), "bot");
+            return;
+        }
+
+        if (input.toLowerCase() === "oi" || input.toLowerCase() === "olá") {
+            addMessage(menus["MAIN"](nomeCliente), "bot");
+            return;
+        }
+
+        if (input === "5") {
+            addMessage(menus["5"], "bot");
+            localStorage.clear();
+            setTimeout(() => location.reload(), 2000);
+            return;
+        }
+
+        if (input === "0") {
+            addMessage(menus["MAIN"](nomeCliente), "bot");
+            return;
+        }
+
+        if (menus[input]) {
+            let resp = menus[input];
+            if (typeof resp === 'function') resp = resp(nomeCliente);
+            addMessage(resp, "bot");
+        } else {
+            addMessage("Desculpe, não entendi. Escolha uma opção do menu ou digite *0* para voltar.", "bot", true);
+        }
+    }
+
+    function alternarSelecao(id) {
+        const el = document.getElementById(id);
+        if (mensagensSelecionadas.includes(id)) {
+            mensagensSelecionadas = mensagensSelecionadas.filter(i => i !== id);
+            el.classList.remove('selected');
+        } else {
+            mensagensSelecionadas.push(id);
+            el.classList.add('selected');
+        }
+        selectionMenu.style.display = mensagensSelecionadas.length > 0 ? 'flex' : 'none';
+        selectionCountText.innerText = `${mensagensSelecionadas.length} selecionada(s)`;
+    }
+
+    function cancelarSelecao() {
+        mensagensSelecionadas.forEach(id => document.getElementById(id)?.classList.remove('selected'));
+        mensagensSelecionadas = [];
+        selectionMenu.style.display = 'none';
+    }
+
+    function apagarSelecionadas() {
+        mensagensSelecionadas.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.remove();
+            historico = historico.filter(m => m.id !== id);
+        });
+        cancelarSelecao();
+        salvar();
+    }
+
+    function handleEnter(e) { if (e.key === 'Enter') sendMessage(); }
+
+    window.onload = () => {
+        if (historico.length > 0) {
+            historico.forEach(m => renderMessage(m.id, m.text, m.sender, m.isWarning, m.time));
+        } else {
+            addMessage("Olá! Sou o assistente virtual da empresa.\n\nPara começar, me diga seu *Nome*:", "bot");
+        }
+    };
+</script>
+</body>
+</html>
