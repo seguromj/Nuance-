@@ -1608,8 +1608,8 @@ function revealText(str) {
 
     function toggleFields() {
         const type = document.getElementById('delivery-type').value;
-        document.getElementById('fields-mesa').style.display = type === 'mesa' ? 'block' : 'none';
-        document.getElementById('fields-retirada').style.display = type === 'retirada' ? 'block' : 'none';
+        //document.getElementById('fields-mesa').style.display = type === 'mesa' ? 'block' : 'none';
+        //document.getElementById('fields-retirada').style.display = type === 'retirada' ? 'block' : 'none';
         document.getElementById('fields-delivery').style.display = type === 'delivery' ? 'block' : 'none';
         
         document.getElementById('delivery-warning').style.display = type === 'delivery' ? 'block' : 'none';
@@ -1652,7 +1652,7 @@ function revealText(str) {
             }
             cepInput.classList.remove('input-error');
         }
-
+ 
         currentPaymentLink = linksDePagamentoFixos[totalStr] || "#";
         const payBtn = document.getElementById('pay-link');
         payBtn.href = currentPaymentLink;
